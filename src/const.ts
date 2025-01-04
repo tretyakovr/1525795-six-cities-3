@@ -9,12 +9,12 @@ export enum AuthStatus {
 }
 
 export enum AppRoutes {
-  FavoritesEmpty,
-  Favorites,
-  Login,
-  Main,
-  MainEmpty,
-  Offer,
-  OfferNotLogged,
-  Page404,
+  FavoritesEmpty = '/favorites-empty',
+  Favorites = '/favorites',
+  Login = '/login',
+  Main = '/',
+  MainEmpty = '/main-empty',
+  Offer = '/offer',
+  OfferNotLogged = '/offer-not-logged',
+  Page404 = '/error404',
 }
