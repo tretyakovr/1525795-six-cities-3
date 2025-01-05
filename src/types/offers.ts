@@ -11,7 +11,7 @@ type Location = {
 //   Room = 'room',
 // }
 
-type Offer = {
+export type Offer = {
   id: string;
   title: string;
   type: 'apartment' | 'hotel' | 'house' | 'room';

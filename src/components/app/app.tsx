@@ -1,5 +1,6 @@
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import { AuthStatus } from '../../const';
+import { Offers } from '../../types/offers';
 import Main from '../../pages/main/main';
 import Favorites from '../../pages/favorites/favorites';
 import Login from '../../pages/login/login';
@@ -10,14 +11,14 @@ import PrivateRoute from '../private-route/private-route';
 
 type AppProps = {
   offersCount: number;
+  offers: Offers;
 }
 
-
-function App({offersCount} : AppProps): JSX.Element | null {
+function App({offersCount, offers} : AppProps): JSX.Element | null {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Main offersCount = {offersCount} />}/>
+        <Route path="/" element={<Main offersCount = {offersCount} offers = {offers}/>}/>
         <Route path="/login" element={<Login />}/>
         <Route path="/favorites" element={
           <PrivateRoute authStatus={AuthStatus.NoAuth}>

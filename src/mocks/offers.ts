@@ -29,7 +29,7 @@ export const offers: Offers = [
     title: 'Loft Studio in the Central Area',
     type: 'hotel',
     price: 475,
-    previewImage: "https://15.design.htmlacademy.pro/static/hotel/7.jpg",
+    previewImage: 'https://15.design.htmlacademy.pro/static/hotel/7.jpg',
     city: {
       name: 'Brussels',
       location: {
@@ -67,7 +67,7 @@ export const offers: Offers = [
       zoom: 16
     },
     isFavorite: false,
-    isPremium: true,
+    isPremium: false,
     rating: 4
   },
   {
