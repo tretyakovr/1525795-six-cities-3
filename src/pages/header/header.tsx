@@ -1,3 +1,6 @@
+import { Link } from 'react-router-dom';
+import { favorites } from '../../mocks/favorites';
+
 type HeaderProps = {
   sourcePage: string;
 }
@@ -6,14 +9,14 @@ function Header({sourcePage}: HeaderProps): JSX.Element {
   let headerLogo: JSX.Element;
   if (sourcePage === 'main') {
     headerLogo = (
-      <a className="header__logo-link header__logo-link--active">
+      <Link className="header__logo-link header__logo-link--active" to="/">
         <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41" />
-      </a>);
+      </Link>);
   } else {
     headerLogo = (
-      <a className="header__logo-link" href="main.html">
+      <Link className="header__logo-link" to="/">
         <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41" />
-      </a>);
+      </Link>);
   }
 
   let headerNav: JSX.Element = <> </>;
@@ -22,12 +25,12 @@ function Header({sourcePage}: HeaderProps): JSX.Element {
       <nav className="header__nav">
         <ul className="header__nav-list">
           <li className="header__nav-item user">
-            <a className="header__nav-link header__nav-link--profile" href="#">
+            <Link className="header__nav-link header__nav-link--profile" to="/favorites">
               <div className="header__avatar-wrapper user__avatar-wrapper">
               </div>
               <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
-              <span className="header__favorite-count">3</span>
-            </a>
+              <span className="header__favorite-count">{ favorites.length }</span>
+            </Link>
           </li>
           <li className="header__nav-item">
             <a className="header__nav-link" href="#">
