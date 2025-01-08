@@ -1,7 +1,3 @@
-export const Settings = {
-  OffersCount: 100,
-};
-
 export enum AuthStatus {
   Auth,
   NoAuth,
