@@ -4,7 +4,7 @@ import { Offer, Offers } from '../../types/offers';
 type OffersListProps = {
   cityOffers: Offers;
   activeLocation: string;
-  selectOfferHandler(offerId: string): void;
+  selectOfferHandler(offerId: string | null): void;
 }
 
 function OffersList({cityOffers, activeLocation, selectOfferHandler}: OffersListProps): JSX.Element {

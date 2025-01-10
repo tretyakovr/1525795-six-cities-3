@@ -11,7 +11,7 @@ function Locations({locations, activeLocation, changeLocationHandler}: Locations
   const classActiveLocation = `${classLocation} tabs__item--active`;
 
   const locationClickHandler = (evt: React.MouseEvent<HTMLElement>):void => {
-    changeLocationHandler(evt.target.innerText);
+    changeLocationHandler(evt.currentTarget.innerText);
   };
 
   return (
