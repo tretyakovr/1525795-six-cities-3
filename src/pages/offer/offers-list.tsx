@@ -40,7 +40,7 @@ function OffersList({cityOffers, activeLocation, selectOfferHandler}: OffersList
             className="cities__card place-card"
             onMouseOver={handleMouseOver}
           >
-            <Card {...item} />
+            <Card offer={item} divClassName='cities__image-wrapper place-card__image-wrapper'/>
           </article>
         ))}
       </div>

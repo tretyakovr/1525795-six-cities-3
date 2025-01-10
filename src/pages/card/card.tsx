@@ -1,14 +1,19 @@
 import { Link } from 'react-router-dom';
 import { Offer } from '../../types/offers';
 
-function Card(offer: Offer): JSX.Element {
+type CardProps = {
+  offer: Offer;
+  divClassName: string;
+}
+
+function Card({offer, divClassName}: CardProps): JSX.Element {
   return (
     <>
       { offer.isPremium &&
         <div className="place-card__mark">
           <span>Premium</span>
         </div> }
-      <div className="cities__image-wrapper place-card__image-wrapper">
+      <div className={`${divClassName}`}>
         <Link to={`/offer/${offer.id}`}>
           <img className="place-card__image" src={offer.previewImage} width="260" height="200" alt="Place image" />
         </Link>

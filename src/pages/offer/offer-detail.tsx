@@ -1,14 +1,18 @@
 import { useParams } from 'react-router';
 import Header from '../header/header';
-// import { Offer } from '../../types/offers';
 import { offers } from '../../mocks/offers';
 import Feedback from '../../components/feedback/feedback';
 import Reviews from './reviews';
+import OfferMap from './offer-map';
+import Card from '../card/card';
+
 
 function OfferDetail(): JSX.Element | null {
   const params = useParams();
-  const offer = offers.filter((item) => (item.id === params.id))[0];
-  if (!offer) {
+  const detailedOffer = offers.filter((item) => (item.id === params.id))[0];
+  const nearOffers = offers.filter((item) =>
+    (item.city.name === detailedOffer.city.name && item.id !== detailedOffer.id)).slice(1, 4);
+  if (!detailedOffer) {
     return (null);
   }
 
@@ -42,13 +46,13 @@ function OfferDetail(): JSX.Element | null {
           </div>
           <div className="offer__container container">
             <div className="offer__wrapper">
-              { offer.isPremium &&
+              { detailedOffer.isPremium &&
                 <div className="offer__mark">
                   <span>Premium</span>
                 </div> }
               <div className="offer__name-wrapper">
                 <h1 className="offer__name">
-                  {offer.title}
+                  {detailedOffer.title}
                 </h1>
                 <button className="offer__bookmark-button button" type="button">
                   <svg className="offer__bookmark-icon" width="31" height="33">
@@ -59,14 +63,14 @@ function OfferDetail(): JSX.Element | null {
               </div>
               <div className="offer__rating rating">
                 <div className="offer__stars rating__stars">
-                  <span style={{width: `${(offer.rating * 100 / 5).toString(10)}%`}}></span>
+                  <span style={{width: `${(detailedOffer.rating * 100 / 5).toString(10)}%`}}></span>
                   <span className="visually-hidden">Rating</span>
                 </div>
-                <span className="offer__rating-value rating__value">{offer.rating}</span>
+                <span className="offer__rating-value rating__value">{detailedOffer.rating}</span>
               </div>
               <ul className="offer__features">
                 <li className="offer__feature offer__feature--entire">
-                  {offer.type}
+                  {detailedOffer.type}
                 </li>
                 <li className="offer__feature offer__feature--bedrooms">
                   3 Bedrooms
@@ -76,7 +80,7 @@ function OfferDetail(): JSX.Element | null {
                 </li>
               </ul>
               <div className="offer__price">
-                <b className="offer__price-value">&euro;{offer.price}</b>
+                <b className="offer__price-value">&euro;{detailedOffer.price}</b>
                 <span className="offer__price-text">&nbsp;night</span>
               </div>
               <div className="offer__inside">
@@ -147,13 +151,18 @@ function OfferDetail(): JSX.Element | null {
               </section>
             </div>
           </div>
-          <section className="offer__map map"></section>
+          <section className="offer__map map"><OfferMap offer={detailedOffer} nearOffers={nearOffers} /></section>
         </section>
         <div className="container">
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
             <div className="near-places__list places__list">
-              <article className="near-places__card place-card">
+              {nearOffers.map((item) => (
+                <article key={item.id} className="near-places__card place-card">
+                  <Card offer={item} divClassName='near-places__image-wrapper place-card__image-wrapper'/>
+                </article>
+              ))}
+              {/* <article className="near-places__card place-card">
                 <div className="near-places__image-wrapper place-card__image-wrapper">
                   <a href="#">
                     <img className="place-card__image" src="img/room.jpg" width="260" height="200" alt="Place image" />
@@ -250,7 +259,7 @@ function OfferDetail(): JSX.Element | null {
                   </h2>
                   <p className="place-card__type">Apartment</p>
                 </div>
-              </article>
+              </article> */}
             </div>
           </section>
         </div>
