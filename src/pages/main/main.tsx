@@ -1,20 +1,46 @@
 import { useState } from 'react';
-import { useParams } from 'react-router';
 import { Offers } from '../../types/offers';
 import Locations from './locations';
 import Header from '../header/header';
 import OffersList from '../offer/offers-list';
+import CityMap from '../../components/city-map/city-map';
+import { City } from '../../types/city';
 
 type MainProps = {
   offers: Offers;
 }
 
+function getCity(city: string, offers: Offers): City {
+  const cityFromOffer = offers.filter((item) => item.city.name === city)[0];
+
+  return {
+    name: cityFromOffer.city.name,
+    latitude: cityFromOffer.city.location.latitude,
+    longitude: cityFromOffer.city.location.longitude,
+    zoom: cityFromOffer.city.location.zoom
+  };
+}
+
+function getCityOffers(city: string, offers: Offers): Offers {
+  const cityOffers: Offers = offers.filter((item) => item.city.name === city);
+
+  return cityOffers;
+}
+
 function Main({offers}: MainProps): JSX.Element {
   const locations: string[] = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
-  const params = useParams();
-  const city = (params.city ? params.city : locations[0]);
-
+  const city = locations[0];
   const [activeLocation, setActiveLocation] = useState(city);
+  const cityOffers: Offers = getCityOffers(activeLocation, offers);
+  const [selectedOffer, setSelectedOffer] = useState('');
+
+  const changeLocationHandler = (newLocation: string) => {
+    setActiveLocation(newLocation);
+  };
+
+  const selectOfferHandler = (offerId: string) => {
+    setSelectedOffer(offerId);
+  };
 
   return (
     <div className="page page--gray page--main">
@@ -27,15 +53,25 @@ function Main({offers}: MainProps): JSX.Element {
             <Locations
               locations={locations}
               activeLocation={activeLocation}
-              setActiveLocation={setActiveLocation}
+              changeLocationHandler={changeLocationHandler}
             />
           </section>
         </div>
         <div className="cities">
           <div className="cities__places-container container">
-            <OffersList offers={offers} activeLocation={activeLocation}/>
+            <OffersList
+              offers={offers}
+              activeLocation={activeLocation}
+              selectOfferHandler={selectOfferHandler}
+            />
             <div className="cities__right-section">
-              <section className="cities__map map"></section>
+              <section className="cities__map map">
+                <CityMap
+                  city={getCity(activeLocation, offers)}
+                  cityOffers={cityOffers}
+                  selectedOffer={selectedOffer}
+                />
+              </section>
             </div>
           </div>
         </div>

@@ -5,6 +5,7 @@ import { Offer, Offers } from '../../types/offers';
 type OffersListProps = {
   offers: Offers;
   activeLocation: string;
+  selectOfferHandler(offerId: string): void;
 }
 
 // type UseStateType = {
@@ -12,13 +13,13 @@ type OffersListProps = {
 //   setActiveOffer: (value: string) => void;
 // }
 
-function OffersList({offers, activeLocation}: OffersListProps): JSX.Element {
+function OffersList({offers, activeLocation, selectOfferHandler}: OffersListProps): JSX.Element {
   // const [, setActiveOffer] = useState<UseStateType>();
 
   function handleMouseOver(evt: React.MouseEvent<HTMLElement>): void {
     const nodeName: string = evt.currentTarget.nodeName;
     if (nodeName === 'ARTICLE') {
-      // setActiveOffer(evt.currentTarget.getAttribute('id'));
+      selectOfferHandler(evt.currentTarget.getAttribute('id'));
     }
   }
 
