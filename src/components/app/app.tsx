@@ -18,7 +18,6 @@ function App({offers} : AppProps): JSX.Element | null {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Main offers = {offers}/>}/>
-        <Route path="/:city" element={<Main offers = {offers}/>}/>
         <Route path="/login" element={<Login />}/>
         <Route path="/favorites" element={
           <PrivateRoute authStatus={AuthStatus.Auth}>

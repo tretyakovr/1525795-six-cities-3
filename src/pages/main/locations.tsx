@@ -3,12 +3,16 @@ import { Link } from 'react-router-dom';
 type LocationsProps = {
   locations: string[];
   activeLocation: string;
-  setActiveLocation(activeLocation: string): void;
+  changeLocationHandler(activeLocation: string): void;
 }
 
-function Locations({locations, activeLocation, setActiveLocation}: LocationsProps): JSX.Element {
+function Locations({locations, activeLocation, changeLocationHandler}: LocationsProps): JSX.Element {
   const classLocation = 'locations__item-link tabs__item';
   const classActiveLocation = `${classLocation} tabs__item--active`;
+
+  const locationClickHandler = (evt: React.MouseEvent<HTMLElement>):void => {
+    changeLocationHandler(evt.currentTarget.innerText);
+  };
 
   return (
     <ul className="locations__list tabs__list">
@@ -17,7 +21,7 @@ function Locations({locations, activeLocation, setActiveLocation}: LocationsProp
           <Link className=
             {
               item === activeLocation ? classActiveLocation : classLocation
-            } to={`/${item}`} onClick={() => setActiveLocation(activeLocation = item)}
+            } to="/" onClick={locationClickHandler}
           >
             <span>{item}</span>
           </Link>
