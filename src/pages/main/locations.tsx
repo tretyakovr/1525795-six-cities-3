@@ -10,8 +10,7 @@ function Locations({locations, activeLocation, changeLocationHandler}: Locations
   const classLocation = 'locations__item-link tabs__item';
   const classActiveLocation = `${classLocation} tabs__item--active`;
 
-  const locationClickHandler = (evt: React.MouseEvent<HTMLAnchorElement>) => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  const locationClickHandler = (evt: React.MouseEvent<HTMLElement>):void => {
     changeLocationHandler(evt.target.innerText);
   };
 

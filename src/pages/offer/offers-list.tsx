@@ -1,34 +1,24 @@
-// import { useState } from 'react';
 import Card from '../card/card';
 import { Offer, Offers } from '../../types/offers';
 
 type OffersListProps = {
-  offers: Offers;
+  cityOffers: Offers;
   activeLocation: string;
   selectOfferHandler(offerId: string): void;
 }
 
-// type UseStateType = {
-//   activeOffer: string;
-//   setActiveOffer: (value: string) => void;
-// }
-
-function OffersList({offers, activeLocation, selectOfferHandler}: OffersListProps): JSX.Element {
-  // const [, setActiveOffer] = useState<UseStateType>();
-
+function OffersList({cityOffers, activeLocation, selectOfferHandler}: OffersListProps): JSX.Element {
   function handleMouseOver(evt: React.MouseEvent<HTMLElement>): void {
-    const nodeName: string = evt.currentTarget.nodeName;
+    const nodeName: React.MouseEvent<HTMLElement> | string = evt.currentTarget.nodeName;
     if (nodeName === 'ARTICLE') {
       selectOfferHandler(evt.currentTarget.getAttribute('id'));
     }
   }
 
-  const filteredOffers = offers.filter((item) => (item.city.name === activeLocation));
-
   return (
     <section className="cities__places places">
       <h2 className="visually-hidden">Places</h2>
-      <b className="places__found">{filteredOffers.length} places to stay in {activeLocation}</b>
+      <b className="places__found">{cityOffers.length} places to stay in {activeLocation}</b>
       <form className="places__sorting" action="#" method="get">
         <span className="places__sorting-caption">Sort by</span>
         <span className="places__sorting-type" tabIndex={0}>
@@ -45,7 +35,7 @@ function OffersList({offers, activeLocation, selectOfferHandler}: OffersListProp
         </ul>
       </form>
       <div className="cities__places-list places__list tabs__content">
-        {filteredOffers.map((item: Offer) => (
+        {cityOffers.map((item: Offer) => (
           <article key={item.id} id={item.id}
             className="cities__card place-card"
             onMouseOver={handleMouseOver}

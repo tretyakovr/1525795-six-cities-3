@@ -60,7 +60,7 @@ function Main({offers}: MainProps): JSX.Element {
         <div className="cities">
           <div className="cities__places-container container">
             <OffersList
-              offers={offers}
+              cityOffers={cityOffers}
               activeLocation={activeLocation}
               selectOfferHandler={selectOfferHandler}
             />
