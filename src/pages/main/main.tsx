@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { Offers } from '../../types/offers';
-import Locations from './locations';
+import Locations from '../../components/locations/locations';
 import Header from '../header/header';
 import OffersList from '../offer/offers-list';
 import CityMap from '../../components/city-map/city-map';
 import { City } from '../../types/city';
+import { cities } from '../../const';
+import { getCityOffers } from '../../utils';
 
 type MainProps = {
   offers: Offers;
@@ -21,17 +23,17 @@ function getCity(city: string, offers: Offers): City {
   };
 }
 
-function getCityOffers(city: string, offers: Offers): Offers {
-  const cityOffers: Offers = offers.filter((item) => item.city.name === city);
+// function getCityOffers(city: string, offers: Offers): Offers {
+//   const cityOffers: Offers = offers.filter((item) => item.city.name === city);
 
-  return cityOffers;
-}
+//   return cityOffers;
+// }
 
 function Main({offers}: MainProps): JSX.Element {
-  const locations: string[] = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
-  const city = locations[0];
-  const [activeLocation, setActiveLocation] = useState(city);
-  const cityOffers: Offers = getCityOffers(activeLocation, offers);
+  // const locations: string[] = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
+  // const city = cities[0];
+  const [activeLocation, setActiveLocation] = useState(cities[0]);
+  const cityOffers: Offers = getCityOffers(activeLocation);
   const [selectedOffer, setSelectedOffer] = useState('');
 
   const changeLocationHandler = (newLocation: string) => {
@@ -51,7 +53,7 @@ function Main({offers}: MainProps): JSX.Element {
         <div className="tabs">
           <section className="locations container">
             <Locations
-              locations={locations}
+              locations={cities}
               activeLocation={activeLocation}
               changeLocationHandler={changeLocationHandler}
             />
