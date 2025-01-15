@@ -1,8 +1,7 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { getCityOffers } from '../utils';
-import { changeActiveCity } from './action';
-// import { cities } from '../const';
-
+import { initActiveCity } from './action';
+import { cities } from '../const';
 
 const initialState = {
   city: '',
@@ -11,9 +10,9 @@ const initialState = {
 
 
 const reducer = createReducer(initialState, (builder) => {
-  builder.addCase(changeActiveCity, (state, city: string) => {
-    state.city = city;
-    state.offers = getCityOffers(city);
+  builder.addCase(initActiveCity, (state) => {
+    state.city = cities[0];
+    state.offers = getCityOffers(cities[0]);
   });
 });
 
