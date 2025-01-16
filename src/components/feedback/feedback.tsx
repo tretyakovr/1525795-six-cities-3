@@ -1,21 +1,22 @@
-import { useState } from 'react';
+// import { useState } from 'react';
 
 function Feedback(): JSX.Element {
-  const [, setFormData] = useState({stars: 0, review: ''});
+  // const [, setFormData] = useState({stars: 0, review: ''});
 
-  const handleSubmit = (evt: React.SyntheticEvent<EventTarget>) => {
-    const target = evt.target as HTMLFormElement;
-    evt.preventDefault();
-    setFormData({
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      stars: target.rating.value as number,
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      review: target.review.value as string
-    });
-  };
+  // const handleSubmit = (evt: FormDataEvent) => {
+  //   const target = evt.target as HTMLFormElement;
+  //   evt.preventDefault();
+  //   setFormData({
+  //     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  //     stars: target.rating.value,
+  //     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  //     review: target.review.value
+  //   });
+  // };
 
   return (
-    <form className="reviews__form form" action="#" onSubmit={handleSubmit} method="post">
+    // <form className="reviews__form form" action="#" onSubmit={handleSubmit} method="post">
+    <form className="reviews__form form" action="#" method="post">
       <label className="reviews__label form__label" htmlFor="review">Your review</label>
       <div className="reviews__rating-form form__rating">
         <input className="form__rating-input visually-hidden" name="rating" value="5" id="5-stars" type="radio" />
