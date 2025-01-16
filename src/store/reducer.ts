@@ -2,8 +2,15 @@ import { createReducer } from '@reduxjs/toolkit';
 import { getCityOffers } from '../utils';
 import { initActiveCity } from './action';
 import { cities } from '../const';
+import { Offers } from '../types/offers';
 
-const initialState = {
+
+type InitialStateType = {
+  city: string;
+  offers: Offers;
+}
+
+const initialState: InitialStateType = {
   city: '',
   offers: [],
 };
