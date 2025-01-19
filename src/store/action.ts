@@ -1,3 +1,4 @@
 import { createAction } from '@reduxjs/toolkit';
 
-export const initActiveCity = createAction('initActiveCity');
+export const changeLocation = createAction('changeLocation');
+export const changeSort = createAction('changeSort');
