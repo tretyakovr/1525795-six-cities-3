@@ -30,7 +30,7 @@ function Main({offers}: MainProps): JSX.Element {
   const cityOffers: Offers = getCityOffers(activeLocation);
   const [selectedOffer, setSelectedOffer] = useState('');
 
-  const changeLocationHandler = (newLocation: string) => {
+  const changeLocationHandler = (newLocation: string | undefined) => {
     store.dispatch(changeLocation(newLocation));
     setActiveLocation(newLocation);
   };

@@ -5,6 +5,7 @@ import { City } from '../../types/city';
 import { Offers } from '../../types/offers';
 import {URL_MARKER_DEFAULT, URL_MARKER_CURRENT} from '../../const';
 import useMap from './use-map';
+// import { store } from '../../store';
 
 
 type CityMapProps = {

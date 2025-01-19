@@ -1,8 +1,6 @@
-// import { useEffect } from 'react';
 import Card from '../card/card';
 import { Offer, Offers } from '../../types/offers';
 import Sort from '../../components/sort/sort';
-// import { store } from '../../store';
 
 type OffersListProps = {
   cityOffers: Offers;
@@ -17,10 +15,6 @@ function OffersList({cityOffers, activeLocation, selectOfferHandler}: OffersList
       selectOfferHandler(evt.currentTarget.getAttribute('id'));
     }
   }
-
-  // const sortType = store.getState().sortType;
-
-  // useEffect(() => { }, [sortType]);
 
   return (
     <section className="cities__places places">
