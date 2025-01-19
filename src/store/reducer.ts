@@ -17,17 +17,17 @@ const initialState: InitialStateType = {
   sortType: SortTypes.POPULAR,
 };
 
-type ChangeSortProps = {
-  payload: string;
-  type: 'changeSort';
-}
+// type ChangeSortProps = {
+//   payload: string;
+//   type: 'changeSort';
+// }
 
 const reducer = createReducer(initialState, (builder) => {
   builder
     .addCase(changeLocation, (state, newLocation) => {
       state.city = newLocation.payload;
     })
-    .addCase(changeSort, (state: InitialStateType, sortValue: ChangeSortProps): void => {
+    .addCase(changeSort, (state, sortValue) => {
       state.sortType = sortValue.payload;
 
       switch (sortValue.payload) {
