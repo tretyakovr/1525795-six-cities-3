@@ -4,7 +4,7 @@ import Sort from '../../components/sort/sort';
 
 type OffersListProps = {
   cityOffers: Offers;
-  activeLocation: string;
+  activeLocation: string | undefined;
   selectOfferHandler(offerId: string | null): void;
 }
 

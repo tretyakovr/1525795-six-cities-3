@@ -14,7 +14,7 @@ type MainProps = {
   offers: Offers;
 }
 
-function getCity(city: string, offers: Offers): City {
+function getCity(city: string | undefined, offers: Offers): City {
   const cityFromOffer = offers.filter((item) => item.city.name === city)[0];
 
   return {
@@ -30,9 +30,11 @@ function Main({offers}: MainProps): JSX.Element {
   const cityOffers: Offers = getCityOffers(activeLocation);
   const [selectedOffer, setSelectedOffer] = useState('');
 
-  const changeLocationHandler = (newLocation: string | undefined) => {
-    store.dispatch(changeLocation(newLocation));
-    setActiveLocation(newLocation);
+  const changeLocationHandler = (newLocation: string) => {
+    if (newLocation) {
+      store.dispatch(changeLocation(newLocation));
+      setActiveLocation(newLocation);
+    }
   };
 
   const selectOfferHandler = (offerId: string) => {
