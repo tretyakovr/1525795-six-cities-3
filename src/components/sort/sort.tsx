@@ -10,7 +10,7 @@ function Sort(): JSX.Element {
     sortMenu?.classList.add('places__options--opened');
   }
 
-  function handleChangeSort(evt: React.MouseEventHandler<HTMLElement>): void {
+  function handleChangeSort(evt): void {
     const sortMenu = document.querySelector('.places__options');
     if (sortMenu) {
       sortMenu.classList.remove('places__options--opened');
