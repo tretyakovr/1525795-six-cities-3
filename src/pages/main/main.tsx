@@ -7,12 +7,14 @@ import CityMap from '../../components/city-map/city-map';
 import { City } from '../../types/city';
 import { cities } from '../../const';
 import { getCityOffers } from '../../utils';
+import { store } from '../../store';
+import { changeLocation } from '../../store/action';
 
 type MainProps = {
   offers: Offers;
 }
 
-function getCity(city: string, offers: Offers): City {
+function getCity(city: string | undefined, offers: Offers): City {
   const cityFromOffer = offers.filter((item) => item.city.name === city)[0];
 
   return {
@@ -23,21 +25,16 @@ function getCity(city: string, offers: Offers): City {
   };
 }
 
-// function getCityOffers(city: string, offers: Offers): Offers {
-//   const cityOffers: Offers = offers.filter((item) => item.city.name === city);
-
-//   return cityOffers;
-// }
-
 function Main({offers}: MainProps): JSX.Element {
-  // const locations: string[] = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
-  // const city = cities[0];
-  const [activeLocation, setActiveLocation] = useState(cities[0]);
+  const [activeLocation, setActiveLocation] = useState(store.getState().city);
   const cityOffers: Offers = getCityOffers(activeLocation);
   const [selectedOffer, setSelectedOffer] = useState('');
 
   const changeLocationHandler = (newLocation: string) => {
-    setActiveLocation(newLocation);
+    if (newLocation) {
+      store.dispatch(changeLocation(newLocation));
+      setActiveLocation(newLocation);
+    }
   };
 
   const selectOfferHandler = (offerId: string) => {
@@ -54,7 +51,7 @@ function Main({offers}: MainProps): JSX.Element {
           <section className="locations container">
             <Locations
               locations={cities}
-              activeLocation={activeLocation}
+              // activeLocation={activeLocation}
               changeLocationHandler={changeLocationHandler}
             />
           </section>

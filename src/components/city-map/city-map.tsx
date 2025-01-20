@@ -5,6 +5,7 @@ import { City } from '../../types/city';
 import { Offers } from '../../types/offers';
 import {URL_MARKER_DEFAULT, URL_MARKER_CURRENT} from '../../const';
 import useMap from './use-map';
+// import { store } from '../../store';
 
 
 type CityMapProps = {
@@ -15,14 +16,14 @@ type CityMapProps = {
 
 const defaultCustomIcon = new Icon({
   iconUrl: URL_MARKER_DEFAULT,
-  iconSize: [40, 40],
-  iconAnchor: [20, 40]
+  iconSize: [34, 39],
+  iconAnchor: [28, 39]
 });
 
 const currentCustomIcon = new Icon({
   iconUrl: URL_MARKER_CURRENT,
-  iconSize: [40, 40],
-  iconAnchor: [20, 40]
+  iconSize: [34, 39],
+  iconAnchor: [28, 39]
 });
 
 function CityMap({city, cityOffers, selectedOffer}: CityMapProps): JSX.Element {
