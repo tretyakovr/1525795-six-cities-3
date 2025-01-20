@@ -10,14 +10,14 @@ function Sort(): JSX.Element {
     sortMenu?.classList.add('places__options--opened');
   }
 
-  function handleChangeSort(evt): void {
+  function handleChangeSort(evt: Event & { target: HTMLLIElement }) {
     const sortMenu = document.querySelector('.places__options');
     if (sortMenu) {
       sortMenu.classList.remove('places__options--opened');
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
-    store.dispatch(changeSort(evt.target.innerText));
+    const itemText = evt.target.innerText as SortTypes;
+    store.dispatch(changeSort(itemText));
     currentSortType = store.getState().sortType;
   }
 

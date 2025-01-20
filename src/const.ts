@@ -23,9 +23,9 @@ export const URL_MARKER_CURRENT = '/public/img/pin-active.svg';
 export const cities: string[] = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
 
 
-export const SortTypes = {
-  POPULAR: 'Popular',
-  LOWTOHIGH: 'Price: low to high',
-  HIGHTOLOW: 'Price: high to low',
-  TOPRATED: 'Top rated first',
-};
+export enum SortTypes {
+  POPULAR = 'Popular',
+  LOWTOHIGH = 'Price: low to high',
+  HIGHTOLOW = 'Price: high to low',
+  TOPRATED = 'Top rated first',
+}

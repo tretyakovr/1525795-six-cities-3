@@ -8,7 +8,7 @@ import { Offers } from '../types/offers';
 type InitialStateType = {
   city: string | undefined;
   offers: Offers;
-  sortType: string | undefined;
+  sortType: SortTypes;
 }
 
 const initialState: InitialStateType = {
@@ -28,7 +28,7 @@ const reducer = createReducer(initialState, (builder) => {
       state.city = newLocation.payload;
     })
     .addCase(changeSort, (state, sortValue) => {
-      state.sortType = sortValue.payload;
+      state.sortType = sortValue.payload as SortTypes;
 
       switch (sortValue.payload) {
         case SortTypes.POPULAR:
