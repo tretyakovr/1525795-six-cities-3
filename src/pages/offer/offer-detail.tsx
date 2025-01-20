@@ -63,7 +63,8 @@ function OfferDetail(): JSX.Element | null {
               </div>
               <div className="offer__rating rating">
                 <div className="offer__stars rating__stars">
-                  <span style={{width: `${(detailedOffer.rating * 100 / 5).toString(10)}%`}}></span>
+                  {/* <span style={{width: `${(detailedOffer.rating * 100 / 5).toString(10)}%`}}></span> */}
+                  <span style={{width: `${(Math.round(detailedOffer.rating) * 100 / 5).toString(10)}%`}}></span>
                   <span className="visually-hidden">Rating</span>
                 </div>
                 <span className="offer__rating-value rating__value">{detailedOffer.rating}</span>

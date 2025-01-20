@@ -10,13 +10,14 @@ function Sort(): JSX.Element {
     sortMenu?.classList.add('places__options--opened');
   }
 
-  function handleChangeSort(evt: Event & { target: HTMLLIElement }) {
+  function handleChangeSort(evt: React.MouseEvent<HTMLLIElement>) {
     const sortMenu = document.querySelector('.places__options');
     if (sortMenu) {
       sortMenu.classList.remove('places__options--opened');
     }
 
-    const itemText = evt.target.innerText as SortTypes;
+    const target = evt.target as HTMLLIElement;
+    const itemText = target.innerText as SortTypes;
     store.dispatch(changeSort(itemText));
     currentSortType = store.getState().sortType;
   }
