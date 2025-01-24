@@ -1,60 +1,57 @@
-import { createReducer, current } from '@reduxjs/toolkit';
+import { createReducer } from '@reduxjs/toolkit';
 import { getCityOffers } from '../utils';
-import { changeLocation, changeSort } from './action';
-import { cities, SortTypes } from '../const';
+import { changeLocation, changeSort, setLoadingStatus, loadOffers, setAuthStatus } from './action';
+import { SortTypes } from '../const';
 import { Offers } from '../types/offers';
+import { AuthStatus } from '../const';
 
 
 type InitialStateType = {
-  city: string | undefined;
+  cities: string[];
+  city: string;
+  loadedOffers: Offers;
   offers: Offers;
   sortType: SortTypes;
+  isDataLoading: boolean;
+  authStatus: AuthStatus;
+  email: string | undefined;
+  favorites: Offers;
 }
 
 const initialState: InitialStateType = {
-  city: cities[0],
-  offers: getCityOffers(cities[0]),
+  cities: ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'],
+  city: '',
+  loadedOffers: [],
+  offers: [],
   sortType: SortTypes.POPULAR,
+  isDataLoading: false,
+  authStatus: AuthStatus.NoAuth,
+  email: '',
+  favorites: [],
 };
 
-// type ChangeSortProps = {
-//   payload: string;
-//   type: 'changeSort';
-// }
 
 const reducer = createReducer(initialState, (builder) => {
   builder
-    .addCase(changeLocation, (state, newLocation) => {
-      state.city = newLocation.payload;
+    .addCase(changeLocation, (state, action) => {
+      state.city = action.payload;
+      state.offers = getCityOffers(state.loadedOffers, action.payload, state.sortType);
     })
-    .addCase(changeSort, (state, sortValue) => {
-      state.sortType = sortValue.payload as SortTypes;
-
-      switch (sortValue.payload) {
-        case SortTypes.POPULAR:
-          state.offers = getCityOffers(current(state).city);
-          return ;
-
-        case SortTypes.LOWTOHIGH:
-          state.offers = getCityOffers(current(state).city).sort((offer1, offer2) => offer1.price - offer2.price);
-          return ;
-
-        case SortTypes.HIGHTOLOW:
-          state.offers = getCityOffers(current(state).city).sort((offer1, offer2) => offer2.price - offer1.price);
-          return ;
-
-        case SortTypes.TOPRATED:
-          state.offers = getCityOffers(current(state).city).sort((offer1, offer2) => offer2.rating - offer1.rating);
-      }
+    .addCase(changeSort, (state, action) => {
+      state.sortType = action.payload as SortTypes;
+      state.offers = getCityOffers(state.loadedOffers, state.city, action.payload as SortTypes);
+    })
+    .addCase(setLoadingStatus, (state, action) => {
+      state.isDataLoading = action.payload;
+    })
+    .addCase(loadOffers, (state, action) => {
+      state.loadedOffers = action.payload;
+      state.offers = getCityOffers(state.loadedOffers, state.city, state.sortType);
+    })
+    .addCase(setAuthStatus, (state, action) => {
+      state.authStatus = action.payload.authStatus;
+      state.email = action.payload.email;
     });
 });
 
 export {reducer};
-
-
-// Объект начального состояния: город (используется для отбора списка предложений в
-//   определённом городе) и список предложений по аренде.
-
-// Функцию-редьюсер. Она принимает в качестве параметров текущий state и действие (action).
-// Результатом выполнения редьюсера станет новое состояние. Обратите внимание, для именования
-// функций-редьюсеров применяются существительные.

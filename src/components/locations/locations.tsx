@@ -1,18 +1,23 @@
 import { Link } from 'react-router-dom';
 import { store } from '../../store';
+// import { changeLocation } from '../../store/action';
 
 type LocationsProps = {
-  locations: string[];
   changeLocationHandler(activeLocation: string): void;
 }
 
-function Locations({locations, changeLocationHandler}: LocationsProps): JSX.Element {
+function Locations({changeLocationHandler}: LocationsProps): JSX.Element {
+// function Locations(): JSX.Element {
+  const activeLocation = store.getState().city;
+  const locations = store.getState().cities;
   const classLocation = 'locations__item-link tabs__item';
   const classActiveLocation = `${classLocation} tabs__item--active`;
-  const activeLocation = store.getState().city;
 
   const locationClickHandler = (evt: React.MouseEvent<HTMLElement>):void => {
     changeLocationHandler(evt.currentTarget.innerText);
+    // const newLocation = evt.currentTarget.innerText;
+    // store.dispatch(changeLocation(newLocation));
+    // ??? Можно ли здесь обойтись без передачи события выше и использования useState, а просто вызвать store.dispatch()?
   };
 
   return (

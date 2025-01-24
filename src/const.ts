@@ -1,10 +1,10 @@
 export enum AuthStatus {
-  Auth,
-  NoAuth,
-  Unknown,
+  Auth = 'AUTH',
+  NoAuth = 'NOAUTH',
+  Unknown = 'UNKNOWN',
 }
 
-export enum AppRoutes {
+export enum AppRoute {
   FavoritesEmpty = '/favorites-empty',
   Favorites = '/favorites',
   Login = '/login',
@@ -21,11 +21,20 @@ export const URL_MARKER_CURRENT = '/public/img/pin-active.svg';
 
 
 export const cities: string[] = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
-
+export const DEFAULT_CITY = cities[0];
 
 export enum SortTypes {
   POPULAR = 'Popular',
   LOWTOHIGH = 'Price: low to high',
   HIGHTOLOW = 'Price: high to low',
   TOPRATED = 'Top rated first',
+}
+
+
+export enum APIRoute {
+  Main = '/',
+  Offers = '/offers',
+  Favorite = '/favorite',
+  Login = '/login',
+  Logout = '/logout',
 }
