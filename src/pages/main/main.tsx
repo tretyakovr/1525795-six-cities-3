@@ -1,33 +1,38 @@
 import { useState } from 'react';
-import { Offers } from '../../types/offers';
 import Locations from '../../components/locations/locations';
 import Header from '../header/header';
 import OffersList from '../offer/offers-list';
 import CityMap from '../../components/city-map/city-map';
 import { City } from '../../types/city';
-import { cities } from '../../const';
-import { getCityOffers } from '../../utils';
+import { Offers } from '../../types/offers';
 import { store } from '../../store';
 import { changeLocation } from '../../store/action';
 
-type MainProps = {
-  offers: Offers;
-}
 
-function getCity(city: string | undefined, offers: Offers): City {
-  const cityFromOffer = offers.filter((item) => item.city.name === city)[0];
+function getCity(): City {
+  const city = store.getState().city;
+  // Из первого предложения в списке офферов берем координаты для отображения на карте
+  const cityFromOffer = store.getState().offers.filter((item) => item.city.name === city)[0];
+  if (cityFromOffer) {
+    return {
+      name: cityFromOffer.city.name,
+      latitude: cityFromOffer.city.location.latitude,
+      longitude: cityFromOffer.city.location.longitude,
+      zoom: cityFromOffer.city.location.zoom
+    };
+  }
 
   return {
-    name: cityFromOffer.city.name,
-    latitude: cityFromOffer.city.location.latitude,
-    longitude: cityFromOffer.city.location.longitude,
-    zoom: cityFromOffer.city.location.zoom
+    name: '',
+    latitude: 0,
+    longitude: 0,
+    zoom: 0
   };
 }
 
-function Main({offers}: MainProps): JSX.Element {
+function Main(): JSX.Element {
   const [activeLocation, setActiveLocation] = useState(store.getState().city);
-  const cityOffers: Offers = getCityOffers(activeLocation);
+  const cityOffers: Offers = store.getState().offers;
   const [selectedOffer, setSelectedOffer] = useState('');
 
   const changeLocationHandler = (newLocation: string) => {
@@ -50,8 +55,6 @@ function Main({offers}: MainProps): JSX.Element {
         <div className="tabs">
           <section className="locations container">
             <Locations
-              locations={cities}
-              // activeLocation={activeLocation}
               changeLocationHandler={changeLocationHandler}
             />
           </section>
@@ -66,8 +69,8 @@ function Main({offers}: MainProps): JSX.Element {
             <div className="cities__right-section">
               <section className="cities__map map">
                 <CityMap
-                  city={getCity(activeLocation, offers)}
-                  cityOffers={cityOffers}
+                  city={getCity()}
+                  cityOffers={store.getState().offers}
                   selectedOffer={selectedOffer}
                 />
               </section>

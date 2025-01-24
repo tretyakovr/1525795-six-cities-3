@@ -1,16 +1,17 @@
 import { useParams } from 'react-router';
 import Header from '../header/header';
-import { offers } from '../../mocks/offers';
+// import { offers } from '../../mocks/offers';
 import Feedback from '../../components/feedback/feedback';
 import Reviews from './reviews';
 import OfferMap from './offer-map';
 import Card from '../card/card';
+import { store } from '../../store';
 
 
 function OfferDetail(): JSX.Element | null {
   const params = useParams();
-  const detailedOffer = offers.filter((item) => (item.id === params.id))[0];
-  const nearOffers = offers.filter((item) =>
+  const detailedOffer = store.getState().offers.filter((item) => (item.id === params.id))[0];
+  const nearOffers = store.getState().offers.filter((item) =>
     (item.city.name === detailedOffer.city.name && item.id !== detailedOffer.id)).slice(1, 4);
   if (!detailedOffer) {
     return (null);

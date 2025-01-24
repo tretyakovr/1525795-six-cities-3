@@ -1,46 +1,70 @@
+import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { favorites } from '../../mocks/favorites';
+import { store } from '../../store';
+import { AuthStatus } from '../../const';
+import { logoutAction } from '../../store/api-actions';
+import { AppRoute } from '../../const';
 
 type HeaderProps = {
   sourcePage: string;
 }
 
-function Header({sourcePage}: HeaderProps): JSX.Element {
-  let headerLogo: JSX.Element;
-  if (sourcePage === 'main') {
-    headerLogo = (
-      <Link className="header__logo-link header__logo-link--active" to="/">
-        <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41" />
-      </Link>);
-  } else {
-    headerLogo = (
-      <Link className="header__logo-link" to="/">
-        <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41" />
-      </Link>);
-  }
+function HeaderLoggedUser(): JSX.Element {
+  const navigate = useNavigate();
 
-  let headerNav: JSX.Element = <> </>;
-  if (sourcePage !== 'login') {
-    headerNav = (
-      <nav className="header__nav">
-        <ul className="header__nav-list">
-          <li className="header__nav-item user">
-            <Link className="header__nav-link header__nav-link--profile" to="/favorites">
-              <div className="header__avatar-wrapper user__avatar-wrapper">
-              </div>
-              <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
-              <span className="header__favorite-count">{ favorites.length }</span>
-            </Link>
-          </li>
-          <li className="header__nav-item">
-            <a className="header__nav-link" href="#">
-              <span className="header__signout">Sign out</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
-    );
-  }
+  const logoutHandler = () => {
+    store.dispatch(logoutAction);
+    navigate(AppRoute.Main);
+  };
+
+
+  return (
+    <nav className="header__nav">
+      <ul className="header__nav-list">
+        <li className="header__nav-item user">
+          <Link className="header__nav-link header__nav-link--profile" to="/favorites">
+            <div className="header__avatar-wrapper user__avatar-wrapper">
+            </div>
+            <span className="header__user-name user__name">{ store.getState().email }</span>
+            <span className="header__favorite-count">{ favorites.length }</span>
+          </Link>
+        </li>
+        <li className="header__nav-item">
+          <Link className="header__nav-link" to="/" onClick={logoutHandler}>
+            <span className="header__signout">Sign out</span>
+          </Link>
+        </li>
+      </ul>
+    </nav>
+  );
+}
+
+function HeaderNotLoggedUser(): JSX.Element {
+  return (
+    <nav className="header__nav">
+      <ul className="header__nav-list">
+        <li className="header__nav-item user">
+          <Link className="header__nav-link header__nav-link--profile" to="/login">
+            <div className="header__avatar-wrapper user__avatar-wrapper">
+            </div>
+            <span className="header__login">Sign in</span>
+          </Link>
+        </li>
+      </ul>
+    </nav>
+  );
+}
+
+function Header({sourcePage}: HeaderProps): JSX.Element {
+  const logoClassName = sourcePage === 'main' ? 'header__logo-link header__logo-link--active' : 'header__logo-link';
+  const headerLogo: JSX.Element = (
+    <Link className={logoClassName} to="/">
+      <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41" />
+    </Link>);
+
+  const isLogged = store.getState().authStatus === AuthStatus.Auth;
+  const headerNav = isLogged ? HeaderLoggedUser() : HeaderNotLoggedUser();
 
   return (
     <header className="header">

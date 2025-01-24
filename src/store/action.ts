@@ -1,5 +1,17 @@
 import { createAction } from '@reduxjs/toolkit';
-// import { SortTypes } from '../const';
+import { Offers } from '../types/offers';
+import { AuthStatus, APIRoute } from '../const';
 
-export const changeLocation = createAction<string, string>('changeLocation');
+export const changeLocation = createAction<string>('changeLocation');
+
 export const changeSort = createAction<string, string>('changeSort');
+
+export const loadOffers = createAction<Offers>('loadOffers');
+
+export const setLoadingStatus = createAction<boolean>('setLoadingStatus');
+
+export const setAuthStatus = createAction<{authStatus: AuthStatus; email: string | undefined}>('setAuthStatus');
+
+export const login = createAction<{authStatus: AuthStatus; email: string}>('login');
+
+export const redirectToRoute = createAction<APIRoute>('redirectToRoute');

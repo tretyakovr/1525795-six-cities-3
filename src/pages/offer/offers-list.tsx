@@ -16,15 +16,18 @@ function OffersList({cityOffers, activeLocation, selectOfferHandler}: OffersList
     }
   }
 
+  const city = activeLocation;
+  const offers = cityOffers;
+
   return (
     <section className="cities__places places">
       <h2 className="visually-hidden">Places</h2>
-      <b className="places__found">{cityOffers.length} places to stay in {activeLocation}</b>
+      <b className="places__found">{offers.length} places to stay in {city}</b>
       <form className="places__sorting" action="#" method="get">
         <Sort />
       </form>
       <div className="cities__places-list places__list tabs__content">
-        {cityOffers.map((item: Offer) => (
+        {offers.map((item: Offer) => (
           <article key={item.id} id={item.id}
             className="cities__card place-card"
             onMouseOver={handleMouseOver}
