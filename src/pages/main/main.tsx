@@ -4,7 +4,6 @@ import Header from '../header/header';
 import OffersList from '../offer/offers-list';
 import CityMap from '../../components/city-map/city-map';
 import { City } from '../../types/city';
-import { Offers } from '../../types/offers';
 import { store } from '../../store';
 import { changeLocation } from '../../store/action';
 
@@ -32,7 +31,6 @@ function getCity(): City {
 
 function Main(): JSX.Element {
   const [activeLocation, setActiveLocation] = useState(store.getState().city);
-  const cityOffers: Offers = store.getState().offers;
   const [selectedOffer, setSelectedOffer] = useState('');
 
   const changeLocationHandler = (newLocation: string) => {
@@ -62,7 +60,6 @@ function Main(): JSX.Element {
         <div className="cities">
           <div className="cities__places-container container">
             <OffersList
-              cityOffers={cityOffers}
               activeLocation={activeLocation}
               selectOfferHandler={selectOfferHandler}
             />

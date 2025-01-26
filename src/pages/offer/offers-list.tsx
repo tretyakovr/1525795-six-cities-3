@@ -1,14 +1,17 @@
 import Card from '../card/card';
 import { Offer, Offers } from '../../types/offers';
 import Sort from '../../components/sort/sort';
+import { useAppSelector } from '../../hooks';
+import { getSortedCityOffers } from '../../utils';
 
 type OffersListProps = {
-  cityOffers: Offers;
   activeLocation: string | undefined;
   selectOfferHandler(offerId: string | null): void;
 }
 
-function OffersList({cityOffers, activeLocation, selectOfferHandler}: OffersListProps): JSX.Element {
+function OffersList({activeLocation, selectOfferHandler}: OffersListProps): JSX.Element {
+  const sortType = useAppSelector((state) => state.sortType);
+
   function handleMouseOver(evt: React.MouseEvent<HTMLElement>): void {
     const nodeName: React.MouseEvent<HTMLElement> | string = evt.currentTarget.nodeName;
     if (nodeName === 'ARTICLE') {
@@ -17,7 +20,7 @@ function OffersList({cityOffers, activeLocation, selectOfferHandler}: OffersList
   }
 
   const city = activeLocation;
-  const offers = cityOffers;
+  const offers: Offers = getSortedCityOffers(city, sortType);
 
   return (
     <section className="cities__places places">

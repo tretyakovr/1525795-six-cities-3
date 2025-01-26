@@ -1,3 +1,4 @@
+import { useAppSelector } from '../../hooks';
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import { AuthStatus } from '../../const';
 import Main from '../../pages/main/main';
@@ -7,12 +8,12 @@ import OfferDetail from '../../pages/offer/offer-detail';
 import Page404 from '../../pages/page404/page404';
 import PrivateRoute from '../private-route/private-route';
 import { favorites } from '../../mocks/favorites';
-import { store } from '../../store';
+// import { store } from '../../store';
 import Loading from '../../pages/loading/loading';
 
 
 function App(): JSX.Element | null {
-  const isLoading = store.getState().isDataLoading;
+  const isLoading = useAppSelector((state) => state.isDataLoading);
 
   if (isLoading) {
     return (
