@@ -26,7 +26,7 @@ const initialState: InitialStateType = {
   sortType: SortTypes.POPULAR,
   isDataLoading: false,
   authStatus: AuthStatus.NoAuth,
-  email: '',
+  email: undefined,
   favorites: [],
 };
 

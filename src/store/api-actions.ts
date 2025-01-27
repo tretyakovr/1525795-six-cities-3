@@ -51,7 +51,7 @@ export const loginAction = createAsyncThunk<void, AuthData, {
       dispatch(setAuthStatus({authStatus: AuthStatus.Auth, email}));
       dispatch(redirectToRoute(APIRoute.Main));
     } catch {
-      dispatch(setAuthStatus({authStatus: AuthStatus.NoAuth, email}));
+      dispatch(setAuthStatus({authStatus: AuthStatus.NoAuth, email: undefined}));
     }
   },
 );

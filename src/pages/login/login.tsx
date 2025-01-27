@@ -8,10 +8,8 @@ import { AppRoute } from '../../const';
 
 
 function Login(): JSX.Element {
-  const loginRef: React.MutableRefObject<HTMLInputElement | null> = useRef<HTMLInputElement | null>(null);
-  const loginValue = loginRef.current?.value;
-  const passwordRef: React.MutableRefObject<HTMLInputElement | null> = useRef<HTMLInputElement | null>(null);
-  const passwordValue = passwordRef.current?.value;
+  const loginRef: React.LegacyRef<HTMLInputElement> | undefined = useRef<HTMLInputElement | null>(null);
+  const passwordRef: React.LegacyRef<HTMLInputElement> | undefined = useRef<HTMLInputElement | null>(null);
   const navigate = useNavigate();
 
   const locationClickHandler = (evt: React.MouseEvent<HTMLElement>):void => {
@@ -21,6 +19,8 @@ function Login(): JSX.Element {
 
   const authFormSubmitHandler = (evt: React.FormEvent<HTMLFormElement>): void => {
     evt.preventDefault();
+    const loginValue = loginRef.current?.value;
+    const passwordValue = passwordRef.current?.value;
     if (loginValue !== null && passwordValue !== null) {
       store.dispatch(loginAction({email: loginValue, password: passwordValue}));
       navigate(AppRoute.Main);

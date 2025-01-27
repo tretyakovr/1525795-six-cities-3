@@ -8,7 +8,6 @@ import OfferDetail from '../../pages/offer/offer-detail';
 import Page404 from '../../pages/page404/page404';
 import PrivateRoute from '../private-route/private-route';
 import { favorites } from '../../mocks/favorites';
-// import { store } from '../../store';
 import Loading from '../../pages/loading/loading';
 
 
