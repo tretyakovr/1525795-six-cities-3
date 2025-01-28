@@ -1,19 +1,22 @@
-import { useParams } from 'react-router';
+import { Params, useParams } from 'react-router';
 import Header from '../header/header';
-// import { offers } from '../../mocks/offers';
 import Feedback from '../../components/feedback/feedback';
 import Reviews from './reviews';
-import OfferMap from './offer-map';
-import Card from '../card/card';
-import { store } from '../../store';
+import { getOfferAction } from '../../store/api-actions';
+import { capitalize } from '../../utils';
+import { useAppSelector, useAppDispatch } from '../../hooks';
+import { OfferDetail } from '../../types/offers';
 
 
-function OfferDetail(): JSX.Element | null {
-  const params = useParams();
-  const detailedOffer = store.getState().offers.filter((item) => (item.id === params.id))[0];
-  const nearOffers = store.getState().offers.filter((item) =>
-    (item.city.name === detailedOffer.city.name && item.id !== detailedOffer.id)).slice(1, 4);
-  if (!detailedOffer) {
+function OfferDetailCard() {
+  const params: Readonly<Params<string>> = useParams<string>();
+  const offerId: string | undefined = params.id;
+
+  const detailedOffer: OfferDetail | undefined = useAppSelector((state) => state.offer);
+  const dispatch = useAppDispatch();
+
+  if (!detailedOffer || offerId !== detailedOffer.id) {
+    dispatch(getOfferAction(offerId));
     return (null);
   }
 
@@ -25,24 +28,11 @@ function OfferDetail(): JSX.Element | null {
         <section className="offer">
           <div className="offer__gallery-container container">
             <div className="offer__gallery">
-              <div className="offer__image-wrapper">
-                <img className="offer__image" src="img/room.jpg" alt="Photo studio" />
-              </div>
-              <div className="offer__image-wrapper">
-                <img className="offer__image" src="img/apartment-01.jpg" alt="Photo studio" />
-              </div>
-              <div className="offer__image-wrapper">
-                <img className="offer__image" src="img/apartment-02.jpg" alt="Photo studio" />
-              </div>
-              <div className="offer__image-wrapper">
-                <img className="offer__image" src="img/apartment-03.jpg" alt="Photo studio" />
-              </div>
-              <div className="offer__image-wrapper">
-                <img className="offer__image" src="img/studio-01.jpg" alt="Photo studio" />
-              </div>
-              <div className="offer__image-wrapper">
-                <img className="offer__image" src="img/apartment-01.jpg" alt="Photo studio" />
-              </div>
+              {detailedOffer.images.map((item) => (
+                <div key={item} className="offer__image-wrapper">
+                  <img className="offer__image" src={item} alt="Photo studio" />
+                </div>
+              ))}
             </div>
           </div>
           <div className="offer__container container">
@@ -64,7 +54,6 @@ function OfferDetail(): JSX.Element | null {
               </div>
               <div className="offer__rating rating">
                 <div className="offer__stars rating__stars">
-                  {/* <span style={{width: `${(detailedOffer.rating * 100 / 5).toString(10)}%`}}></span> */}
                   <span style={{width: `${(Math.round(detailedOffer.rating) * 100 / 5).toString(10)}%`}}></span>
                   <span className="visually-hidden">Rating</span>
                 </div>
@@ -72,13 +61,13 @@ function OfferDetail(): JSX.Element | null {
               </div>
               <ul className="offer__features">
                 <li className="offer__feature offer__feature--entire">
-                  {detailedOffer.type}
+                  {capitalize(detailedOffer.type)}
                 </li>
                 <li className="offer__feature offer__feature--bedrooms">
-                  3 Bedrooms
+                  {detailedOffer.bedrooms} Bedrooms
                 </li>
                 <li className="offer__feature offer__feature--adults">
-                  Max 4 adults
+                  Max {detailedOffer.maxAdults} adults
                 </li>
               </ul>
               <div className="offer__price">
@@ -88,36 +77,11 @@ function OfferDetail(): JSX.Element | null {
               <div className="offer__inside">
                 <h2 className="offer__inside-title">What&apos;s inside</h2>
                 <ul className="offer__inside-list">
-                  <li className="offer__inside-item">
-                    Wi-Fi
-                  </li>
-                  <li className="offer__inside-item">
-                    Washing machine
-                  </li>
-                  <li className="offer__inside-item">
-                    Towels
-                  </li>
-                  <li className="offer__inside-item">
-                    Heating
-                  </li>
-                  <li className="offer__inside-item">
-                    Coffee machine
-                  </li>
-                  <li className="offer__inside-item">
-                    Baby seat
-                  </li>
-                  <li className="offer__inside-item">
-                    Kitchen
-                  </li>
-                  <li className="offer__inside-item">
-                    Dishwasher
-                  </li>
-                  <li className="offer__inside-item">
-                    Cabel TV
-                  </li>
-                  <li className="offer__inside-item">
-                    Fridge
-                  </li>
+                  {detailedOffer.goods.map((item) => (
+                    <li key={item} className="offer__inside-item">
+                      {item}
+                    </li>
+                  ))}
                 </ul>
               </div>
               <div className="offer__host">
@@ -153,9 +117,9 @@ function OfferDetail(): JSX.Element | null {
               </section>
             </div>
           </div>
-          <section className="offer__map map"><OfferMap offer={detailedOffer} nearOffers={nearOffers} /></section>
+          {/* <section className="offer__map map"><OfferMap offer={detailedOffer} nearOffers={nearOffers} /></section> */}
         </section>
-        <div className="container">
+        {/* <div className="container">
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
             <div className="near-places__list places__list">
@@ -166,11 +130,11 @@ function OfferDetail(): JSX.Element | null {
               ))}
             </div>
           </section>
-        </div>
+        </div> */}
       </main>
     </div>
 
   );
 }
 
-export default OfferDetail;
+export default OfferDetailCard;

@@ -20,8 +20,8 @@ export const URL_MARKER_DEFAULT = '/public/img/pin.svg';
 export const URL_MARKER_CURRENT = '/public/img/pin-active.svg';
 
 
-export const cities: string[] = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
-export const DEFAULT_CITY = cities[0];
+export const CITIES: string[] = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
+export const DEFAULT_CITY = CITIES[0];
 
 export enum SortTypes {
   POPULAR = 'Popular',
@@ -37,4 +37,5 @@ export enum APIRoute {
   Favorite = '/favorite',
   Login = '/login',
   Logout = '/logout',
+  // Offer = /offers/{offerId}
 }
