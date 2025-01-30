@@ -3,12 +3,16 @@ import Header from '../header/header';
 import { Offers } from '../../types/offers';
 import FavoriteLocation from './favorite-location';
 import FavoritesEmpty from './favorites-empty';
+import { useAppSelector } from '../../hooks';
 
-type FavoritesProps = {
-  favorites: Offers;
-}
+// type FavoritesProps = {
+//   favorites: Offers;
+// }
 
-function Favorites({favorites}: FavoritesProps): JSX.Element {
+// function Favorites({favorites}: FavoritesProps): JSX.Element {
+function Favorites(): JSX.Element {
+  const favorites: Offers = useAppSelector((state) => state.favorites);
+
   const favoriteCities: string[] = Array.from(
     new Set<string>(favorites.map((item) => item.city.name))
   );

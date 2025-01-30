@@ -13,6 +13,8 @@ export const saveComments = createAction<Comments>('saveComments');
 
 export const saveNearOffers = createAction<Offers>('saveNearOffers');
 
+export const saveFavorites = createAction<Offers>('saveFavorites');
+
 export const saveOffer = createAction<OfferDetail>('saveOffer');
 
 export const setLoadingStatus = createAction<boolean>('setLoadingStatus');

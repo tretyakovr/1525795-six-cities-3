@@ -7,7 +7,6 @@ import Login from '../../pages/login/login';
 import OfferDetailCard from '../../pages/offer/offer-detail-card';
 import Page404 from '../../pages/page404/page404';
 import PrivateRoute from '../private-route/private-route';
-import { favorites } from '../../mocks/favorites';
 import Loading from '../../pages/loading/loading';
 
 
@@ -27,7 +26,7 @@ function App(): JSX.Element | null {
         <Route path="/login" element={<Login />}/>
         <Route path="/favorites" element={
           <PrivateRoute authStatus={AuthStatus.Auth}>
-            <Favorites favorites={favorites}/>
+            <Favorites />
           </PrivateRoute>
         }
         />

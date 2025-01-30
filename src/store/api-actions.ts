@@ -4,7 +4,7 @@ import {AppDispatch, State} from '../types/state';
 import {OfferDetail, Offers} from '../types/offers';
 import { Comments } from '../types/comments';
 import {loadOffers, setLoadingStatus, changeLocation, setAuthStatus, redirectToRoute, saveOffer} from './action';
-import { saveComments, saveNearOffers } from './action';
+import { saveComments, saveNearOffers, saveFavorites } from './action';
 import {saveToken, dropToken} from '../services/token';
 import {AppRoute, APIRoute} from '../const';
 import { AuthStatus, DEFAULT_CITY } from '../const';
@@ -43,6 +43,19 @@ export const getNearOffersAction = createAsyncThunk<void, string | undefined, {
   async (offerId, {dispatch, extra: api}) => {
     const {data} = await api.get<Offers>(`${APIRoute.Offers}/${offerId}/nearby`);
     dispatch(saveNearOffers(data.filter((item) => item.id !== offerId).slice(0, 3)));
+  },
+);
+
+
+export const getFavoritesAction = createAsyncThunk<void, string | undefined, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'getFavorites',
+  async (_arg, {dispatch, extra: api}) => {
+    const {data} = await api.get<Offers>(`${APIRoute.Favorite}`);
+    dispatch(saveFavorites(data));
   },
 );
 

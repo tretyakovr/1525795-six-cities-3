@@ -1,6 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { changeLocation, changeSort, setLoadingStatus, loadOffers, setAuthStatus, saveOffer } from './action';
-import { saveComments, saveNearOffers } from './action';
+import { saveComments, saveNearOffers, saveFavorites } from './action';
 import { SortTypes } from '../const';
 import { OfferDetail, Offers } from '../types/offers';
 import { Comments } from '../types/comments';
@@ -60,7 +60,11 @@ const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(saveNearOffers, (state, action) => {
       state.nearOffers = action.payload;
+    })
+    .addCase(saveFavorites, (state, action) => {
+      state.favorites = action.payload;
     });
+
 });
 
 export {reducer};
