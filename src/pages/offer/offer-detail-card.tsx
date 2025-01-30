@@ -2,10 +2,13 @@ import { Params, useParams } from 'react-router';
 import Header from '../header/header';
 import Feedback from '../../components/feedback/feedback';
 import Reviews from './reviews';
-import { getOfferAction } from '../../store/api-actions';
+import { getOfferAction, getCommentsAction, getNearOffersAction } from '../../store/api-actions';
 import { capitalize } from '../../utils';
 import { useAppSelector, useAppDispatch } from '../../hooks';
-import { OfferDetail } from '../../types/offers';
+import { OfferDetail, Offers } from '../../types/offers';
+import { Comments } from '../../types/comments';
+import OfferMap from './offer-map';
+import Card from '../card/card';
 
 
 function OfferDetailCard() {
@@ -13,10 +16,14 @@ function OfferDetailCard() {
   const offerId: string | undefined = params.id;
 
   const detailedOffer: OfferDetail | undefined = useAppSelector((state) => state.offer);
+  const offerComments: Comments = useAppSelector((state) => state.comments);
+  const nearOffers: Offers = useAppSelector((state) => state.nearOffers);
   const dispatch = useAppDispatch();
 
   if (!detailedOffer || offerId !== detailedOffer.id) {
     dispatch(getOfferAction(offerId));
+    dispatch(getCommentsAction(offerId));
+    dispatch(getNearOffersAction(offerId));
     return (null);
   }
 
@@ -64,7 +71,7 @@ function OfferDetailCard() {
                   {capitalize(detailedOffer.type)}
                 </li>
                 <li className="offer__feature offer__feature--bedrooms">
-                  {detailedOffer.bedrooms} Bedrooms
+                  {detailedOffer.bedrooms} Bedroom{detailedOffer.bedrooms > 1 ? 's' : ''}
                 </li>
                 <li className="offer__feature offer__feature--adults">
                   Max {detailedOffer.maxAdults} adults
@@ -88,18 +95,18 @@ function OfferDetailCard() {
                 <h2 className="offer__host-title">Meet the host</h2>
                 <div className="offer__host-user user">
                   <div className="offer__avatar-wrapper offer__avatar-wrapper--pro user__avatar-wrapper">
-                    <img className="offer__avatar user__avatar" src="img/avatar-angelina.jpg" width="74" height="74" alt="Host avatar" />
+                    <img className="offer__avatar user__avatar" src={detailedOffer.host.avatarUrl} width="74" height="74" alt="Host avatar" />
                   </div>
                   <span className="offer__user-name">
-                    Angelina
+                    {detailedOffer.host.name}
                   </span>
                   <span className="offer__user-status">
-                    Pro
+                    {detailedOffer.host.isPro ? 'Pro' : ''}
                   </span>
                 </div>
                 <div className="offer__description">
                   <p className="offer__text">
-                    A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam. The building is green and from 18th century.
+                    {detailedOffer.description}
                   </p>
                   <p className="offer__text">
                     An independent House, strategically located between Rembrand Square and National Opera, but where the bustle of the city comes to rest in this alley flowery and colorful.
@@ -108,18 +115,16 @@ function OfferDetailCard() {
               </div>
               <section className="offer__reviews reviews">
                 <h2 className="reviews__title">Reviews &middot;
-                  <span className="reviews__amount">1</span>
+                  <span className="reviews__amount">{offerComments.length}</span>
                 </h2>
-                <ul className="reviews__list">
-                  <Reviews />
-                </ul>
+                <Reviews offerComments={offerComments} />
                 <Feedback />
               </section>
             </div>
           </div>
-          {/* <section className="offer__map map"><OfferMap offer={detailedOffer} nearOffers={nearOffers} /></section> */}
+          <section className="offer__map map"><OfferMap offer={detailedOffer} nearOffers={nearOffers} /></section>
         </section>
-        {/* <div className="container">
+        <div className="container">
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
             <div className="near-places__list places__list">
@@ -130,7 +135,7 @@ function OfferDetailCard() {
               ))}
             </div>
           </section>
-        </div> */}
+        </div>
       </main>
     </div>
 

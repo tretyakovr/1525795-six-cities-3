@@ -1,7 +1,9 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { changeLocation, changeSort, setLoadingStatus, loadOffers, setAuthStatus, saveOffer } from './action';
+import { saveComments, saveNearOffers } from './action';
 import { SortTypes } from '../const';
 import { OfferDetail, Offers } from '../types/offers';
+import { Comments } from '../types/comments';
 import { AuthStatus } from '../const';
 
 
@@ -14,6 +16,8 @@ type InitialStateType = {
   email: string | undefined;
   favorites: Offers;
   offer: OfferDetail | undefined;
+  comments: Comments;
+  nearOffers: Offers;
 }
 
 const initialState: InitialStateType = {
@@ -25,6 +29,8 @@ const initialState: InitialStateType = {
   email: undefined,
   favorites: [],
   offer: undefined,
+  comments: [],
+  nearOffers: [],
 };
 
 
@@ -48,6 +54,12 @@ const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(saveOffer, (state, action)=> {
       state.offer = action.payload;
+    })
+    .addCase(saveComments, (state, action)=> {
+      state.comments = action.payload;
+    })
+    .addCase(saveNearOffers, (state, action) => {
+      state.nearOffers = action.payload;
     });
 });
 

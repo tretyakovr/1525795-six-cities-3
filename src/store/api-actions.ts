@@ -2,7 +2,9 @@ import {AxiosInstance} from 'axios';
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import {AppDispatch, State} from '../types/state';
 import {OfferDetail, Offers} from '../types/offers';
+import { Comments } from '../types/comments';
 import {loadOffers, setLoadingStatus, changeLocation, setAuthStatus, redirectToRoute, saveOffer} from './action';
+import { saveComments, saveNearOffers } from './action';
 import {saveToken, dropToken} from '../services/token';
 import {AppRoute, APIRoute} from '../const';
 import { AuthStatus, DEFAULT_CITY } from '../const';
@@ -28,6 +30,32 @@ export const getOfferAction = createAsyncThunk<void, string | undefined, {
   async (offerId, {dispatch, extra: api}) => {
     const {data} = await api.get<OfferDetail>(`${APIRoute.Offers}/${offerId}`);
     dispatch(saveOffer(data));
+  },
+);
+
+
+export const getNearOffersAction = createAsyncThunk<void, string | undefined, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'getNearOffers',
+  async (offerId, {dispatch, extra: api}) => {
+    const {data} = await api.get<Offers>(`${APIRoute.Offers}/${offerId}/nearby`);
+    dispatch(saveNearOffers(data.filter((item) => item.id !== offerId).slice(0, 3)));
+  },
+);
+
+
+export const getCommentsAction = createAsyncThunk<void, string | undefined, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'getComments',
+  async (offerId, {dispatch, extra: api}) => {
+    const {data} = await api.get<Comments>(`${APIRoute.Comments}/${offerId}`);
+    dispatch(saveComments(data));
   },
 );
 

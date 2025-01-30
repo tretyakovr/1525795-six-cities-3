@@ -1,10 +1,5 @@
 import { Link } from 'react-router-dom';
 import { Offer } from '../../types/offers';
-// import { useNavigate } from 'react-router-dom';
-// import { useAppDispatch } from '../../hooks';
-// import { getOfferAction } from '../../store/api-actions';
-// import { AppRoute } from '../../const';
-// import { store } from '../../store';
 
 type CardProps = {
   offer: Offer;
@@ -12,17 +7,6 @@ type CardProps = {
 }
 
 function Card({offer, divClassName}: CardProps): JSX.Element {
-  // const dispatch = useAppDispatch();
-  // const navigate = useNavigate();
-
-  // const cardClickHandler = ((evt) => {
-  //   evt.preventDefault();
-  //   dispatch(getOfferAction(offer.id));
-  //   console.log(store.getState());
-  //   console.log('card click handler', current(store.getState().offer.id);
-  //   navigate(`${AppRoute.Offer}/${offer.id}`);
-  // });
-
   return (
     <>
       { offer.isPremium &&
@@ -55,8 +39,6 @@ function Card({offer, divClassName}: CardProps): JSX.Element {
         </div>
         <h2 className="place-card__name">
           <Link to={`/offer/${offer.id}`}>{offer.title}</Link>
-          {/* <Link to={`/offer/${offer.id}`} onClick={cardClickHandler}>{offer.title}</Link> */}
-          {/* <Link to="#" onClick={cardClickHandler}>{offer.title}</Link> */}
         </h2>
         <p className="place-card__type">{offer.type}</p>
       </div>
