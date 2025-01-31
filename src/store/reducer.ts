@@ -67,7 +67,7 @@ const reducer = createReducer(initialState, (builder) => {
     .addCase(markFavorite, (state, action) => {
       // Заменить оффер в state.loadedOffers
       let index: number = state.loadedOffers.findIndex((item) => item.id === action.payload.id);
-      if (index > 0) {
+      if (index !== -1) {
         state.loadedOffers = [...state.loadedOffers.slice(0, index), action.payload, ...state.loadedOffers.slice(index + 1)];
       }
 

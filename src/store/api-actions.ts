@@ -136,5 +136,7 @@ export const markFavoriteAction = createAsyncThunk<void, FavoriteData, {
   async ({offerId, favoriteState}, {dispatch, extra: api}) => {
     const {data} = await api.post<Offer>(`${APIRoute.Favorite}/${offerId}/${favoriteState}`);
     dispatch(markFavorite(data));
+    // dispatch(fetchOffersAction());
+    // dispatch(getFavoritesAction());
   },
 );
