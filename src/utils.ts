@@ -1,10 +1,13 @@
 import { Offers } from './types/offers';
 import { SortTypes } from './const';
+// import { store } from './store';
+
+export function getCityOffers(loadedOffers: Offers, city: string | undefined): Offers {
+  return [...loadedOffers.filter((item) => item.city.name === city)];
+}
 
 
-export function getCityOffers(loadedOffers: Offers, city: string | undefined, sortType: SortTypes): Offers {
-  const cityOffers: Offers = loadedOffers.filter((item) => item.city.name === city);
-
+export function getSortedCityOffers(cityOffers: Offers | [], sortType: SortTypes): Offers {
   switch (sortType) {
     case SortTypes.LOWTOHIGH:
       return cityOffers.sort((offer1, offer2) => offer1.price - offer2.price);
@@ -18,3 +21,5 @@ export function getCityOffers(loadedOffers: Offers, city: string | undefined, so
 
   return cityOffers;
 }
+
+export const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);

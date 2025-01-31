@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { store } from '../../store';
+import { CITIES } from '../../const';
 // import { changeLocation } from '../../store/action';
 
 type LocationsProps = {
@@ -9,7 +10,7 @@ type LocationsProps = {
 function Locations({changeLocationHandler}: LocationsProps): JSX.Element {
 // function Locations(): JSX.Element {
   const activeLocation = store.getState().city;
-  const locations = store.getState().cities;
+  // const locations = CITIES;
   const classLocation = 'locations__item-link tabs__item';
   const classActiveLocation = `${classLocation} tabs__item--active`;
 
@@ -22,7 +23,7 @@ function Locations({changeLocationHandler}: LocationsProps): JSX.Element {
 
   return (
     <ul className="locations__list tabs__list">
-      {locations.map((item) => (
+      {CITIES.map((item) => (
         <li key={item} className="locations__item">
           <Link className=
             {

@@ -1,24 +1,15 @@
-import { useNavigate } from 'react-router-dom';
+import { useAppSelector } from '../../hooks';
 import { Link } from 'react-router-dom';
-import { favorites } from '../../mocks/favorites';
 import { store } from '../../store';
 import { AuthStatus } from '../../const';
 import { logoutAction } from '../../store/api-actions';
-import { AppRoute } from '../../const';
+import { Offers } from '../../types/offers';
 
 type HeaderProps = {
   sourcePage: string;
 }
 
-function HeaderLoggedUser(): JSX.Element {
-  const navigate = useNavigate();
-
-  const logoutHandler = () => {
-    store.dispatch(logoutAction);
-    navigate(AppRoute.Main);
-  };
-
-
+function HeaderLoggedUser(favorites: Offers): JSX.Element {
   return (
     <nav className="header__nav">
       <ul className="header__nav-list">
@@ -31,7 +22,11 @@ function HeaderLoggedUser(): JSX.Element {
           </Link>
         </li>
         <li className="header__nav-item">
-          <Link className="header__nav-link" to="/" onClick={logoutHandler}>
+          <Link className="header__nav-link" to="/" onClick={(evt) => {
+            evt.preventDefault();
+            store.dispatch(logoutAction());
+          }}
+          >
             <span className="header__signout">Sign out</span>
           </Link>
         </li>
@@ -57,14 +52,15 @@ function HeaderNotLoggedUser(): JSX.Element {
 }
 
 function Header({sourcePage}: HeaderProps): JSX.Element {
+  const authStatus = useAppSelector((state) => state.authStatus);
+  const favorites = useAppSelector((state) => state.favorites);
   const logoClassName = sourcePage === 'main' ? 'header__logo-link header__logo-link--active' : 'header__logo-link';
   const headerLogo: JSX.Element = (
     <Link className={logoClassName} to="/">
       <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41" />
     </Link>);
 
-  const isLogged = store.getState().authStatus === AuthStatus.Auth;
-  const headerNav = isLogged ? HeaderLoggedUser() : HeaderNotLoggedUser();
+  const headerNav = authStatus === AuthStatus.Auth ? HeaderLoggedUser(favorites) : HeaderNotLoggedUser();
 
   return (
     <header className="header">

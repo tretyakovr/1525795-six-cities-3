@@ -1,33 +1,36 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { getCityOffers } from '../utils';
-import { changeLocation, changeSort, setLoadingStatus, loadOffers, setAuthStatus } from './action';
+import { changeLocation, changeSort, setLoadingStatus, loadOffers, setAuthStatus, saveOffer } from './action';
+import { saveComments, saveNearOffers, saveFavorites, markFavorite } from './action';
 import { SortTypes } from '../const';
-import { Offers } from '../types/offers';
+import { OfferDetail, Offers } from '../types/offers';
+import { Comments } from '../types/comments';
 import { AuthStatus } from '../const';
 
 
 type InitialStateType = {
-  cities: string[];
   city: string;
   loadedOffers: Offers;
-  offers: Offers;
   sortType: SortTypes;
   isDataLoading: boolean;
   authStatus: AuthStatus;
   email: string | undefined;
   favorites: Offers;
+  offer: OfferDetail | undefined;
+  comments: Comments;
+  nearOffers: Offers;
 }
 
 const initialState: InitialStateType = {
-  cities: ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'],
   city: '',
   loadedOffers: [],
-  offers: [],
   sortType: SortTypes.POPULAR,
   isDataLoading: false,
   authStatus: AuthStatus.NoAuth,
-  email: '',
+  email: undefined,
   favorites: [],
+  offer: undefined,
+  comments: [],
+  nearOffers: [],
 };
 
 
@@ -35,22 +38,46 @@ const reducer = createReducer(initialState, (builder) => {
   builder
     .addCase(changeLocation, (state, action) => {
       state.city = action.payload;
-      state.offers = getCityOffers(state.loadedOffers, action.payload, state.sortType);
     })
     .addCase(changeSort, (state, action) => {
       state.sortType = action.payload as SortTypes;
-      state.offers = getCityOffers(state.loadedOffers, state.city, action.payload as SortTypes);
     })
     .addCase(setLoadingStatus, (state, action) => {
       state.isDataLoading = action.payload;
     })
     .addCase(loadOffers, (state, action) => {
       state.loadedOffers = action.payload;
-      state.offers = getCityOffers(state.loadedOffers, state.city, state.sortType);
     })
     .addCase(setAuthStatus, (state, action) => {
       state.authStatus = action.payload.authStatus;
       state.email = action.payload.email;
+    })
+    .addCase(saveOffer, (state, action)=> {
+      state.offer = action.payload;
+    })
+    .addCase(saveComments, (state, action)=> {
+      state.comments = action.payload;
+    })
+    .addCase(saveNearOffers, (state, action) => {
+      state.nearOffers = action.payload;
+    })
+    .addCase(saveFavorites, (state, action) => {
+      state.favorites = action.payload;
+    })
+    .addCase(markFavorite, (state, action) => {
+      // Заменить оффер в state.loadedOffers
+      let index: number = state.loadedOffers.findIndex((item) => item.id === action.payload.id);
+      if (index > 0) {
+        state.loadedOffers = [...state.loadedOffers.slice(0, index), action.payload, ...state.loadedOffers.slice(index + 1)];
+      }
+
+      // Привести в актуальное состояние state.favorites
+      index = state.favorites.findIndex((item) => item.id === action.payload.id);
+      if (index === -1) {
+        state.favorites.push(action.payload);
+      } else {
+        state.favorites = [...state.favorites.slice(0, index), ...state.favorites.slice(index + 1)];
+      }
     });
 });
 

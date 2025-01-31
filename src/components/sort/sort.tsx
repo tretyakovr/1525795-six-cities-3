@@ -1,25 +1,28 @@
+import { useRef, useState } from 'react';
 import { SortTypes } from '../../const';
 import { store } from '../../store';
 import { changeSort } from '../../store/action';
 
 function Sort(): JSX.Element {
-  let currentSortType = store.getState().sortType;
+  const [currentSortType, setCurrentSortType] = useState(store.getState().sortType);
+  const refSortMenu: React.MutableRefObject<HTMLUListElement | null> = useRef<HTMLUListElement | null>(null);
 
   function handleSortClick(): void {
-    const sortMenu = document.querySelector('.places__options');
-    sortMenu?.classList.add('places__options--opened');
+    if (refSortMenu.current) {
+      refSortMenu.current.classList.toggle('places__options--opened');
+    }
   }
 
   function handleChangeSort(evt: React.MouseEvent<HTMLLIElement>) {
-    const sortMenu = document.querySelector('.places__options');
-    if (sortMenu) {
-      sortMenu.classList.remove('places__options--opened');
+    if (refSortMenu.current) {
+      refSortMenu.current.classList.toggle('places__options--opened');
     }
 
+    // Здесь диспатчим новое значение сортировки и перерисовываем название типа сортировки
     const target = evt.target as HTMLLIElement;
     const itemText = target.innerText as SortTypes;
     store.dispatch(changeSort(itemText));
-    currentSortType = store.getState().sortType;
+    setCurrentSortType(store.getState().sortType);
   }
 
   return (
@@ -31,7 +34,7 @@ function Sort(): JSX.Element {
           <use xlinkHref="#icon-arrow-select"></use>
         </svg>
       </span>
-      <ul className="places__options places__options--custom" >
+      <ul ref={refSortMenu} className="places__options places__options--custom" >
         {Object.entries(SortTypes).map(([key, value]) => (
           <li key={key}
             className={value === currentSortType ? 'places__option places__option--active' : 'places__option'}
