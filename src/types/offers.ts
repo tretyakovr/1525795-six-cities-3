@@ -50,6 +50,7 @@ export type OfferDetail = {
   };
   images: string[];
   maxAdults: number;
+  previewImage: string;
 }
 
 export type Offers = Offer[];

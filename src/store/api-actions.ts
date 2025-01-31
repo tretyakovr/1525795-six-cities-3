@@ -1,10 +1,10 @@
 import {AxiosInstance} from 'axios';
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import {AppDispatch, State} from '../types/state';
-import {OfferDetail, Offers} from '../types/offers';
+import {OfferDetail, Offers, Offer } from '../types/offers';
 import { Comments } from '../types/comments';
 import {loadOffers, setLoadingStatus, changeLocation, setAuthStatus, redirectToRoute, saveOffer} from './action';
-import { saveComments, saveNearOffers, saveFavorites } from './action';
+import { saveComments, saveNearOffers, saveFavorites, markFavorite } from './action';
 import {saveToken, dropToken} from '../services/token';
 import {AppRoute, APIRoute} from '../const';
 import { AuthStatus, DEFAULT_CITY } from '../const';
@@ -13,6 +13,11 @@ import { AuthStatus, DEFAULT_CITY } from '../const';
 type AuthData = {
   email: string | undefined;
   password: string | undefined;
+}
+
+type FavoriteData = {
+  offerId: string;
+  favoriteState: number;
 }
 
 type UserData = {
@@ -118,5 +123,18 @@ export const logoutAction = createAsyncThunk<void, undefined, {
     await api.delete(APIRoute.Logout);
     dropToken();
     dispatch(setAuthStatus({authStatus: AuthStatus.NoAuth, email: undefined}));
+  },
+);
+
+
+export const markFavoriteAction = createAsyncThunk<void, FavoriteData, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'markFavorite',
+  async ({offerId, favoriteState}, {dispatch, extra: api}) => {
+    const {data} = await api.post<Offer>(`${APIRoute.Favorite}/${offerId}/${favoriteState}`);
+    dispatch(markFavorite(data));
   },
 );

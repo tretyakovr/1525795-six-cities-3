@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Offer } from '../../types/offers';
+import { useAppDispatch } from '../../hooks';
+import { markFavoriteAction } from '../../store/api-actions';
 
 type CardProps = {
   offer: Offer;
@@ -7,6 +9,19 @@ type CardProps = {
 }
 
 function Card({offer, divClassName}: CardProps): JSX.Element {
+  // const cardOffer = useAppSelector((state) => state.loadedOffers[state.loadedOffers.findIndex((item) => item.id === offer.id)]);
+  // console.log(cardOffer);
+  const dispatch = useAppDispatch();
+
+  const favoriteClickHandler = () => {
+    dispatch(markFavoriteAction({offerId: offer.id, favoriteState: Number(!offer.isFavorite)}));
+  };
+
+  // if (cardOffer.isFavorite !== offer.isFavorite) {
+  //   return (null);
+  // }
+
+
   return (
     <>
       { offer.isPremium &&
@@ -24,7 +39,11 @@ function Card({offer, divClassName}: CardProps): JSX.Element {
             <b className="place-card__price-value">&euro;{offer.price}</b>
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
-          <button className="place-card__bookmark-button button" type="button">
+          <button className=
+            {offer.isFavorite ? 'place-card__bookmark-button button place-card__bookmark-button--active button' : 'place-card__bookmark-button button'}
+          type="button"
+          onClick={favoriteClickHandler}
+          >
             <svg className="place-card__bookmark-icon" width="18" height="19">
               <use xlinkHref="#icon-bookmark"></use>
             </svg>

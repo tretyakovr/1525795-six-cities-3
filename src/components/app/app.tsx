@@ -1,6 +1,5 @@
 import { useAppSelector } from '../../hooks';
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
-import { AuthStatus } from '../../const';
 import Main from '../../pages/main/main';
 import Favorites from '../../pages/favorites/favorites';
 import Login from '../../pages/login/login';
@@ -12,6 +11,7 @@ import Loading from '../../pages/loading/loading';
 
 function App(): JSX.Element | null {
   const isLoading = useAppSelector((state) => state.isDataLoading);
+  const authStatus = useAppSelector((state) => state.authStatus);
 
   if (isLoading) {
     return (
@@ -25,7 +25,7 @@ function App(): JSX.Element | null {
         <Route path="/" element={<Main />}/>
         <Route path="/login" element={<Login />}/>
         <Route path="/favorites" element={
-          <PrivateRoute authStatus={AuthStatus.Auth}>
+          <PrivateRoute authStatus={authStatus}>
             <Favorites />
           </PrivateRoute>
         }

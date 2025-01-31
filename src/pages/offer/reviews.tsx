@@ -16,7 +16,7 @@ function Reviews({offerComments}: ReviewsProps): JSX.Element {
   };
 
   const getDateMMMMYYYY = (date: string): string => {
-    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     const commentDate = new Date(date);
     const year = commentDate.getFullYear();
     const month = commentDate.getMonth();

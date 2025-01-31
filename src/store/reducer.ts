@@ -1,6 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { changeLocation, changeSort, setLoadingStatus, loadOffers, setAuthStatus, saveOffer } from './action';
-import { saveComments, saveNearOffers, saveFavorites } from './action';
+import { saveComments, saveNearOffers, saveFavorites, markFavorite } from './action';
 import { SortTypes } from '../const';
 import { OfferDetail, Offers } from '../types/offers';
 import { Comments } from '../types/comments';
@@ -63,8 +63,22 @@ const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(saveFavorites, (state, action) => {
       state.favorites = action.payload;
-    });
+    })
+    .addCase(markFavorite, (state, action) => {
+      // Заменить оффер в state.loadedOffers
+      let index: number = state.loadedOffers.findIndex((item) => item.id === action.payload.id);
+      if (index > 0) {
+        state.loadedOffers = [...state.loadedOffers.slice(0, index), action.payload, ...state.loadedOffers.slice(index + 1)];
+      }
 
+      // Привести в актуальное состояние state.favorites
+      index = state.favorites.findIndex((item) => item.id === action.payload.id);
+      if (index === -1) {
+        state.favorites.push(action.payload);
+      } else {
+        state.favorites = [...state.favorites.slice(0, index), ...state.favorites.slice(index + 1)];
+      }
+    });
 });
 
 export {reducer};
