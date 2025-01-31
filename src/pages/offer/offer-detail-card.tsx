@@ -9,6 +9,7 @@ import { OfferDetail, Offers } from '../../types/offers';
 import { Comments } from '../../types/comments';
 import OfferMap from './offer-map';
 import Card from '../card/card';
+import { AuthStatus } from '../../const';
 
 
 function OfferDetailCard() {
@@ -18,6 +19,7 @@ function OfferDetailCard() {
   const detailedOffer: OfferDetail | undefined = useAppSelector((state) => state.offer);
   const offerComments: Comments = useAppSelector((state) => state.comments);
   const nearOffers: Offers = useAppSelector((state) => state.nearOffers);
+  const authStatus: AuthStatus = useAppSelector((state) => state.authStatus);
   const dispatch = useAppDispatch();
 
   if (!detailedOffer || offerId !== detailedOffer.id) {
@@ -118,7 +120,7 @@ function OfferDetailCard() {
                   <span className="reviews__amount">{offerComments.length}</span>
                 </h2>
                 <Reviews offerComments={offerComments} />
-                <Feedback />
+                { authStatus === AuthStatus.Auth ? <Feedback /> : null}
               </section>
             </div>
           </div>
