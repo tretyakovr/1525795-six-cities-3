@@ -1,9 +1,8 @@
 import Card from '../card/card';
-import { Offer, Offers } from '../../types/offers';
+import { Offer } from '../../types/offers';
 import Sort from '../../components/sort/sort';
 import { useAppSelector } from '../../hooks';
 import { getCityOffers, getSortedCityOffers } from '../../utils';
-import { store } from '../../store';
 
 type OffersListProps = {
   activeLocation: string | undefined;
@@ -21,8 +20,9 @@ function OffersList({activeLocation, selectOfferHandler}: OffersListProps): JSX.
   }
 
   const city = activeLocation;
-  const cityOffers = getCityOffers(store.getState().loadedOffers, city);
-  const offers: Offers = getSortedCityOffers(cityOffers, sortType);
+  let offers = useAppSelector((state) => state.loadedOffers);
+  offers = getCityOffers(offers, city);
+  offers = getSortedCityOffers(offers, sortType);
 
   return (
     <section className="cities__places places">

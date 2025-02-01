@@ -1,7 +1,7 @@
 import { createAction } from '@reduxjs/toolkit';
 import { Offer, Offers, OfferDetail } from '../types/offers';
 import { AuthStatus, AppRoute } from '../const';
-import { Comments } from '../types/comments';
+import { Comment, Comments } from '../types/comments';
 
 export const changeLocation = createAction<string>('changeLocation');
 
@@ -26,3 +26,5 @@ export const login = createAction<{authStatus: AuthStatus; email: string}>('logi
 export const redirectToRoute = createAction<AppRoute>('redirectToRoute');
 
 export const markFavorite = createAction<Offer>('markFavorite');
+
+export const addComment = createAction<Comment>('addComment');

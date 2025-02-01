@@ -1,9 +1,9 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { changeLocation, changeSort, setLoadingStatus, loadOffers, setAuthStatus, saveOffer } from './action';
-import { saveComments, saveNearOffers, saveFavorites, markFavorite } from './action';
+import { saveComments, saveNearOffers, saveFavorites, markFavorite, addComment } from './action';
 import { SortTypes } from '../const';
 import { OfferDetail, Offers } from '../types/offers';
-import { Comments } from '../types/comments';
+import { Comment } from '../types/comments';
 import { AuthStatus } from '../const';
 
 
@@ -16,7 +16,7 @@ type InitialStateType = {
   email: string | undefined;
   favorites: Offers;
   offer: OfferDetail | undefined;
-  comments: Comments;
+  comments: Comment[];
   nearOffers: Offers;
 }
 
@@ -67,7 +67,7 @@ const reducer = createReducer(initialState, (builder) => {
     .addCase(markFavorite, (state, action) => {
       // Заменить оффер в state.loadedOffers
       let index: number = state.loadedOffers.findIndex((item) => item.id === action.payload.id);
-      if (index > 0) {
+      if (index !== -1) {
         state.loadedOffers = [...state.loadedOffers.slice(0, index), action.payload, ...state.loadedOffers.slice(index + 1)];
       }
 
@@ -78,6 +78,9 @@ const reducer = createReducer(initialState, (builder) => {
       } else {
         state.favorites = [...state.favorites.slice(0, index), ...state.favorites.slice(index + 1)];
       }
+    })
+    .addCase(addComment, (state, action) => {
+      state.comments.push(action.payload);
     });
 });
 
