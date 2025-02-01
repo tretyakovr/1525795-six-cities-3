@@ -46,6 +46,7 @@ function OfferMap({offer, nearOffers}: OfferMapProps): JSX.Element {
         lng: offer.location.longitude
       });
       const markerIcon = currentCustomIcon;
+
       marker.setIcon(markerIcon).addTo(markerLayer);
 
       return () => {

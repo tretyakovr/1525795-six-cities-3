@@ -123,18 +123,22 @@ function OfferDetailCard() {
                   <span className="reviews__amount">{offerComments.length}</span>
                 </h2>
                 <Reviews offerComments={offerComments} />
-                { authStatus === AuthStatus.Auth ? <Feedback /> : null}
+                { authStatus === AuthStatus.Auth ? <Feedback offerId={detailedOffer.id} /> : null}
               </section>
             </div>
           </div>
-          <section className="offer__map map"><OfferMap offer={detailedOffer} nearOffers={nearOffers} /></section>
+          <section className="offer__map map">
+            <OfferMap offer={detailedOffer} nearOffers={nearOffers} />
+          </section>
         </section>
         <div className="container">
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
             <div className="near-places__list places__list">
               {nearOffers.map((item) => (
-                <article key={item.id} className="near-places__card place-card">
+                <article id={item.id} key={item.id}
+                  className="near-places__card place-card"
+                >
                   <Card offer={item} divClassName='near-places__image-wrapper place-card__image-wrapper'/>
                 </article>
               ))}
@@ -143,7 +147,6 @@ function OfferDetailCard() {
         </div>
       </main>
     </div>
-
   );
 }
 
