@@ -2,8 +2,7 @@ import Card from '../card/card';
 import { Offer, Offers } from '../../types/offers';
 import Sort from '../../components/sort/sort';
 import { useAppSelector } from '../../hooks';
-import { getCityOffers, getSortedCityOffers } from '../../utils';
-// import { store } from '../../store';
+import { getSortedCityOffers } from '../../utils';
 
 type OffersListProps = {
   activeLocation: string | undefined;

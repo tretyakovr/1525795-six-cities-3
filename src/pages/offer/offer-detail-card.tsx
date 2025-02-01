@@ -54,7 +54,10 @@ function OfferDetailCard() {
                 <h1 className="offer__name">
                   {detailedOffer.title}
                 </h1>
-                <button className="offer__bookmark-button button" type="button">
+                <button className=
+                  {detailedOffer.isFavorite ? 'offer__bookmark-button button offer__bookmark-button--active button' : 'offer__bookmark-button button'}
+                type="button"
+                >
                   <svg className="offer__bookmark-icon" width="31" height="33">
                     <use xlinkHref="#icon-bookmark"></use>
                   </svg>
