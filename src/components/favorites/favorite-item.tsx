@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Offer } from '../../types/offers';
+import { capitalize } from '../../utils';
 
 type FavoriteItemProps = {
   favoriteItem: Offer;
@@ -39,7 +40,7 @@ function FavoriteItem({favoriteItem}: FavoriteItemProps): JSX.Element {
         <h2 className="place-card__name">
           <Link to={`/offer/${favoriteItem.id}`}>{favoriteItem.title}</Link>
         </h2>
-        <p className="place-card__type">{favoriteItem.type}</p>
+        <p className="place-card__type">{capitalize(favoriteItem.type)}</p>
       </div>
     </>
   );

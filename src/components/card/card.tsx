@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Offer } from '../../types/offers';
 import { useAppDispatch } from '../../hooks';
 import { markFavoriteAction } from '../../store/api-actions';
+import { capitalize } from '../../utils';
 
 type CardProps = {
   offer: Offer;
@@ -52,7 +53,7 @@ function Card({offer, divClassName}: CardProps): JSX.Element {
         <h2 className="place-card__name">
           <Link to={`/offer/${offer.id}`}>{offer.title}</Link>
         </h2>
-        <p className="place-card__type">{offer.type}</p>
+        <p className="place-card__type">{capitalize(offer.type)}</p>
       </div>
     </>
   );
