@@ -78,12 +78,6 @@ const reducer = createReducer(initialState, (builder) => {
       } else {
         state.favorites = [...state.favorites.slice(0, index), ...state.favorites.slice(index + 1)];
       }
-
-      // // Если этот оффер есть в nearOffers, то обновить и там, бред конечно, но пока так
-      // index = state.nearOffers.findIndex((item) => item.id === action.payload.id);
-      // if (index !== -1) {
-      //   state.nearOffers = [...state.nearOffers.slice(0, index), action.payload, ...state.nearOffers.slice(index + 1)];
-      // }
     })
     .addCase(addComment, (state, action) => {
       state.comments.push(action.payload);
