@@ -37,7 +37,7 @@ function OfferDetailCard() {
         <section className="offer">
           <div className="offer__gallery-container container">
             <div className="offer__gallery">
-              {detailedOffer.images.map((item) => (
+              {detailedOffer.images.slice(0, 6).map((item) => (
                 <div key={item} className="offer__image-wrapper">
                   <img className="offer__image" src={item} alt="Photo studio" />
                 </div>
