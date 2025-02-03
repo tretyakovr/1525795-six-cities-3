@@ -3,18 +3,26 @@ import { Offer } from '../../types/offers';
 import { capitalize } from '../../utils';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { markFavoriteAction } from '../../store/api-actions';
+import { AppRoute, AuthStatus } from '../../const';
+import { useNavigate } from 'react-router-dom';
 
 type FavoriteItemProps = {
   favoriteItem: Offer;
 };
 
 function FavoriteItem({favoriteItem}: FavoriteItemProps): JSX.Element {
+  const authStatus = useAppSelector((state) => state.authStatus);
+  const navigate = useNavigate();
   // Вообще говоря, здесь всегда будет true
   const isFavorite = useAppSelector((state) => state.favorites.find((item) => item.id === favoriteItem.id)?.isFavorite);
   const dispatch = useAppDispatch();
 
   const favoriteClickHandler = () => {
-    dispatch(markFavoriteAction({offerId: favoriteItem.id, favoriteState: Number(!favoriteItem.isFavorite)}));
+    if (authStatus !== AuthStatus.Auth) {
+      navigate(AppRoute.Login);
+    } else {
+      dispatch(markFavoriteAction({offerId: favoriteItem.id, favoriteState: Number(!favoriteItem.isFavorite)}));
+    }
   };
 
   return (

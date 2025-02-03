@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom';
 import { Offer } from '../../types/offers';
+import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { markFavoriteAction } from '../../store/api-actions';
 import { capitalize } from '../../utils';
+import { AppRoute, AuthStatus } from '../../const';
 
 type CardProps = {
   offer: Offer;
@@ -11,12 +13,18 @@ type CardProps = {
 
 function Card({offer, divClassName}: CardProps): JSX.Element {
   const dispatch = useAppDispatch();
+  const authStatus = useAppSelector((state) => state.authStatus);
+  const navigate = useNavigate();
   // Значение isFavorite ищем в loadedOffers, чтобы не мудрить с
   // обновлением nearOffers, если компонент вызывается из OfferDetailCard и там меняется его значение
   const isFavorite = useAppSelector((state) => state.loadedOffers.find((item) => item.id === offer.id)?.isFavorite);
 
   const favoriteClickHandler = () => {
-    dispatch(markFavoriteAction({offerId: offer.id, favoriteState: Number(!offer.isFavorite)}));
+    if (authStatus !== AuthStatus.Auth) {
+      navigate(AppRoute.Login);
+    } else {
+      dispatch(markFavoriteAction({offerId: offer.id, favoriteState: Number(!offer.isFavorite)}));
+    }
   };
 
   return (

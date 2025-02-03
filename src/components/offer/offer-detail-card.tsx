@@ -1,15 +1,15 @@
-import { Params, useParams } from 'react-router';
+import { Params, useParams, useNavigate } from 'react-router';
 import Header from '../../components/header/header';
 import Feedback from '../../components/feedback/feedback';
 import Card from '../../components/card/card';
 import Reviews from './reviews';
+import OfferMap from './offer-map';
 import { getOfferAction, getCommentsAction, getNearOffersAction, markFavoriteAction } from '../../store/api-actions';
 import { capitalize } from '../../utils';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { OfferDetail, Offers } from '../../types/offers';
 import { Comments } from '../../types/comments';
-import OfferMap from './offer-map';
-import { AuthStatus } from '../../const';
+import { AppRoute, AuthStatus } from '../../const';
 
 function OfferDetailCard() {
   const params: Readonly<Params<string>> = useParams<string>();
@@ -19,12 +19,17 @@ function OfferDetailCard() {
   const offerComments: Comments = useAppSelector((state) => state.comments);
   const nearOffers: Offers = useAppSelector((state) => state.nearOffers);
   const authStatus: AuthStatus = useAppSelector((state) => state.authStatus);
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const isFavorite = useAppSelector((state) => state.offer?.isFavorite) as boolean;
 
   const favoriteClickHandler = () => {
-    dispatch(markFavoriteAction({offerId: detailedOffer.id, favoriteState: Number(!detailedOffer.isFavorite)}));
-    dispatch(getOfferAction(offerId));
+    if (authStatus !== AuthStatus.Auth) {
+      navigate(AppRoute.Login);
+    } else {
+      dispatch(markFavoriteAction({offerId: detailedOffer.id, favoriteState: Number(!detailedOffer.isFavorite)}));
+      dispatch(getOfferAction(offerId));
+    }
   };
 
   if (!detailedOffer || offerId !== detailedOffer.id) {
@@ -119,9 +124,6 @@ function OfferDetailCard() {
                   <p className="offer__text">
                     {detailedOffer.description}
                   </p>
-                  {/* <p className="offer__text">
-                    An independent House, strategically located between Rembrand Square and National Opera, but where the bustle of the city comes to rest in this alley flowery and colorful.
-                  </p> */}
                 </div>
               </div>
               <section className="offer__reviews reviews">
