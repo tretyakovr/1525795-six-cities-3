@@ -1,6 +1,7 @@
 import { Params, useParams } from 'react-router';
-import Header from '../header/header';
+import Header from '../../components/header/header';
 import Feedback from '../../components/feedback/feedback';
+import Card from '../../components/card/card';
 import Reviews from './reviews';
 import { getOfferAction, getCommentsAction, getNearOffersAction } from '../../store/api-actions';
 import { capitalize } from '../../utils';
@@ -8,7 +9,6 @@ import { useAppSelector, useAppDispatch } from '../../hooks';
 import { OfferDetail, Offers } from '../../types/offers';
 import { Comments } from '../../types/comments';
 import OfferMap from './offer-map';
-import Card from '../card/card';
 import { AuthStatus } from '../../const';
 
 
@@ -79,7 +79,7 @@ function OfferDetailCard() {
                   {detailedOffer.bedrooms} Bedroom{detailedOffer.bedrooms > 1 ? 's' : ''}
                 </li>
                 <li className="offer__feature offer__feature--adults">
-                  Max {detailedOffer.maxAdults} adults
+                  Max {detailedOffer.maxAdults} adult{detailedOffer.maxAdults > 1 ? 's' : ''}
                 </li>
               </ul>
               <div className="offer__price">

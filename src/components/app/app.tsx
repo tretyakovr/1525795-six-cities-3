@@ -1,12 +1,12 @@
 import { useAppSelector } from '../../hooks';
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
-import Main from '../../pages/main/main';
-import Favorites from '../../pages/favorites/favorites';
-import Login from '../../pages/login/login';
-import OfferDetailCard from '../../pages/offer/offer-detail-card';
-import Page404 from '../../pages/page404/page404';
+import Main from '../main/main';
+import Favorites from '../favorites/favorites';
+import Login from '../login/login';
+import OfferDetailCard from '../offer/offer-detail-card';
+import Page404 from '../page404/page404';
 import PrivateRoute from '../private-route/private-route';
-import Loading from '../../pages/loading/loading';
+import Loading from '../loading/loading';
 
 
 function App(): JSX.Element | null {

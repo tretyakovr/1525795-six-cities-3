@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Locations from '../../components/locations/locations';
-import Header from '../header/header';
-import OffersList from '../offer/offers-list';
+import Header from '../../components/header/header';
+import OffersList from '../../components/offer/offers-list';
 import CityMap from '../../components/city-map/city-map';
 import { City } from '../../types/city';
 import { Offers } from '../../types/offers';

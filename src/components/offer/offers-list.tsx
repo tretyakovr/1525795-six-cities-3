@@ -1,4 +1,4 @@
-import Card from '../card/card';
+import Card from '../../components/card/card';
 import { Offer } from '../../types/offers';
 import Sort from '../../components/sort/sort';
 import { useAppSelector } from '../../hooks';

@@ -9,18 +9,11 @@ type CardProps = {
 }
 
 function Card({offer, divClassName}: CardProps): JSX.Element {
-  // const cardOffer = useAppSelector((state) => state.loadedOffers[state.loadedOffers.findIndex((item) => item.id === offer.id)]);
-  // console.log(cardOffer);
   const dispatch = useAppDispatch();
 
   const favoriteClickHandler = () => {
     dispatch(markFavoriteAction({offerId: offer.id, favoriteState: Number(!offer.isFavorite)}));
   };
-
-  // if (cardOffer.isFavorite !== offer.isFavorite) {
-  //   return (null);
-  // }
-
 
   return (
     <>
