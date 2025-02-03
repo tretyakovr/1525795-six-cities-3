@@ -3,7 +3,7 @@ import Header from '../../components/header/header';
 import Feedback from '../../components/feedback/feedback';
 import Card from '../../components/card/card';
 import Reviews from './reviews';
-import { getOfferAction, getCommentsAction, getNearOffersAction } from '../../store/api-actions';
+import { getOfferAction, getCommentsAction, getNearOffersAction, markFavoriteAction } from '../../store/api-actions';
 import { capitalize } from '../../utils';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { OfferDetail, Offers } from '../../types/offers';
@@ -11,16 +11,21 @@ import { Comments } from '../../types/comments';
 import OfferMap from './offer-map';
 import { AuthStatus } from '../../const';
 
-
 function OfferDetailCard() {
   const params: Readonly<Params<string>> = useParams<string>();
   const offerId: string | undefined = params.id;
 
-  const detailedOffer: OfferDetail | undefined = useAppSelector((state) => state.offer);
+  const detailedOffer = useAppSelector((state) => state.offer) as OfferDetail;
   const offerComments: Comments = useAppSelector((state) => state.comments);
   const nearOffers: Offers = useAppSelector((state) => state.nearOffers);
   const authStatus: AuthStatus = useAppSelector((state) => state.authStatus);
   const dispatch = useAppDispatch();
+  const isFavorite = useAppSelector((state) => state.offer?.isFavorite) as boolean;
+
+  const favoriteClickHandler = () => {
+    dispatch(markFavoriteAction({offerId: detailedOffer.id, favoriteState: Number(!detailedOffer.isFavorite)}));
+    dispatch(getOfferAction(offerId));
+  };
 
   if (!detailedOffer || offerId !== detailedOffer.id) {
     dispatch(getOfferAction(offerId));
@@ -55,8 +60,9 @@ function OfferDetailCard() {
                   {detailedOffer.title}
                 </h1>
                 <button className=
-                  {detailedOffer.isFavorite ? 'offer__bookmark-button button offer__bookmark-button--active button' : 'offer__bookmark-button button'}
+                  {isFavorite ? 'offer__bookmark-button button offer__bookmark-button--active button' : 'offer__bookmark-button button'}
                 type="button"
+                onClick={favoriteClickHandler}
                 >
                   <svg className="offer__bookmark-icon" width="31" height="33">
                     <use xlinkHref="#icon-bookmark"></use>
@@ -113,9 +119,9 @@ function OfferDetailCard() {
                   <p className="offer__text">
                     {detailedOffer.description}
                   </p>
-                  <p className="offer__text">
+                  {/* <p className="offer__text">
                     An independent House, strategically located between Rembrand Square and National Opera, but where the bustle of the city comes to rest in this alley flowery and colorful.
-                  </p>
+                  </p> */}
                 </div>
               </div>
               <section className="offer__reviews reviews">
@@ -139,7 +145,10 @@ function OfferDetailCard() {
                 <article id={item.id} key={item.id}
                   className="near-places__card place-card"
                 >
-                  <Card offer={item} divClassName='near-places__image-wrapper place-card__image-wrapper'/>
+                  <Card
+                    offer={item}
+                    divClassName='near-places__image-wrapper place-card__image-wrapper'
+                  />
                 </article>
               ))}
             </div>

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Offer } from '../../types/offers';
-import { useAppDispatch } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { markFavoriteAction } from '../../store/api-actions';
 import { capitalize } from '../../utils';
 
@@ -11,6 +11,9 @@ type CardProps = {
 
 function Card({offer, divClassName}: CardProps): JSX.Element {
   const dispatch = useAppDispatch();
+  // Значение isFavorite ищем в loadedOffers, чтобы не мудрить с
+  // обновлением nearOffers, если компонент вызывается из OfferDetailCard и там меняется его значение
+  const isFavorite = useAppSelector((state) => state.loadedOffers.find((item) => item.id === offer.id)?.isFavorite);
 
   const favoriteClickHandler = () => {
     dispatch(markFavoriteAction({offerId: offer.id, favoriteState: Number(!offer.isFavorite)}));
@@ -34,7 +37,7 @@ function Card({offer, divClassName}: CardProps): JSX.Element {
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
           <button className=
-            {offer.isFavorite ? 'place-card__bookmark-button button place-card__bookmark-button--active button' : 'place-card__bookmark-button button'}
+            {isFavorite ? 'place-card__bookmark-button button place-card__bookmark-button--active button' : 'place-card__bookmark-button button'}
           type="button"
           onClick={favoriteClickHandler}
           >
