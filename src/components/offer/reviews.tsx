@@ -1,10 +1,9 @@
-import { Comment } from '../../types/comments';
+import { useAppSelector } from '../../hooks';
+import { Comment, Comments } from '../../types/comments';
 
-type ReviewsProps = {
-  offerComments: Comment[];
-};
 
-function Reviews({offerComments}: ReviewsProps): JSX.Element {
+function Reviews(): JSX.Element {
+  const offerComments: Comments = useAppSelector((state) => state.comments);
 
   const getFormattedDate = (date: string): string => {
     const commentDate = new Date(date);

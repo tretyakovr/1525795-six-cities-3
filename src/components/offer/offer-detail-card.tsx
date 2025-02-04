@@ -8,19 +8,20 @@ import { getOfferAction, getCommentsAction, getNearOffersAction, markFavoriteAct
 import { capitalize } from '../../utils';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { OfferDetail, Offers } from '../../types/offers';
-import { Comments } from '../../types/comments';
 import { AppRoute, AuthStatus } from '../../const';
+
 
 function OfferDetailCard() {
   const params: Readonly<Params<string>> = useParams<string>();
   const offerId: string | undefined = params.id;
 
-  const detailedOffer = useAppSelector((state) => state.offer) as OfferDetail;
-  const offerComments: Comments = useAppSelector((state) => state.comments);
-  const nearOffers: Offers = useAppSelector((state) => state.nearOffers);
-  const authStatus: AuthStatus = useAppSelector((state) => state.authStatus);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
+  const detailedOffer = useAppSelector((state) => state.offer) as OfferDetail;
+  const commentsCount = useAppSelector((state) => state.comments.length);
+  const nearOffers: Offers = useAppSelector((state) => state.nearOffers);
+  const authStatus: AuthStatus = useAppSelector((state) => state.authStatus);
   const isFavorite = useAppSelector((state) => state.offer?.isFavorite) as boolean;
 
   const favoriteClickHandler = () => {
@@ -128,9 +129,9 @@ function OfferDetailCard() {
               </div>
               <section className="offer__reviews reviews">
                 <h2 className="reviews__title">Reviews &middot;
-                  <span className="reviews__amount">{offerComments.length}</span>
+                  <span className="reviews__amount">{commentsCount}</span>
                 </h2>
-                <Reviews offerComments={offerComments} />
+                <Reviews />
                 { authStatus === AuthStatus.Auth ? <Feedback offerId={detailedOffer.id} /> : null}
               </section>
             </div>

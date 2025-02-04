@@ -78,7 +78,8 @@ export const getCommentsAction = createAsyncThunk<void, string | undefined, {
 }>(
   'getComments',
   async (offerId, {dispatch, extra: api}) => {
-    const {data} = await api.get<Comments>(`${APIRoute.Comments}/${offerId}`);
+    let {data} = await api.get<Comments>(`${APIRoute.Comments}/${offerId}`);
+    data = data.sort((review1, review2) => +new Date(review2.date) - +new Date(review1.date));
     dispatch(saveComments(data));
   },
 );
@@ -155,5 +156,6 @@ export const sendCommentAction = createAsyncThunk<void, CommentData, {
   async ({offerId, comment, rating}, {dispatch, extra: api}) => {
     const {data} = await api.post<Comment>(`${APIRoute.Comments}/${offerId}`, {comment, rating});
     dispatch(addComment(data));
+    dispatch(getCommentsAction(offerId));
   },
 );
