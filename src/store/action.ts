@@ -28,3 +28,9 @@ export const redirectToRoute = createAction<AppRoute>('redirectToRoute');
 export const markFavorite = createAction<Offer>('markFavorite');
 
 export const addComment = createAction<Comment>('addComment');
+
+export const setAsyncOpState = createAction<boolean>('setAsyncOpState');
+
+export const setAsyncErrorState = createAction<boolean>('setAsyncErrorState');
+
+export const setResetFormState = createAction<boolean>('setResetFormState');

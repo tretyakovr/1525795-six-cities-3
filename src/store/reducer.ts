@@ -1,6 +1,7 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { changeLocation, changeSort, setLoadingStatus, loadOffers, setAuthStatus, saveOffer } from './action';
-import { saveComments, saveNearOffers, saveFavorites, markFavorite, addComment } from './action';
+import { saveComments, saveNearOffers, saveFavorites, markFavorite, addComment, setAsyncOpState, setAsyncErrorState } from './action';
+import { setResetFormState } from './action';
 import { SortTypes } from '../const';
 import { OfferDetail, Offers } from '../types/offers';
 import { Comment } from '../types/comments';
@@ -18,6 +19,9 @@ type InitialStateType = {
   offer: OfferDetail | undefined;
   comments: Comment[];
   nearOffers: Offers;
+  isAsyncOp: boolean;
+  isAsyncError: boolean;
+  isResetForm: boolean;
 }
 
 const initialState: InitialStateType = {
@@ -31,6 +35,9 @@ const initialState: InitialStateType = {
   offer: undefined,
   comments: [],
   nearOffers: [],
+  isAsyncOp: false,
+  isAsyncError: false,
+  isResetForm: false,
 };
 
 
@@ -63,6 +70,15 @@ const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(saveFavorites, (state, action) => {
       state.favorites = action.payload;
+    })
+    .addCase(setAsyncOpState, (state, action) => {
+      state.isAsyncOp = action.payload;
+    })
+    .addCase(setAsyncErrorState, (state, action) => {
+      state.isAsyncError = action.payload;
+    })
+    .addCase(setResetFormState, (state, action) => {
+      state.isResetForm = action.payload;
     })
     .addCase(markFavorite, (state, action) => {
       // Заменить оффер в state.loadedOffers

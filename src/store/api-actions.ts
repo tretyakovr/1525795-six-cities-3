@@ -3,12 +3,11 @@ import {createAsyncThunk} from '@reduxjs/toolkit';
 import {AppDispatch, State} from '../types/state';
 import {OfferDetail, Offers, Offer } from '../types/offers';
 import { Comment, Comments } from '../types/comments';
-import {loadOffers, setLoadingStatus, changeLocation, setAuthStatus, redirectToRoute, saveOffer} from './action';
-import { saveComments, saveNearOffers, saveFavorites, markFavorite, addComment } from './action';
+import {loadOffers, setLoadingStatus, changeLocation, setAuthStatus, redirectToRoute, saveOffer, setAsyncOpState} from './action';
+import { saveComments, saveNearOffers, saveFavorites, markFavorite, addComment, setResetFormState } from './action';
 import {saveToken, dropToken} from '../services/token';
 import {AppRoute, APIRoute} from '../const';
 import { AuthStatus, DEFAULT_CITY } from '../const';
-
 
 type AuthData = {
   email: string | undefined;
@@ -154,8 +153,13 @@ export const sendCommentAction = createAsyncThunk<void, CommentData, {
 }>(
   'sendComment',
   async ({offerId, comment, rating}, {dispatch, extra: api}) => {
-    const {data} = await api.post<Comment>(`${APIRoute.Comments}/${offerId}`, {comment, rating});
-    dispatch(addComment(data));
-    dispatch(getCommentsAction(offerId));
+    dispatch(setAsyncOpState(true));
+    await api.post<Comment>(`${APIRoute.Comments}/${offerId}`, {comment, rating})
+      .then((response) => dispatch(addComment(response.data)))
+      .then(() => dispatch(setAsyncOpState(false)))
+      .then(() => dispatch(setResetFormState(true)))
+      .catch(() => {
+        throw new Error('Error send comment');
+      });
   },
 );
