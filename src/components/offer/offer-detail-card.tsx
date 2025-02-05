@@ -1,4 +1,4 @@
-import { Params, useParams, useNavigate } from 'react-router';
+import { useParams, useNavigate } from 'react-router';
 import Header from '../../components/header/header';
 import Feedback from '../../components/feedback/feedback';
 import Card from '../../components/card/card';
@@ -12,7 +12,7 @@ import { AppRoute, AuthStatus } from '../../const';
 
 
 function OfferDetailCard() {
-  const params: Readonly<Params<string>> = useParams<string>();
+  const params = useParams<string>();
   const offerId: string | undefined = params.id;
 
   const navigate = useNavigate();

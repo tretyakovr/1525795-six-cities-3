@@ -31,6 +31,45 @@ type UserData = {
   token: string;
 }
 
+
+export const loginAction = createAsyncThunk<void, AuthData, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'login',
+  async ({email, password}, {dispatch, extra: api}) => {
+    try {
+      const {data: {token}} = await api.post<UserData>(APIRoute.Login, {email, password});
+      saveToken(token);
+      dispatch(setAuthStatus({authStatus: AuthStatus.Auth, email}));
+      dispatch(redirectToRoute(AppRoute.Main));
+    } catch {
+      dispatch(setAuthStatus({authStatus: AuthStatus.NoAuth, email: undefined}));
+    }
+  },
+);
+
+
+export const checkAuthAction = createAsyncThunk<void, undefined, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'checkAuth',
+  async (_arg, {dispatch, extra: api}) => {
+    // await api.get(APIRoute.Login);
+    try {
+      const {data: {token, email}} = await api.get<UserData>(APIRoute.Login);
+      saveToken(token);
+      dispatch(setAuthStatus({authStatus: AuthStatus.Auth, email: email}));
+      dispatch(redirectToRoute(AppRoute.Main));
+    } catch {
+      dispatch(setAuthStatus({authStatus: AuthStatus.NoAuth, email: undefined}));
+    }
+  },
+);
+
 export const getOfferAction = createAsyncThunk<void, string | undefined, {
   dispatch: AppDispatch;
   state: State;
@@ -96,25 +135,6 @@ export const fetchOffersAction = createAsyncThunk<void, undefined, {
     dispatch(loadOffers(data));
     dispatch(changeLocation(DEFAULT_CITY));
     dispatch(setLoadingStatus(false));
-  },
-);
-
-
-export const loginAction = createAsyncThunk<void, AuthData, {
-  dispatch: AppDispatch;
-  state: State;
-  extra: AxiosInstance;
-}>(
-  'login',
-  async ({email, password}, {dispatch, extra: api}) => {
-    try {
-      const {data: {token}} = await api.post<UserData>(APIRoute.Login, {email, password});
-      saveToken(token);
-      dispatch(setAuthStatus({authStatus: AuthStatus.Auth, email}));
-      dispatch(redirectToRoute(AppRoute.Main));
-    } catch {
-      dispatch(setAuthStatus({authStatus: AuthStatus.NoAuth, email: undefined}));
-    }
   },
 );
 

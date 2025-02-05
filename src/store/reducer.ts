@@ -30,7 +30,7 @@ const initialState: InitialStateType = {
   sortType: SortTypes.POPULAR,
   isDataLoading: false,
   authStatus: AuthStatus.NoAuth,
-  email: undefined,
+  email: '',
   favorites: [],
   offer: undefined,
   comments: [],

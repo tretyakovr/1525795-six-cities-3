@@ -1,20 +1,23 @@
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { store } from '../../store';
 import { changeLocation } from '../../store/action';
 import { loginAction } from '../../store/api-actions';
-import { AppRoute } from '../../const';
+import { AppRoute, AuthStatus } from '../../const';
+import { useAppSelector, useAppDispatch } from '../../hooks';
 
 
 function Login(): JSX.Element {
-  const loginRef: React.LegacyRef<HTMLInputElement> | undefined = useRef<HTMLInputElement | null>(null);
-  const passwordRef: React.LegacyRef<HTMLInputElement> | undefined = useRef<HTMLInputElement | null>(null);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  const authStatus = useAppSelector((state) => state.authStatus);
+  const loginRef = useRef<HTMLInputElement | null>(null);
+  const passwordRef = useRef<HTMLInputElement | null>(null);
 
   const locationClickHandler = (evt: React.MouseEvent<HTMLElement>):void => {
     const newLocation = evt.currentTarget.innerText;
-    store.dispatch(changeLocation(newLocation));
+    dispatch(changeLocation(newLocation));
   };
 
   const authFormSubmitHandler = (evt: React.FormEvent<HTMLFormElement>): void => {
@@ -22,11 +25,15 @@ function Login(): JSX.Element {
     const loginValue = loginRef.current?.value;
     const passwordValue = passwordRef.current?.value;
     if (loginValue !== null && passwordValue !== null) {
-      store.dispatch(loginAction({email: loginValue, password: passwordValue}));
+      dispatch(loginAction({email: loginValue, password: passwordValue}));
       navigate(AppRoute.Main);
     }
     // Вывести сообщение об ошибке
   };
+
+  if (authStatus === AuthStatus.Auth) {
+    navigate(AppRoute.Main);
+  }
 
   return (
     <div className="page page--gray page--login">

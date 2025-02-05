@@ -5,13 +5,12 @@ import OffersList from '../../components/offer/offers-list';
 import CityMap from '../../components/city-map/city-map';
 import { City } from '../../types/city';
 import { Offers } from '../../types/offers';
-import { store } from '../../store';
 import { changeLocation } from '../../store/action';
 import { getCityOffers, getSortedCityOffers } from '../../utils';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 
 
-function getCity(cityOffers: Offers): City {
-  const city = store.getState().city;
+function getCity(city: string, cityOffers: Offers): City {
   // Из первого предложения в списке офферов берем координаты для отображения на карте
   const cityFromOffer = cityOffers.filter((item) => item.city.name === city)[0];
   if (cityFromOffer) {
@@ -32,18 +31,23 @@ function getCity(cityOffers: Offers): City {
 }
 
 function Main(): JSX.Element {
-  const [activeLocation, setActiveLocation] = useState(store.getState().city);
-  const [selectedOffer, setSelectedOffer] = useState('');
-  let cityOffers = getCityOffers(store.getState().loadedOffers, activeLocation);
-  cityOffers = getSortedCityOffers(cityOffers, store.getState().sortType);
+  const dispatch = useAppDispatch();
+  const city = useAppSelector((state) => state.city);
 
+  const [activeLocation, setActiveLocation] = useState(city);
+  const [selectedOffer, setSelectedOffer] = useState('');
+
+  const loadedOffers = useAppSelector((state) => state.loadedOffers);
+  const sortType = useAppSelector((state) => state.sortType);
+  let cityOffers = getCityOffers(loadedOffers, activeLocation);
+  cityOffers = getSortedCityOffers(cityOffers, sortType);
 
   const changeLocationHandler = (newLocation: string) => {
     if (newLocation) {
-      store.dispatch(changeLocation(newLocation));
+      dispatch(changeLocation(newLocation));
       setActiveLocation(newLocation);
-      cityOffers = getCityOffers(store.getState().loadedOffers, newLocation);
-      cityOffers = getSortedCityOffers(cityOffers, store.getState().sortType);
+      cityOffers = getCityOffers(loadedOffers, newLocation);
+      cityOffers = getSortedCityOffers(cityOffers, sortType);
     }
   };
 
@@ -87,7 +91,7 @@ function Main(): JSX.Element {
               <div className="cities__right-section">
                 <section className="cities__map map">
                   <CityMap
-                    city={getCity(cityOffers)}
+                    city={getCity(city, cityOffers)}
                     cityOffers={cityOffers}
                     selectedOffer={selectedOffer}
                   />

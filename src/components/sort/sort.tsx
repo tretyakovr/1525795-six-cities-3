@@ -2,10 +2,12 @@ import { useRef, useState } from 'react';
 import { SortTypes } from '../../const';
 import { store } from '../../store';
 import { changeSort } from '../../store/action';
+import { useAppSelector } from '../../hooks';
 
 function Sort(): JSX.Element {
-  const [currentSortType, setCurrentSortType] = useState(store.getState().sortType);
-  const refSortMenu: React.MutableRefObject<HTMLUListElement | null> = useRef<HTMLUListElement | null>(null);
+  const sortType = useAppSelector((state) => state.sortType);
+  const [currentSortType, setCurrentSortType] = useState(sortType);
+  const refSortMenu = useRef<HTMLUListElement | null>(null);
 
   function handleSortClick(): void {
     if (refSortMenu.current) {

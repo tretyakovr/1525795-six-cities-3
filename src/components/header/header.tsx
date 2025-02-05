@@ -9,7 +9,7 @@ type HeaderProps = {
   sourcePage: string;
 }
 
-function HeaderLoggedUser(favorites: Offers): JSX.Element {
+function HeaderLoggedUser(favorites: Offers, email: string): JSX.Element {
   return (
     <nav className="header__nav">
       <ul className="header__nav-list">
@@ -17,7 +17,7 @@ function HeaderLoggedUser(favorites: Offers): JSX.Element {
           <Link className="header__nav-link header__nav-link--profile" to="/favorites">
             <div className="header__avatar-wrapper user__avatar-wrapper">
             </div>
-            <span className="header__user-name user__name">{ store.getState().email }</span>
+            <span className="header__user-name user__name">{ email }</span>
             <span className="header__favorite-count">{ favorites.length }</span>
           </Link>
         </li>
@@ -51,23 +51,31 @@ function HeaderNotLoggedUser(): JSX.Element {
   );
 }
 
-function Header({sourcePage}: HeaderProps): JSX.Element {
-  const authStatus = useAppSelector((state) => state.authStatus);
-  const favorites = useAppSelector((state) => state.favorites);
+
+function HeaderLogo({sourcePage}: HeaderProps): JSX.Element {
   const logoClassName = sourcePage === 'main' ? 'header__logo-link header__logo-link--active' : 'header__logo-link';
-  const headerLogo: JSX.Element = (
+
+  return (
     <Link className={logoClassName} to="/">
       <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41" />
-    </Link>);
+    </Link>
+  );
+}
 
-  const headerNav = authStatus === AuthStatus.Auth ? HeaderLoggedUser(favorites) : HeaderNotLoggedUser();
+
+function Header({sourcePage}: HeaderProps): JSX.Element {
+  const authStatus = useAppSelector((state) => state.authStatus);
+  const email = useAppSelector((state) => state.email) as string;
+  const favorites = useAppSelector((state) => state.favorites);
+
+  const headerNav = authStatus === AuthStatus.Auth ? HeaderLoggedUser(favorites, email) : HeaderNotLoggedUser();
 
   return (
     <header className="header">
       <div className="container">
         <div className="header__wrapper">
           <div className="header__left">
-            { headerLogo }
+            { <HeaderLogo sourcePage={sourcePage} /> }
           </div>
           { headerNav }
         </div>
