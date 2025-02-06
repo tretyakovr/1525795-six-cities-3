@@ -1,10 +1,11 @@
 import { useRef, useState } from 'react';
 import { SortTypes } from '../../const';
-import { store } from '../../store';
+// import { store } from '../../store';
 import { changeSort } from '../../store/action';
-import { useAppSelector } from '../../hooks';
+import { useAppSelector, useAppDispatch } from '../../hooks';
 
 function Sort(): JSX.Element {
+  const dispatch = useAppDispatch();
   const sortType = useAppSelector((state) => state.sortType);
   const [currentSortType, setCurrentSortType] = useState(sortType);
   const refSortMenu = useRef<HTMLUListElement | null>(null);
@@ -23,8 +24,8 @@ function Sort(): JSX.Element {
     // Здесь диспатчим новое значение сортировки и перерисовываем название типа сортировки
     const target = evt.target as HTMLLIElement;
     const itemText = target.innerText as SortTypes;
-    store.dispatch(changeSort(itemText));
-    setCurrentSortType(store.getState().sortType);
+    dispatch(changeSort(itemText));
+    setCurrentSortType(sortType);
   }
 
   return (

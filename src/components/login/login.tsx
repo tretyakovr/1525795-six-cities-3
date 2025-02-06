@@ -3,8 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { changeLocation } from '../../store/action';
 import { loginAction } from '../../store/api-actions';
-import { AppRoute, AuthStatus } from '../../const';
+import { AppRoute, AuthStatus, CITIES } from '../../const';
 import { useAppSelector, useAppDispatch } from '../../hooks';
+import { getRandomInteger } from '../../utils';
 
 
 function Login(): JSX.Element {
@@ -14,6 +15,8 @@ function Login(): JSX.Element {
   const authStatus = useAppSelector((state) => state.authStatus);
   const loginRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
+
+  const randomLocation = CITIES[getRandomInteger(0, CITIES.length - 1)];
 
   const locationClickHandler = (evt: React.MouseEvent<HTMLElement>):void => {
     const newLocation = evt.currentTarget.innerText;
@@ -68,7 +71,7 @@ function Login(): JSX.Element {
           <section className="locations locations--login locations--current">
             <div className="locations__item">
               <Link className="locations__item-link" to="/" onClick={locationClickHandler}>
-                <span>Amsterdam</span>
+                <span>{randomLocation}</span>
               </Link>
             </div>
           </section>
