@@ -16,14 +16,14 @@ type CityMapProps = {
 
 const defaultCustomIcon = new Icon({
   iconUrl: URL_MARKER_DEFAULT,
-  iconSize: [34, 39],
-  iconAnchor: [28, 39]
+  iconSize: [28, 39],
+  iconAnchor: [14, 39]
 });
 
 const currentCustomIcon = new Icon({
   iconUrl: URL_MARKER_CURRENT,
-  iconSize: [34, 39],
-  iconAnchor: [28, 39]
+  iconSize: [28, 39],
+  iconAnchor: [14, 39]
 });
 
 function CityMap({city, cityOffers, selectedOffer}: CityMapProps): JSX.Element {

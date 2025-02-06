@@ -1,4 +1,4 @@
-import { useAppSelector } from '../../hooks';
+import { useAppSelector, useAppDispatch } from '../../hooks';
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import Main from '../main/main';
 import Favorites from '../favorites/favorites';
@@ -7,11 +7,18 @@ import OfferDetailCard from '../offer/offer-detail-card';
 import Page404 from '../page404/page404';
 import PrivateRoute from '../private-route/private-route';
 import Loading from '../loading/loading';
+import { AuthStatus } from '../../const';
+import { getFavoritesAction } from '../../store/api-actions';
 
 
 function App(): JSX.Element | null {
+  const dispatch = useAppDispatch();
   const isLoading = useAppSelector((state) => state.isDataLoading);
   const authStatus = useAppSelector((state) => state.authStatus);
+
+  if (authStatus === AuthStatus.Auth) {
+    dispatch(getFavoritesAction());
+  }
 
   if (isLoading) {
     return (
