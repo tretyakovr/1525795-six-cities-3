@@ -1,36 +1,38 @@
 import { createAction } from '@reduxjs/toolkit';
-import { Offer, Offers, OfferDetail } from '../types/offers';
-import { AuthStatus, AppRoute } from '../const';
-import { Comment, Comments } from '../types/comments';
+// import { Offer, Offers, OfferDetail } from '../types/offers';
+import { AppRoute } from '../const';
+// import { Comment, Comments } from '../types/comments';
 
-export const changeLocation = createAction<string>('changeLocation');
+// export const changeLocation = createAction<string>('changeLocation');
 
-export const changeSort = createAction<string, string>('changeSort');
+// export const changeSort = createAction<string, string>('changeSort');
 
-export const loadOffers = createAction<Offers>('loadOffers');
+// export const loadOffers = createAction<Offers>('loadOffers');
 
-export const saveComments = createAction<Comments>('saveComments');
+// export const saveComments = createAction<Comments>('saveComments');
 
-export const saveNearOffers = createAction<Offers>('saveNearOffers');
+// export const saveNearOffers = createAction<Offers>('saveNearOffers');
 
-export const saveFavorites = createAction<Offers>('saveFavorites');
+// export const saveFavorites = createAction<Offers>('saveFavorites');
 
-export const saveOffer = createAction<OfferDetail>('saveOffer');
+// export const saveOffer = createAction<OfferDetail>('saveOffer');
 
-export const setLoadingStatus = createAction<boolean>('setLoadingStatus');
+// export const setOfferFindErrorState = createAction<boolean>('setOfferFindErrorState');
 
-export const setAuthStatus = createAction<{authStatus: AuthStatus; email: string | undefined}>('setAuthStatus');
+// export const setLoadingStatus = createAction<boolean>('setLoadingStatus');
 
-export const login = createAction<{authStatus: AuthStatus; email: string}>('login');
+// export const setAuthStatus = createAction<{authStatus: AuthStatus; email: string | undefined}>('setAuthStatus');
+
+// export const login = createAction<{authStatus: AuthStatus; email: string}>('login');
 
 export const redirectToRoute = createAction<AppRoute>('redirectToRoute');
 
-export const markFavorite = createAction<Offer>('markFavorite');
+// export const markFavorite = createAction<Offer>('markFavorite');
 
-export const addComment = createAction<Comment>('addComment');
+// export const addComment = createAction<Comment>('addComment');
 
-export const setAsyncOpState = createAction<boolean>('setAsyncOpState');
+// export const setAsyncOpState = createAction<boolean>('setAsyncOpState');
 
-export const setAsyncErrorState = createAction<boolean>('setAsyncErrorState');
+// export const setAsyncErrorState = createAction<boolean>('setAsyncErrorState');
 
-export const setResetFormState = createAction<boolean>('setResetFormState');
+// export const setResetFormState = createAction<boolean>('setResetFormState');

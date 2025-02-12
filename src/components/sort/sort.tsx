@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { SortTypes } from '../../const';
 // import { store } from '../../store';
 import { changeSort } from '../../store/action';
@@ -6,8 +6,7 @@ import { useAppSelector, useAppDispatch } from '../../hooks';
 
 function Sort(): JSX.Element {
   const dispatch = useAppDispatch();
-  const sortType = useAppSelector((state) => state.sortType);
-  const [currentSortType, setCurrentSortType] = useState(sortType);
+  const currentSortType = useAppSelector((state) => state.sortType);
   const refSortMenu = useRef<HTMLUListElement | null>(null);
 
   function handleSortClick(): void {
@@ -25,7 +24,6 @@ function Sort(): JSX.Element {
     const target = evt.target as HTMLLIElement;
     const itemText = target.innerText as SortTypes;
     dispatch(changeSort(itemText));
-    setCurrentSortType(sortType);
   }
 
   return (

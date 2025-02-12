@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { Offer, Offers } from '../../types/offers';
 import FavoriteItem from './favorite-item';
 import { store } from '../../store';
-import { changeLocation } from '../../store/action';
+import { changeLocation } from '../../store/app-data/app-data';
 
 type FavoriteLocationProps = {
   favorites: Offers;

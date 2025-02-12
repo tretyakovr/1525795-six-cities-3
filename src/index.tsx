@@ -3,9 +3,10 @@ import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import App from './components/app/app';
 import { store } from './store';
-import { checkAuthAction, fetchOffersAction } from './store/api-actions';
+import { checkAuthAction, getOffersAction } from './store/api-actions';
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+// import { getLoadedOffers } from './store/offer-data/selectors';
 
 
 const root = ReactDOM.createRoot(
@@ -13,7 +14,7 @@ const root = ReactDOM.createRoot(
 );
 
 store.dispatch(checkAuthAction());
-store.dispatch(fetchOffersAction());
+store.dispatch(getOffersAction());
 
 root.render(
   <React.StrictMode>

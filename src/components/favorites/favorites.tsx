@@ -5,11 +5,7 @@ import FavoriteLocation from './favorite-location';
 import FavoritesEmpty from './favorites-empty';
 import { useAppSelector } from '../../hooks';
 
-// type FavoritesProps = {
-//   favorites: Offers;
-// }
 
-// function Favorites({favorites}: FavoritesProps): JSX.Element {
 function Favorites(): JSX.Element {
   const favorites: Offers = useAppSelector((state) => state.favorites);
 

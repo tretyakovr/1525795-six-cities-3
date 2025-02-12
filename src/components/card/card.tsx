@@ -45,7 +45,9 @@ function Card({offer, divClassName}: CardProps): JSX.Element {
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
           <button className=
-            {isFavorite ? 'place-card__bookmark-button button place-card__bookmark-button--active button' : 'place-card__bookmark-button button'}
+            {isFavorite && authStatus === AuthStatus.Auth ?
+              'place-card__bookmark-button button place-card__bookmark-button--active' :
+              'place-card__bookmark-button button'}
           type="button"
           onClick={favoriteClickHandler}
           >

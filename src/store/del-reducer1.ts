@@ -43,12 +43,12 @@ const initialState: InitialStateType = {
 
 const reducer = createReducer(initialState, (builder) => {
   builder
-    .addCase(changeLocation, (state, action) => {
-      state.city = action.payload;
-    })
-    .addCase(changeSort, (state, action) => {
-      state.sortType = action.payload as SortTypes;
-    })
+    // .addCase(changeLocation, (state, action) => {
+    //   state.city = action.payload;
+    // })
+    // .addCase(changeSort, (state, action) => {
+    //   state.sortType = action.payload as SortTypes;
+    // })
     .addCase(setLoadingStatus, (state, action) => {
       state.isDataLoading = action.payload;
     })

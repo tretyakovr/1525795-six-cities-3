@@ -9,12 +9,14 @@ import PrivateRoute from '../private-route/private-route';
 import Loading from '../loading/loading';
 import { AuthStatus } from '../../const';
 import { getFavoritesAction } from '../../store/api-actions';
+import { getAuthStatus } from '../../store/user-data/selectors';
+import { isDataLoading } from '../../store/offer-data/selectors';
 
 
 function App(): JSX.Element | null {
   const dispatch = useAppDispatch();
-  const isLoading = useAppSelector((state) => state.isDataLoading);
-  const authStatus = useAppSelector((state) => state.authStatus);
+  const isLoading = useAppSelector(isDataLoading);
+  const authStatus = useAppSelector(getAuthStatus);
 
   if (authStatus === AuthStatus.Auth) {
     dispatch(getFavoritesAction());
@@ -37,7 +39,7 @@ function App(): JSX.Element | null {
           </PrivateRoute>
         }
         />
-        <Route path="/offer/:id" element={<OfferDetailCard />}/>
+        <Route path="/offer/:id" element={<OfferDetailCard />} />
         <Route path="*" element={<Page404 />}/>
       </Routes>
     </BrowserRouter>

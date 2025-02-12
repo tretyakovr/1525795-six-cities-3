@@ -5,12 +5,15 @@ import OffersList from '../../components/offer/offers-list';
 import CityMap from '../../components/city-map/city-map';
 import { City } from '../../types/city';
 import { Offers } from '../../types/offers';
-import { changeLocation } from '../../store/action';
+// import { changeLocation } from '../../store/action';
+import { changeLocation } from '../../store/app-data/app-data';
 import { getCityOffers, getSortedCityOffers } from '../../utils';
 import { useAppDispatch, useAppSelector } from '../../hooks';
+import { getSortType, getCity } from '../../store/app-data/selectors';
+import { getLoadedOffers } from '../../store/offer-data/selectors';
 
 
-function getCity(city: string, cityOffers: Offers): City {
+function getCityParams(city: string, cityOffers: Offers): City {
   // Из первого предложения в списке офферов берем координаты для отображения на карте
   const cityFromOffer = cityOffers.filter((item) => item.city.name === city)[0];
   if (cityFromOffer) {
@@ -32,13 +35,16 @@ function getCity(city: string, cityOffers: Offers): City {
 
 function Main(): JSX.Element {
   const dispatch = useAppDispatch();
-  const city = useAppSelector((state) => state.city);
+  // const city = useAppSelector((state) => state.city);
+  const city = useAppSelector(getCity);
 
   const [activeLocation, setActiveLocation] = useState(city);
   const [selectedOffer, setSelectedOffer] = useState('');
 
-  const loadedOffers = useAppSelector((state) => state.loadedOffers);
-  const sortType = useAppSelector((state) => state.sortType);
+  // const loadedOffers = useAppSelector((state) => state.loadedOffers);
+  const loadedOffers = useAppSelector(getLoadedOffers);
+  // const sortType = useAppSelector((state) => state.sortType);
+  const sortType = useAppSelector(getSortType);
   let cityOffers = getCityOffers(loadedOffers, activeLocation);
   cityOffers = getSortedCityOffers(cityOffers, sortType);
 
@@ -59,7 +65,10 @@ function Main(): JSX.Element {
     <div className="page page--gray page--main">
       <Header sourcePage = 'main' />
 
-      <main className="page__main page__main--index">
+      <main className={cityOffers.length === 0 ?
+        'page__main page__main--index page__main--index-empty' :
+        'page__main page__main--index'}
+      >
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
           <section className="locations container">
@@ -91,7 +100,7 @@ function Main(): JSX.Element {
               <div className="cities__right-section">
                 <section className="cities__map map">
                   <CityMap
-                    city={getCity(city, cityOffers)}
+                    city={getCityParams(city, cityOffers)}
                     cityOffers={cityOffers}
                     selectedOffer={selectedOffer}
                   />

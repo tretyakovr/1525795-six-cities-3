@@ -1,20 +1,24 @@
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { changeLocation } from '../../store/action';
+// import { changeLocation } from '../../store/action';
+import { changeLocation } from '../../store/app-data/app-data';
 import { loginAction } from '../../store/api-actions';
 import { AppRoute, AuthStatus, CITIES } from '../../const';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { getRandomInteger } from '../../utils';
+import { getAuthStatus } from '../../store/user-data/selectors';
 
 
 function Login(): JSX.Element {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const authStatus = useAppSelector((state) => state.authStatus);
-  const loginRef = useRef<HTMLInputElement | null>(null);
+  // const authStatus = useAppSelector((state) => state.authStatus);
+  const authStatus = useAppSelector(getAuthStatus);
+  const loginRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
+  // loginRef.current.value = '';
 
   const randomLocation = CITIES[getRandomInteger(0, CITIES.length - 1)];
 
@@ -25,13 +29,9 @@ function Login(): JSX.Element {
 
   const authFormSubmitHandler = (evt: React.FormEvent<HTMLFormElement>): void => {
     evt.preventDefault();
-    const loginValue = loginRef.current?.value;
-    const passwordValue = passwordRef.current?.value;
-    if (loginValue !== null && passwordValue !== null) {
-      dispatch(loginAction({email: loginValue, password: passwordValue}));
-      navigate(AppRoute.Main);
-    }
-    // Вывести сообщение об ошибке
+    const loginValue = loginRef.current?.value ?? '';
+    const passwordValue = passwordRef.current?.value ?? '';
+    dispatch(loginAction({email: loginValue, password: passwordValue}));
   };
 
   if (authStatus === AuthStatus.Auth) {

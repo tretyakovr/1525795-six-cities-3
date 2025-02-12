@@ -1,10 +1,11 @@
-import { useAppSelector } from '../../hooks';
-import { Comment, Comments } from '../../types/comments';
+import { Comment } from '../../types/comments';
 
 
-function Reviews(): JSX.Element {
-  const offerComments: Comments = useAppSelector((state) => state.comments);
+type ReviewsProps = {
+  comments: Comment[];
+}
 
+function Reviews({comments}: ReviewsProps): JSX.Element {
   const getFormattedDate = (date: string): string => {
     const commentDate = new Date(date);
     const year = commentDate.getFullYear();
@@ -25,7 +26,7 @@ function Reviews(): JSX.Element {
 
   return (
     <ul className="reviews__list">
-      { offerComments.map((item: Comment) => (
+      { comments.map((item: Comment) => (
         <li key={item.id} className="reviews__item">
           <div className="reviews__user user">
             <div className="reviews__avatar-wrapper user__avatar-wrapper">

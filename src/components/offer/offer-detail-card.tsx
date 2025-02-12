@@ -9,6 +9,7 @@ import { capitalize } from '../../utils';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { OfferDetail, Offers } from '../../types/offers';
 import { AppRoute, AuthStatus } from '../../const';
+// import { setOfferFindErrorState } from '../../store/action';
 
 
 function OfferDetailCard() {
@@ -19,10 +20,15 @@ function OfferDetailCard() {
   const dispatch = useAppDispatch();
 
   const detailedOffer = useAppSelector((state) => state.offer) as OfferDetail;
+  const offerFindError = useAppSelector((state) => state.offerFindError);
   const commentsCount = useAppSelector((state) => state.comments.length);
   const nearOffers: Offers = useAppSelector((state) => state.nearOffers);
   const authStatus: AuthStatus = useAppSelector((state) => state.authStatus);
+  // а разве isFavorite не в detailedOffer??
   const isFavorite = useAppSelector((state) => state.offer?.isFavorite) as boolean;
+  let comments = useAppSelector((state) => state.comments);
+  comments = [...comments].sort((review1, review2) => +new Date(review2.date) - +new Date(review1.date));
+  comments = [...comments.slice(0, 10)];
 
   const favoriteClickHandler = () => {
     if (authStatus !== AuthStatus.Auth) {
@@ -32,6 +38,10 @@ function OfferDetailCard() {
       dispatch(getOfferAction(offerId));
     }
   };
+
+  if (offerFindError) {
+    navigate(AppRoute.Page404);
+  }
 
   if (!detailedOffer || offerId !== detailedOffer.id) {
     dispatch(getOfferAction(offerId));
@@ -66,7 +76,9 @@ function OfferDetailCard() {
                   {detailedOffer.title}
                 </h1>
                 <button className=
-                  {isFavorite ? 'offer__bookmark-button button offer__bookmark-button--active button' : 'offer__bookmark-button button'}
+                  {isFavorite && authStatus === AuthStatus.Auth ?
+                    'offer__bookmark-button button offer__bookmark-button--active' :
+                    'offer__bookmark-button button'}
                 type="button"
                 onClick={favoriteClickHandler}
                 >
@@ -111,15 +123,17 @@ function OfferDetailCard() {
               <div className="offer__host">
                 <h2 className="offer__host-title">Meet the host</h2>
                 <div className="offer__host-user user">
-                  <div className="offer__avatar-wrapper offer__avatar-wrapper--pro user__avatar-wrapper">
+                  <div className={
+                    detailedOffer.host.isPro ?
+                      'offer__avatar-wrapper offer__avatar-wrapper--pro user__avatar-wrapper' :
+                      'offer__avatar-wrapper user__avatar-wrapper'}
+                  >
                     <img className="offer__avatar user__avatar" src={detailedOffer.host.avatarUrl} width="74" height="74" alt="Host avatar" />
                   </div>
                   <span className="offer__user-name">
                     {detailedOffer.host.name}
                   </span>
-                  <span className="offer__user-status">
-                    {detailedOffer.host.isPro ? 'Pro' : ''}
-                  </span>
+                  {detailedOffer.host.isPro ? <span className="offer__user-status">Pro</span> : ''}
                 </div>
                 <div className="offer__description">
                   <p className="offer__text">
@@ -131,7 +145,7 @@ function OfferDetailCard() {
                 <h2 className="reviews__title">Reviews &middot;
                   <span className="reviews__amount">{commentsCount}</span>
                 </h2>
-                <Reviews />
+                <Reviews comments={comments} />
                 { authStatus === AuthStatus.Auth ? <Feedback offerId={detailedOffer.id} /> : null}
               </section>
             </div>

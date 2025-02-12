@@ -19,6 +19,10 @@ function OffersList({activeLocation, selectOfferHandler}: OffersListProps): JSX.
     }
   }
 
+  function handleMouseOut(): void {
+    selectOfferHandler('');
+  }
+
   const city = activeLocation;
   let offers = useAppSelector((state) => state.loadedOffers);
   offers = getCityOffers(offers, city);
@@ -27,7 +31,7 @@ function OffersList({activeLocation, selectOfferHandler}: OffersListProps): JSX.
   return (
     <section className="cities__places places">
       <h2 className="visually-hidden">Places</h2>
-      <b className="places__found">{offers.length} places to stay in {city}</b>
+      <b className="places__found">{offers.length} place{offers.length > 1 ? 's' : ''} to stay in {city}</b>
       <form className="places__sorting" action="#" method="get">
         <Sort />
       </form>
@@ -36,6 +40,7 @@ function OffersList({activeLocation, selectOfferHandler}: OffersListProps): JSX.
           <article key={item.id} id={item.id}
             className="cities__card place-card"
             onMouseOver={handleMouseOver}
+            onMouseOut={handleMouseOut}
           >
             <Card offer={item} divClassName='cities__image-wrapper place-card__image-wrapper'/>
           </article>

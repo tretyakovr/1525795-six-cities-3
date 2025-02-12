@@ -36,3 +36,10 @@ export enum APIRoute {
   Logout = '/logout',
   Comments = '/comments',
 }
+
+export enum NameSpace {
+  App = 'APP',
+  Favorite = 'FAVORITES',
+  Offer = 'OFFER',
+  User = 'USER',
+}
