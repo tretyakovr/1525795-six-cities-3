@@ -5,17 +5,21 @@ import { useAppSelector, useAppDispatch } from '../../hooks';
 import { markFavoriteAction } from '../../store/api-actions';
 import { AppRoute, AuthStatus } from '../../const';
 import { useNavigate } from 'react-router-dom';
+import { getAuthStatus } from '../../store/user-data/selectors';
+import { getFavorites } from '../../store/offer-data/selectors';
 
 type FavoriteItemProps = {
   favoriteItem: Offer;
 };
 
 function FavoriteItem({favoriteItem}: FavoriteItemProps): JSX.Element {
-  const authStatus = useAppSelector((state) => state.authStatus);
   const navigate = useNavigate();
-  // Вообще говоря, здесь всегда будет true
-  const isFavorite = useAppSelector((state) => state.favorites.find((item) => item.id === favoriteItem.id)?.isFavorite);
   const dispatch = useAppDispatch();
+
+  const authStatus = useAppSelector(getAuthStatus);
+  // Вообще говоря, здесь всегда будет true
+  const favorites = useAppSelector(getFavorites);
+  const isFavorite = favorites.find((item) => item.id === favoriteItem.id)?.isFavorite;
 
   const favoriteClickHandler = () => {
     if (authStatus !== AuthStatus.Auth) {

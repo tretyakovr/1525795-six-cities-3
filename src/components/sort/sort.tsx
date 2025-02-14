@@ -1,6 +1,5 @@
 import { useRef } from 'react';
 import { SortTypes } from '../../const';
-// import { store } from '../../store';
 import { changeSort } from '../../store/app-data/app-data';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { getSortType } from '../../store/app-data/selectors';
@@ -21,7 +20,6 @@ function Sort(): JSX.Element {
       refSortMenu.current.classList.toggle('places__options--opened');
     }
 
-    // Здесь диспатчим новое значение сортировки и перерисовываем название типа сортировки
     const target = evt.target as HTMLLIElement;
     const itemText = target.innerText as SortTypes;
     dispatch(changeSort(itemText));

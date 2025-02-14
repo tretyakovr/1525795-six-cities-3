@@ -1,16 +1,14 @@
-import {AxiosInstance, AxiosResponse} from 'axios';
+import {AxiosInstance} from 'axios';
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import {AppDispatch, State} from '../types/state';
-import {OfferDetail, Offers, Offer } from '../types/offers';
+import {OfferDetail, Offers } from '../types/offers';
 import { Comment, Comments } from '../types/comments';
-// import {loadOffers, setLoadingStatus, changeLocation, setAuthStatus, redirectToRoute, saveOffer, setAsyncOpState, setOfferFindErrorState} from './action';
-import {loadOffers, setLoadingStatus, changeLocation, setAuthStatus, redirectToRoute, saveOffer, setOfferFindErrorState} from './action';
-// import { saveComments, saveNearOffers, saveFavorites, markFavorite, setResetFormState } from './action';
-import { saveComments, saveNearOffers, saveFavorites, markFavorite } from './action';
-import { addComment } from './offer-process/offer-process';
+// import {loadOffers, setLoadingStatus, changeLocation, setAuthStatus, redirectToRoute, saveOffer, setOfferFindErrorState} from './action';
+// import { saveComments, saveNearOffers, saveFavorites, markFavorite } from './action';
+// import { addComment } from './offer-process/offer-process';
 import {saveToken, dropToken} from '../services/token';
-import {AppRoute, APIRoute} from '../const';
-import { AuthStatus, DEFAULT_CITY } from '../const';
+import {APIRoute} from '../const';
+// import { AuthStatus, DEFAULT_CITY } from '../const';
 
 type AuthData = {
   email: string | undefined;
@@ -45,12 +43,6 @@ export const sendCommentAction = createAsyncThunk<Comment, CommentData, {
   async ({offerId, comment, rating}, {extra: api}) => {
     const {data} = await api.post<Comment>(`${APIRoute.Comments}/${offerId}`, {comment, rating});
     return data;
-    // .then((response) => dispatch(addComment(response.data)))
-    // .then(() => dispatch(setAsyncOpState(false)))
-    // .then(() => dispatch(setResetFormState(true)))
-    // .catch(() => {
-    //   throw new Error('Error send comment');
-    // });
   },
 );
 
@@ -61,17 +53,9 @@ export const getOfferDetailAction = createAsyncThunk<OfferDetail, string | undef
   extra: AxiosInstance;
 }>(
   'getOffer',
-  // async (offerId, {dispatch, extra: api}) => {
   async (offerId, {extra: api}) => {
     const {data} = await api.get<OfferDetail>(`${APIRoute.Offers}/${offerId}`);
     return data;
-    // try {
-    //   const {data} = await api.get<OfferDetail>(`${APIRoute.Offers}/${offerId}`);
-    //   dispatch(saveOffer(data));
-    //   dispatch(setOfferFindErrorState(false));
-    // } catch {
-    //   dispatch(setOfferFindErrorState(true));
-    // }
   },
 );
 
@@ -81,11 +65,8 @@ export const getCommentsAction = createAsyncThunk<Comments, string | undefined, 
   extra: AxiosInstance;
 }>(
   'getComments',
-  // async (offerId, {dispatch, extra: api}) => {
   async (offerId, {extra: api}) => {
     const {data} = await api.get<Comments>(`${APIRoute.Comments}/${offerId}`);
-    // data = data.sort((review1, review2) => +new Date(review2.date) - +new Date(review1.date));
-    // dispatch(saveComments(data));
     return data;
   },
 );
@@ -124,7 +105,6 @@ export const getNearOffersAction = createAsyncThunk<Offers, string | undefined, 
   async (offerId, {extra: api}) => {
     const {data} = await api.get<Offers>(`${APIRoute.Offers}/${offerId}/nearby`);
     return data;
-    // dispatch(saveNearOffers(data.filter((item) => item.id !== offerId).slice(0, 3)));
   },
 );
 
@@ -150,7 +130,7 @@ export const logoutAction = createAsyncThunk<void, undefined, {
 }>(
   'logout',
   async (_arg, {extra: api}) => {
-    await api.delete(APIRoute.Logout);
+    await api.delete<void>(APIRoute.Logout);
     dropToken();
   },
 );
@@ -178,25 +158,5 @@ export const markFavoriteAction = createAsyncThunk<OfferDetail, FavoriteData, {
   async ({offerId, favoriteState}, {extra: api}) => {
     const {data} = await api.post<OfferDetail>(`${APIRoute.Favorite}/${offerId}/${favoriteState}`);
     return data;
-    // dispatch(markFavorite(data));
   },
 );
-
-
-// export const sendCommentAction = createAsyncThunk<void, CommentData, {
-//   dispatch: AppDispatch;
-//   state: State;
-//   extra: AxiosInstance;
-// }>(
-//   'sendComment',
-//   async ({offerId, comment, rating}, {dispatch, extra: api}) => {
-//     dispatch(setAsyncOpState(true));
-//     await api.post<Comment>(`${APIRoute.Comments}/${offerId}`, {comment, rating})
-//       .then((response) => dispatch(addComment(response.data)))
-//       .then(() => dispatch(setAsyncOpState(false)))
-//       .then(() => dispatch(setResetFormState(true)))
-//       .catch(() => {
-//         throw new Error('Error send comment');
-//       });
-//   },
-// );

@@ -1,8 +1,8 @@
 import { useRef, useState } from 'react';
 import { sendCommentAction } from '../../store/api-actions';
 import { useAppSelector, useAppDispatch } from '../../hooks';
-import { getIsDataLoading } from '../../store/offer-data/selectors';
-// import { setResetFormState } from '../../store/action';
+import { getIsResetFeedback } from '../../store/offer-data/selectors';
+import { changeResetFeedback } from '../../store/offer-data/offer-data';
 
 const DEFAULT_MIN_LENGTH = 50;
 const DEFAULT_MAX_LENGTH = 300;
@@ -17,53 +17,41 @@ function Feedback(props: FeedbackProps): JSX.Element {
   const commentText = useRef<HTMLTextAreaElement | null>(null);
   const refSubmit = useRef<HTMLButtonElement | null>(null);
   const refForm = useRef<HTMLFormElement | null>(null);
+
   const dispatch = useAppDispatch();
-  // const isAsyncOp = useAppSelector((state) => state.isAsyncOp);
-  // const isResetForm = useAppSelector((state) => state.isResetForm);
-  const isDataLoading = useAppSelector(getIsDataLoading);
+  const isResetFeedback = useAppSelector(getIsResetFeedback);
+
+  if (refSubmit.current !== null) {
+    refSubmit.current.disabled = true;
+  }
 
   const handleSubmit = (evt: React.FormEvent<HTMLFormElement> | undefined) => {
     if (evt !== undefined) {
       evt.preventDefault();
     }
+    if (refSubmit.current !== null && refForm.current !== null && commentText.current !== null) {
+      refForm.current.disabled = true;
+      commentText.current.disabled = true;
+      refSubmit.current.disabled = true;
+    }
     dispatch(sendCommentAction({offerId: offerId, comment: String(commentText.current?.value), rating: rating}));
   };
 
-  const isCommentCompleted = (): boolean => {
-    if (refSubmit.current !== null && commentText.current !== null) {
-      return (rating === 0 ||
-          commentText.current.value.length < DEFAULT_MIN_LENGTH ||
-          commentText.current.value.length > DEFAULT_MAX_LENGTH);
-    }
-    return false;
-  };
-
-  const handleChange = () => {
-    if (refSubmit.current !== null) {
-      refSubmit.current.disabled = isCommentCompleted();
-    }
-  };
-
-  // if (isAsyncOp) {
-  if (isDataLoading) {
+  if (isResetFeedback) {
     if (refSubmit.current !== null && refForm.current !== null && commentText.current !== null) {
-      commentText.current.disabled = isDataLoading;
-      refSubmit.current.disabled = isDataLoading;
-    }
-  } else {
-    if (refSubmit.current !== null) {
-      refSubmit.current.disabled = isCommentCompleted();
+      refForm.current.reset();
+      commentText.current.disabled = false;
+      dispatch(changeResetFeedback({isResetFeedback: false}));
     }
   }
 
-  // if (isResetForm) {
-  //   if (refSubmit.current !== null && refForm.current !== null && commentText.current !== null) {
-  //     dispatch(setResetFormState(false));
-  //     refForm.current.reset();
-  //     commentText.current.disabled = false;
-  //     refSubmit.current.disabled = false;
-  //   }
-  // }
+  const handleChange = () => {
+    if (refSubmit.current !== null) {
+      refSubmit.current.disabled = !(commentText.current !== null && rating !== 0 &&
+        commentText.current.value.length >= DEFAULT_MIN_LENGTH &&
+        commentText.current.value.length <= DEFAULT_MAX_LENGTH);
+    }
+  };
 
   return (
     <form ref={refForm} className="reviews__form form" action="#" method="post"
@@ -107,12 +95,23 @@ function Feedback(props: FeedbackProps): JSX.Element {
           </svg>
         </label>
       </div>
-      <textarea ref={commentText} className="reviews__textarea form__textarea" id="review" name="review" placeholder="Tell how was your stay, what you like and what can be improved"></textarea>
+      <textarea ref={commentText}
+        className="reviews__textarea form__textarea"
+        id="review"
+        name="review"
+        placeholder="Tell how was your stay, what you like and what can be improved"
+      >
+      </textarea>
       <div className="reviews__button-wrapper">
         <p className="reviews__help">
           To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay with at least <b className="reviews__text-amount">50 characters</b>.
         </p>
-        <button ref={refSubmit} className="reviews__submit form__submit button" type="submit">Submit</button>
+        <button
+          ref={refSubmit}
+          className="reviews__submit form__submit button"
+          type="submit"
+        >Submit
+        </button>
       </div>
     </form>
   );

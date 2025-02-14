@@ -8,7 +8,6 @@ type LocationsProps = {
 }
 
 function Locations({changeLocationHandler}: LocationsProps): JSX.Element {
-  // const activeLocation = useAppSelector((state) => state.city);
   const activeLocation = useAppSelector(getCity);
   const classLocation = 'locations__item-link tabs__item';
   const classActiveLocation = `${classLocation} tabs__item--active`;

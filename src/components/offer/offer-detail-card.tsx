@@ -7,10 +7,8 @@ import OfferMap from './offer-map';
 import { getOfferDetailAction, getCommentsAction, getNearOffersAction, markFavoriteAction } from '../../store/api-actions';
 import { capitalize } from '../../utils';
 import { useAppSelector, useAppDispatch } from '../../hooks';
-import { OfferDetail, Offers } from '../../types/offers';
 import { AppRoute, AuthStatus } from '../../const';
-// import { setOfferFindErrorState } from '../../store/action';
-import { getComments, getOfferDetail, getOfferSearchError, getNearOffers, getIsDataLoading, getIsLoadingError } from '../../store/offer-data/selectors';
+import { getComments, getOfferDetail, getNearOffers, getIsDataLoading } from '../../store/offer-data/selectors';
 import { getAuthStatus } from '../../store/user-data/selectors';
 
 
@@ -22,26 +20,16 @@ function OfferDetailCard() {
   const dispatch = useAppDispatch();
 
   const isDataLoading = useAppSelector(getIsDataLoading);
-  const isLoadingError = useAppSelector(getIsLoadingError);
-
-  // dispatch(getOfferDetailAction(offerId));
-
   const detailedOffer = useAppSelector(getOfferDetail);
-  // const offerSearchError = useAppSelector(getOfferSearchError);
 
-  // dispatch(getCommentsAction(offerId));
   const offerComments = useAppSelector(getComments);
   const commentsCount = offerComments.length;
 
-  // dispatch(getNearOffersAction(offerId));
   let nearOffers = useAppSelector(getNearOffers);
   nearOffers = [...nearOffers.filter((item) => item.id !== offerId).slice(0, 3)];
 
   const authStatus: AuthStatus = useAppSelector(getAuthStatus);
-  // а разве isFavorite не в detailedOffer??
-  // const isFavorite = detailedOffer?.isFavorite;
 
-  // let comments = useAppSelector((state) => state.comments);
   let comments = [...offerComments].sort((review1, review2) => +new Date(review2.date) - +new Date(review1.date));
   comments = [...comments.slice(0, 10)];
 
@@ -51,14 +39,9 @@ function OfferDetailCard() {
     dispatch(getNearOffersAction(offerId));
   }
 
-  // if (isDataLoading) {
-  //   return null;
+  // if ((!isDataLoading && isLoadingError) || detailedOffer === undefined) {
+  //   navigate(AppRoute.Main);
   // }
-
-  // if (offerSearchError) {
-  if (!isDataLoading && isLoadingError || detailedOffer === undefined) {
-    navigate(AppRoute.Page404);
-  }
 
   const favoriteClickHandler = () => {
     if (authStatus !== AuthStatus.Auth) {
@@ -66,17 +49,9 @@ function OfferDetailCard() {
     } else {
       if (detailedOffer !== undefined) {
         dispatch(markFavoriteAction({offerId: detailedOffer.id, favoriteState: Number(!detailedOffer.isFavorite)}));
-        // dispatch(getOfferDetailAction(offerId));
       }
     }
   };
-
-  // if (!detailedOffer || offerId !== detailedOffer.id) {
-  //   dispatch(getOfferAction(offerId));
-  //   dispatch(getCommentsAction(offerId));
-  //   dispatch(getNearOffersAction(offerId));
-  //   return (null);
-  // }
 
   return (
     <div className="page">
@@ -154,7 +129,8 @@ function OfferDetailCard() {
                   <div className={
                     detailedOffer?.host.isPro ?
                       'offer__avatar-wrapper offer__avatar-wrapper--pro user__avatar-wrapper' :
-                      'offer__avatar-wrapper user__avatar-wrapper'}
+                      'offer__avatar-wrapper user__avatar-wrapper'
+                  }
                   >
                     <img className="offer__avatar user__avatar" src={detailedOffer?.host.avatarUrl} width="74" height="74" alt="Host avatar" />
                   </div>

@@ -1,6 +1,5 @@
 import { Offers } from './types/offers';
 import { SortTypes } from './const';
-// import { store } from './store';
 
 export function getCityOffers(loadedOffers: Offers, city: string | undefined): Offers {
   return [...loadedOffers.filter((item) => item.city.name === city)];
@@ -21,6 +20,7 @@ export function getSortedCityOffers(cityOffers: Offers | [], sortType: SortTypes
 
   return cityOffers;
 }
+
 
 export const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
 

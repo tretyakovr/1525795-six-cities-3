@@ -5,7 +5,6 @@ import OffersList from '../../components/offer/offers-list';
 import CityMap from '../../components/city-map/city-map';
 import { City } from '../../types/city';
 import { Offers } from '../../types/offers';
-// import { changeLocation } from '../../store/action';
 import { changeLocation } from '../../store/app-data/app-data';
 import { getCityOffers, getSortedCityOffers } from '../../utils';
 import { useAppDispatch, useAppSelector } from '../../hooks';
@@ -35,16 +34,14 @@ function getCityParams(city: string, cityOffers: Offers): City {
 
 function Main(): JSX.Element {
   const dispatch = useAppDispatch();
-  // const city = useAppSelector((state) => state.city);
   const city = useAppSelector(getCity);
 
   const [activeLocation, setActiveLocation] = useState(city);
   const [selectedOffer, setSelectedOffer] = useState('');
 
-  // const loadedOffers = useAppSelector((state) => state.loadedOffers);
   const loadedOffers = useAppSelector(getLoadedOffers);
-  // const sortType = useAppSelector((state) => state.sortType);
   const sortType = useAppSelector(getSortType);
+
   let cityOffers = getCityOffers(loadedOffers, activeLocation);
   cityOffers = getSortedCityOffers(cityOffers, sortType);
 

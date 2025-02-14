@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-// import { UserData } from '../../types/state';
 import { AuthStatus, NameSpace } from '../../const';
 import { checkAuthAction, loginAction, logoutAction } from '../api-actions';
 
@@ -39,6 +38,8 @@ export const userData = createSlice({
       }))
       .addCase(logoutAction.fulfilled, ((state) => {
         state.authStatus = AuthStatus.NoAuth;
+        state.email = '';
+        state.avatarUrl = '';
       }));
   },
 });

@@ -6,7 +6,6 @@ import { store } from './store';
 import { checkAuthAction, getOffersAction } from './store/api-actions';
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-// import { getLoadedOffers } from './store/offer-data/selectors';
 
 
 const root = ReactDOM.createRoot(

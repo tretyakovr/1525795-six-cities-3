@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-// import { AppData } from '../../types/state';
 import { NameSpace } from '../../const';
 import { SortTypes } from '../../const';
 import { DEFAULT_CITY } from '../../const';
@@ -13,7 +12,6 @@ type AppData = {
 
 const initialState: AppData = {
   city: DEFAULT_CITY,
-  // loadedOffers: [],
   sortType: SortTypes.POPULAR,
   isDataLoading: false,
 };
@@ -32,12 +30,6 @@ export const appData = createSlice({
       state.isDataLoading = action.payload as boolean;
     }
   },
-  // extraReducers(builder) {
-  //   builder
-  //     .addCase(changeLocation, (state, action) => {
-  //       state.city = action.payload;
-  //     });
-  // }
 });
 
 export const {changeLocation, changeSort, changeLoadingStatus} = appData.actions;

@@ -3,7 +3,6 @@ import { Offer } from '../../types/offers';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { markFavoriteAction } from '../../store/api-actions';
-// import { markFavorite } from '../../store/offer-process/offer-process';
 import { capitalize } from '../../utils';
 import { AppRoute, AuthStatus } from '../../const';
 import { getAuthStatus } from '../../store/user-data/selectors';
@@ -16,9 +15,9 @@ type CardProps = {
 
 function Card({offer, divClassName}: CardProps): JSX.Element {
   const dispatch = useAppDispatch();
-  // const authStatus = useAppSelector((state) => state.authStatus);
-  const authStatus = useAppSelector(getAuthStatus);
   const navigate = useNavigate();
+  const authStatus = useAppSelector(getAuthStatus);
+
   // Значение isFavorite ищем в loadedOffers, чтобы не мудрить с
   // обновлением nearOffers, если компонент вызывается из OfferDetailCard и там меняется его значение
   const loadedOffers = useAppSelector(getLoadedOffers);
@@ -29,7 +28,6 @@ function Card({offer, divClassName}: CardProps): JSX.Element {
       navigate(AppRoute.Login);
     } else {
       dispatch(markFavoriteAction({offerId: offer.id, favoriteState: Number(!offer.isFavorite)}));
-      // dispatch(markFavorite({offerId: offer.id, favoriteState: Number(!offer.isFavorite)}));
     }
   };
 
