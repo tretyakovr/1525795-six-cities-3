@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-// import { sendCommentAction } from '../../store/api-actions';
+import { sendCommentAction } from '../../store/api-actions';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { getIsResetFeedback } from '../../store/offer-data/selectors';
 import { changeResetFeedback } from '../../store/offer-data/offer-data';
@@ -7,13 +7,12 @@ import { changeResetFeedback } from '../../store/offer-data/offer-data';
 const DEFAULT_MIN_LENGTH = 50;
 const DEFAULT_MAX_LENGTH = 300;
 
-// type FeedbackProps = {
-//   offerId: string;
-// }
+type FeedbackProps = {
+  offerId: string;
+}
 
-// function Feedback(props: FeedbackProps): JSX.Element {
-function Feedback(): JSX.Element {
-  // const {offerId} = props;
+function Feedback(props: FeedbackProps): JSX.Element {
+  const {offerId} = props;
   const [rating, setRating] = useState<number>(0);
   const commentText = useRef<HTMLTextAreaElement | null>(null);
   const refSubmit = useRef<HTMLButtonElement | null>(null);
@@ -35,7 +34,7 @@ function Feedback(): JSX.Element {
       commentText.current.disabled = true;
       refSubmit.current.disabled = true;
     }
-    // dispatch(sendCommentAction({offerId: offerId, comment: String(commentText.current?.value), rating: rating}));
+    dispatch(sendCommentAction({offerId: offerId, comment: String(commentText.current?.value), rating: rating}));
   };
 
   if (isResetFeedback) {
