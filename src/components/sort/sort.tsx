@@ -1,11 +1,13 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { SortTypes } from '../../const';
-import { store } from '../../store';
-import { changeSort } from '../../store/action';
+import { changeSort } from '../../store/app-data/app-data';
+import { useAppSelector, useAppDispatch } from '../../hooks';
+import { getSortType } from '../../store/app-data/selectors';
 
 function Sort(): JSX.Element {
-  const [currentSortType, setCurrentSortType] = useState(store.getState().sortType);
-  const refSortMenu: React.MutableRefObject<HTMLUListElement | null> = useRef<HTMLUListElement | null>(null);
+  const dispatch = useAppDispatch();
+  const currentSortType = useAppSelector(getSortType);
+  const refSortMenu = useRef<HTMLUListElement | null>(null);
 
   function handleSortClick(): void {
     if (refSortMenu.current) {
@@ -18,11 +20,9 @@ function Sort(): JSX.Element {
       refSortMenu.current.classList.toggle('places__options--opened');
     }
 
-    // Здесь диспатчим новое значение сортировки и перерисовываем название типа сортировки
     const target = evt.target as HTMLLIElement;
     const itemText = target.innerText as SortTypes;
-    store.dispatch(changeSort(itemText));
-    setCurrentSortType(store.getState().sortType);
+    dispatch(changeSort(itemText));
   }
 
   return (

@@ -1,31 +1,33 @@
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { store } from '../../store';
-import { changeLocation } from '../../store/action';
+import { changeLocation } from '../../store/app-data/app-data';
 import { loginAction } from '../../store/api-actions';
-import { AppRoute } from '../../const';
+import { AppRoute, CITIES } from '../../const';
+import { useAppDispatch } from '../../hooks';
+import { getRandomInteger } from '../../utils';
 
 
 function Login(): JSX.Element {
-  const loginRef: React.LegacyRef<HTMLInputElement> | undefined = useRef<HTMLInputElement | null>(null);
-  const passwordRef: React.LegacyRef<HTMLInputElement> | undefined = useRef<HTMLInputElement | null>(null);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  const loginRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement | null>(null);
+
+  const randomLocation = CITIES[getRandomInteger(0, CITIES.length - 1)];
 
   const locationClickHandler = (evt: React.MouseEvent<HTMLElement>):void => {
     const newLocation = evt.currentTarget.innerText;
-    store.dispatch(changeLocation(newLocation));
+    dispatch(changeLocation(newLocation));
   };
 
   const authFormSubmitHandler = (evt: React.FormEvent<HTMLFormElement>): void => {
     evt.preventDefault();
-    const loginValue = loginRef.current?.value;
-    const passwordValue = passwordRef.current?.value;
-    if (loginValue !== null && passwordValue !== null) {
-      store.dispatch(loginAction({email: loginValue, password: passwordValue}));
-      navigate(AppRoute.Main);
-    }
-    // Вывести сообщение об ошибке
+    const loginValue = loginRef.current?.value ?? '';
+    const passwordValue = passwordRef.current?.value ?? '';
+    dispatch(loginAction({email: loginValue, password: passwordValue}));
+    navigate(AppRoute.Main);
   };
 
   return (
@@ -61,7 +63,7 @@ function Login(): JSX.Element {
           <section className="locations locations--login locations--current">
             <div className="locations__item">
               <Link className="locations__item-link" to="/" onClick={locationClickHandler}>
-                <span>Amsterdam</span>
+                <span>{randomLocation}</span>
               </Link>
             </div>
           </section>

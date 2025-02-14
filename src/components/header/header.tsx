@@ -1,30 +1,49 @@
-import { useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { Link } from 'react-router-dom';
-import { store } from '../../store';
 import { AuthStatus } from '../../const';
 import { logoutAction } from '../../store/api-actions';
-import { Offers } from '../../types/offers';
+import { getAuthStatus, getAvatarUrl, getUserEmail } from '../../store/user-data/selectors';
+import { getFavorites } from '../../store/offer-data/selectors';
 
 type HeaderProps = {
   sourcePage: string;
 }
 
-function HeaderLoggedUser(favorites: Offers): JSX.Element {
+function HeaderLogo({sourcePage}: HeaderProps): JSX.Element {
+  const logoClassName = sourcePage === 'main' ? 'header__logo-link header__logo-link--active' : 'header__logo-link';
+
   return (
+    <Link className={logoClassName} to="/">
+      <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41" />
+    </Link>
+  );
+}
+
+
+function Header({sourcePage}: HeaderProps): JSX.Element {
+  const authStatus = useAppSelector(getAuthStatus);
+
+  const dispatch = useAppDispatch();
+  const email = useAppSelector(getUserEmail);
+  const favorites = useAppSelector(getFavorites);
+  const avatarUrl = useAppSelector(getAvatarUrl);
+
+  const headerLoggedUser = (
     <nav className="header__nav">
       <ul className="header__nav-list">
         <li className="header__nav-item user">
           <Link className="header__nav-link header__nav-link--profile" to="/favorites">
             <div className="header__avatar-wrapper user__avatar-wrapper">
+              <img src={avatarUrl} />
             </div>
-            <span className="header__user-name user__name">{ store.getState().email }</span>
+            <span className="header__user-name user__name">{ email }</span>
             <span className="header__favorite-count">{ favorites.length }</span>
           </Link>
         </li>
         <li className="header__nav-item">
           <Link className="header__nav-link" to="/" onClick={(evt) => {
             evt.preventDefault();
-            store.dispatch(logoutAction());
+            dispatch(logoutAction());
           }}
           >
             <span className="header__signout">Sign out</span>
@@ -33,10 +52,8 @@ function HeaderLoggedUser(favorites: Offers): JSX.Element {
       </ul>
     </nav>
   );
-}
 
-function HeaderNotLoggedUser(): JSX.Element {
-  return (
+  const headerNotLoggedUser = (
     <nav className="header__nav">
       <ul className="header__nav-list">
         <li className="header__nav-item user">
@@ -49,27 +66,15 @@ function HeaderNotLoggedUser(): JSX.Element {
       </ul>
     </nav>
   );
-}
-
-function Header({sourcePage}: HeaderProps): JSX.Element {
-  const authStatus = useAppSelector((state) => state.authStatus);
-  const favorites = useAppSelector((state) => state.favorites);
-  const logoClassName = sourcePage === 'main' ? 'header__logo-link header__logo-link--active' : 'header__logo-link';
-  const headerLogo: JSX.Element = (
-    <Link className={logoClassName} to="/">
-      <img className="header__logo" src="img/logo.svg" alt="6 cities logo" width="81" height="41" />
-    </Link>);
-
-  const headerNav = authStatus === AuthStatus.Auth ? HeaderLoggedUser(favorites) : HeaderNotLoggedUser();
 
   return (
     <header className="header">
       <div className="container">
         <div className="header__wrapper">
           <div className="header__left">
-            { headerLogo }
+            { <HeaderLogo sourcePage={sourcePage} /> }
           </div>
-          { headerNav }
+          { authStatus === AuthStatus.Auth ? headerLoggedUser : headerNotLoggedUser }
         </div>
       </div>
     </header>

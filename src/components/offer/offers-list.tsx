@@ -1,8 +1,10 @@
-import Card from '../card/card';
+import Card from '../../components/card/card';
 import { Offer } from '../../types/offers';
 import Sort from '../../components/sort/sort';
 import { useAppSelector } from '../../hooks';
 import { getCityOffers, getSortedCityOffers } from '../../utils';
+import { getSortType } from '../../store/app-data/selectors';
+import { getLoadedOffers } from '../../store/offer-data/selectors';
 
 type OffersListProps = {
   activeLocation: string | undefined;
@@ -10,7 +12,7 @@ type OffersListProps = {
 }
 
 function OffersList({activeLocation, selectOfferHandler}: OffersListProps): JSX.Element {
-  const sortType = useAppSelector((state) => state.sortType);
+  const sortType = useAppSelector(getSortType);
 
   function handleMouseOver(evt: React.MouseEvent<HTMLElement>): void {
     const nodeName: React.MouseEvent<HTMLElement> | string = evt.currentTarget.nodeName;
@@ -19,15 +21,19 @@ function OffersList({activeLocation, selectOfferHandler}: OffersListProps): JSX.
     }
   }
 
+  function handleMouseOut(): void {
+    selectOfferHandler('');
+  }
+
   const city = activeLocation;
-  let offers = useAppSelector((state) => state.loadedOffers);
+  let offers = useAppSelector(getLoadedOffers);
   offers = getCityOffers(offers, city);
   offers = getSortedCityOffers(offers, sortType);
 
   return (
     <section className="cities__places places">
       <h2 className="visually-hidden">Places</h2>
-      <b className="places__found">{offers.length} places to stay in {city}</b>
+      <b className="places__found">{offers.length} place{offers.length > 1 ? 's' : ''} to stay in {city}</b>
       <form className="places__sorting" action="#" method="get">
         <Sort />
       </form>
@@ -36,6 +42,7 @@ function OffersList({activeLocation, selectOfferHandler}: OffersListProps): JSX.
           <article key={item.id} id={item.id}
             className="cities__card place-card"
             onMouseOver={handleMouseOver}
+            onMouseOut={handleMouseOut}
           >
             <Card offer={item} divClassName='cities__image-wrapper place-card__image-wrapper'/>
           </article>

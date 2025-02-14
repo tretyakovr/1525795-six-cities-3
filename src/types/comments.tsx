@@ -1,9 +1,3 @@
-// export type CommentUser = {
-//   name: string;
-//   avatarUrl: string;
-//   isPro: boolean;
-// };
-
 export type Comment = {
   id: string;
   date: string;

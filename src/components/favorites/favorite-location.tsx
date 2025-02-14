@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
 import { Offer, Offers } from '../../types/offers';
 import FavoriteItem from './favorite-item';
-import { store } from '../../store';
-import { changeLocation } from '../../store/action';
+import { changeLocation } from '../../store/app-data/app-data';
+import { useDispatch } from 'react-redux';
 
 type FavoriteLocationProps = {
   favorites: Offers;
@@ -10,11 +10,13 @@ type FavoriteLocationProps = {
 }
 
 function FavoriteLocation({favorites, city}: FavoriteLocationProps): JSX.Element {
+  const dispatch = useDispatch();
+
   const cityOffers: Offer[] = favorites.filter(
     (item) => item.city.name === city);
 
   const locationClickHandler = (evt: React.MouseEvent<HTMLElement>):void => {
-    store.dispatch(changeLocation(evt.currentTarget.innerText));
+    dispatch(changeLocation(evt.currentTarget.innerText));
   };
 
   return (

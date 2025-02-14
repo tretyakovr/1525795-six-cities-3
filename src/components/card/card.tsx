@@ -1,7 +1,12 @@
 import { Link } from 'react-router-dom';
 import { Offer } from '../../types/offers';
-import { useAppDispatch } from '../../hooks';
+import { useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { markFavoriteAction } from '../../store/api-actions';
+import { capitalize } from '../../utils';
+import { AppRoute, AuthStatus } from '../../const';
+import { getAuthStatus } from '../../store/user-data/selectors';
+import { getLoadedOffers } from '../../store/offer-data/selectors';
 
 type CardProps = {
   offer: Offer;
@@ -9,18 +14,22 @@ type CardProps = {
 }
 
 function Card({offer, divClassName}: CardProps): JSX.Element {
-  // const cardOffer = useAppSelector((state) => state.loadedOffers[state.loadedOffers.findIndex((item) => item.id === offer.id)]);
-  // console.log(cardOffer);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const authStatus = useAppSelector(getAuthStatus);
+
+  // Значение isFavorite ищем в loadedOffers, чтобы не мудрить с
+  // обновлением nearOffers, если компонент вызывается из OfferDetailCard и там меняется его значение
+  const loadedOffers = useAppSelector(getLoadedOffers);
+  const isFavorite = loadedOffers.find((item) => item.id === offer.id)?.isFavorite;
 
   const favoriteClickHandler = () => {
-    dispatch(markFavoriteAction({offerId: offer.id, favoriteState: Number(!offer.isFavorite)}));
+    if (authStatus !== AuthStatus.Auth) {
+      navigate(AppRoute.Login);
+    } else {
+      dispatch(markFavoriteAction({offerId: offer.id, favoriteState: Number(!offer.isFavorite)}));
+    }
   };
-
-  // if (cardOffer.isFavorite !== offer.isFavorite) {
-  //   return (null);
-  // }
-
 
   return (
     <>
@@ -40,7 +49,9 @@ function Card({offer, divClassName}: CardProps): JSX.Element {
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
           <button className=
-            {offer.isFavorite ? 'place-card__bookmark-button button place-card__bookmark-button--active button' : 'place-card__bookmark-button button'}
+            {isFavorite && authStatus === AuthStatus.Auth ?
+              'place-card__bookmark-button button place-card__bookmark-button--active' :
+              'place-card__bookmark-button button'}
           type="button"
           onClick={favoriteClickHandler}
           >
@@ -59,7 +70,7 @@ function Card({offer, divClassName}: CardProps): JSX.Element {
         <h2 className="place-card__name">
           <Link to={`/offer/${offer.id}`}>{offer.title}</Link>
         </h2>
-        <p className="place-card__type">{offer.type}</p>
+        <p className="place-card__type">{capitalize(offer.type)}</p>
       </div>
     </>
   );

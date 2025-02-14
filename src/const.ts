@@ -5,13 +5,10 @@ export enum AuthStatus {
 }
 
 export enum AppRoute {
-  FavoritesEmpty = '/favorites-empty',
   Favorites = '/favorites',
   Login = '/login',
   Main = '/',
-  MainEmpty = '/main-empty',
   Offer = '/offer',
-  OfferNotLogged = '/offer-not-logged',
   Page404 = '/error404',
 }
 
@@ -38,4 +35,11 @@ export enum APIRoute {
   Login = '/login',
   Logout = '/logout',
   Comments = '/comments',
+}
+
+export enum NameSpace {
+  App = 'APP',
+  Favorite = 'FAVORITES',
+  Offer = 'OFFER',
+  User = 'USER',
 }

@@ -1,17 +1,29 @@
-import { useAppSelector } from '../../hooks';
+import { useEffect } from 'react';
+import { useAppSelector, useAppDispatch } from '../../hooks';
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
-import Main from '../../pages/main/main';
-import Favorites from '../../pages/favorites/favorites';
-import Login from '../../pages/login/login';
-import OfferDetailCard from '../../pages/offer/offer-detail-card';
-import Page404 from '../../pages/page404/page404';
+import Main from '../main/main';
+import Favorites from '../favorites/favorites';
+import Login from '../login/login';
+import OfferDetailCard from '../offer/offer-detail-card';
+import Page404 from '../page404/page404';
 import PrivateRoute from '../private-route/private-route';
-import Loading from '../../pages/loading/loading';
+import Loading from '../loading/loading';
+import { getAuthStatus } from '../../store/user-data/selectors';
+import { getIsOffersLoading } from '../../store/offer-data/selectors';
+import { AuthStatus } from '../../const';
+import { getFavoritesAction } from '../../store/api-actions';
 
 
 function App(): JSX.Element | null {
-  const isLoading = useAppSelector((state) => state.isDataLoading);
-  const authStatus = useAppSelector((state) => state.authStatus);
+  const dispatch = useAppDispatch();
+  const isLoading = useAppSelector(getIsOffersLoading);
+  const authStatus = useAppSelector(getAuthStatus);
+
+  useEffect(() => {
+    if (authStatus === AuthStatus.Auth) {
+      dispatch(getFavoritesAction());
+    }
+  }, [dispatch, authStatus]);
 
   if (isLoading) {
     return (
@@ -30,7 +42,7 @@ function App(): JSX.Element | null {
           </PrivateRoute>
         }
         />
-        <Route path="/offer/:id" element={<OfferDetailCard />}/>
+        <Route path="/offer/:id" element={<OfferDetailCard />} />
         <Route path="*" element={<Page404 />}/>
       </Routes>
     </BrowserRouter>

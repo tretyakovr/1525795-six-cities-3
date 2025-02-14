@@ -1,11 +1,11 @@
 import { Comment } from '../../types/comments';
 
+
 type ReviewsProps = {
-  offerComments: Comment[];
-};
+  comments: Comment[];
+}
 
-function Reviews({offerComments}: ReviewsProps): JSX.Element {
-
+function Reviews({comments}: ReviewsProps): JSX.Element {
   const getFormattedDate = (date: string): string => {
     const commentDate = new Date(date);
     const year = commentDate.getFullYear();
@@ -26,7 +26,7 @@ function Reviews({offerComments}: ReviewsProps): JSX.Element {
 
   return (
     <ul className="reviews__list">
-      { offerComments.map((item: Comment) => (
+      { comments.map((item: Comment) => (
         <li key={item.id} className="reviews__item">
           <div className="reviews__user user">
             <div className="reviews__avatar-wrapper user__avatar-wrapper">
