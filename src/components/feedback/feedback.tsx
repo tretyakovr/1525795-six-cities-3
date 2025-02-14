@@ -34,7 +34,7 @@ function Feedback(props: FeedbackProps): JSX.Element {
       commentText.current.disabled = true;
       refSubmit.current.disabled = true;
     }
-    dispatch(sendCommentAction({offerId: offerId, comment: String(commentText.current?.value), rating: rating}));
+    // dispatch(sendCommentAction({offerId: offerId, comment: String(commentText.current?.value), rating: rating}));
   };
 
   if (isResetFeedback) {

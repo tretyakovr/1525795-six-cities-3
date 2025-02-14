@@ -40,6 +40,11 @@ export const userData = createSlice({
         state.authStatus = AuthStatus.NoAuth;
         state.email = '';
         state.avatarUrl = '';
+      }))
+      .addCase(logoutAction.rejected, ((state) => {
+        state.authStatus = AuthStatus.NoAuth;
+        state.email = '';
+        state.avatarUrl = '';
       }));
   },
 });

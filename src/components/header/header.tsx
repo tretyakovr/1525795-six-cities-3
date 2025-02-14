@@ -1,10 +1,9 @@
-import { useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { Link } from 'react-router-dom';
 import { AuthStatus } from '../../const';
 import { logoutAction } from '../../store/api-actions';
 import { getAuthStatus, getAvatarUrl, getUserEmail } from '../../store/user-data/selectors';
 import { getFavorites } from '../../store/offer-data/selectors';
-import { useDispatch } from 'react-redux';
 
 type HeaderProps = {
   sourcePage: string;
@@ -24,7 +23,7 @@ function HeaderLogo({sourcePage}: HeaderProps): JSX.Element {
 function Header({sourcePage}: HeaderProps): JSX.Element {
   const authStatus = useAppSelector(getAuthStatus);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const email = useAppSelector(getUserEmail);
   const favorites = useAppSelector(getFavorites);
   const avatarUrl = useAppSelector(getAvatarUrl);
@@ -42,7 +41,11 @@ function Header({sourcePage}: HeaderProps): JSX.Element {
           </Link>
         </li>
         <li className="header__nav-item">
-          <Link className="header__nav-link" to="/" onClick={() => dispatch(logoutAction())}>
+          <Link className="header__nav-link" to="/" onClick={(evt) => {
+            evt.preventDefault();
+            dispatch(logoutAction());
+          }}
+          >
             <span className="header__signout">Sign out</span>
           </Link>
         </li>
