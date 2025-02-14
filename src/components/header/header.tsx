@@ -4,18 +4,21 @@ import { store } from '../../store';
 import { AuthStatus } from '../../const';
 import { logoutAction } from '../../store/api-actions';
 import { Offers } from '../../types/offers';
+import { getAuthStatus, getAvatarUrl, getUserEmail } from '../../store/user-data/selectors';
+import { getFavorites } from '../../store/offer-data/selectors';
 
 type HeaderProps = {
   sourcePage: string;
 }
 
-function HeaderLoggedUser(favorites: Offers, email: string): JSX.Element {
+function HeaderLoggedUser(favorites: Offers, email: string, avatarUrl: string): JSX.Element {
   return (
     <nav className="header__nav">
       <ul className="header__nav-list">
         <li className="header__nav-item user">
           <Link className="header__nav-link header__nav-link--profile" to="/favorites">
             <div className="header__avatar-wrapper user__avatar-wrapper">
+              <img src={avatarUrl} />
             </div>
             <span className="header__user-name user__name">{ email }</span>
             <span className="header__favorite-count">{ favorites.length }</span>
@@ -64,11 +67,12 @@ function HeaderLogo({sourcePage}: HeaderProps): JSX.Element {
 
 
 function Header({sourcePage}: HeaderProps): JSX.Element {
-  const authStatus = useAppSelector((state) => state.authStatus);
-  const email = useAppSelector((state) => state.email) as string;
-  const favorites = useAppSelector((state) => state.favorites);
+  const authStatus = useAppSelector(getAuthStatus);
+  const email = useAppSelector(getUserEmail);
+  const favorites = useAppSelector(getFavorites);
+  const avatarUrl = useAppSelector(getAvatarUrl);
 
-  const headerNav = authStatus === AuthStatus.Auth ? HeaderLoggedUser(favorites, email) : HeaderNotLoggedUser();
+  const headerNav = authStatus === AuthStatus.Auth ? HeaderLoggedUser(favorites, email, avatarUrl) : HeaderNotLoggedUser();
 
   return (
     <header className="header">

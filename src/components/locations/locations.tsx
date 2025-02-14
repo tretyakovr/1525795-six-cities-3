@@ -1,13 +1,15 @@
 import { Link } from 'react-router-dom';
 import { CITIES } from '../../const';
 import { useAppSelector } from '../../hooks';
+import { getCity } from '../../store/app-data/selectors';
 
 type LocationsProps = {
   changeLocationHandler(activeLocation: string): void;
 }
 
 function Locations({changeLocationHandler}: LocationsProps): JSX.Element {
-  const activeLocation = useAppSelector((state) => state.city);
+  // const activeLocation = useAppSelector((state) => state.city);
+  const activeLocation = useAppSelector(getCity);
   const classLocation = 'locations__item-link tabs__item';
   const classActiveLocation = `${classLocation} tabs__item--active`;
 

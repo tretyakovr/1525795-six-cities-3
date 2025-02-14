@@ -10,16 +10,16 @@ import Loading from '../loading/loading';
 import { AuthStatus } from '../../const';
 import { getFavoritesAction } from '../../store/api-actions';
 import { getAuthStatus } from '../../store/user-data/selectors';
-import { isDataLoading } from '../../store/offer-data/selectors';
+import { getIsOffersLoading } from '../../store/offer-data/selectors';
 
 
 function App(): JSX.Element | null {
-  const dispatch = useAppDispatch();
-  const isLoading = useAppSelector(isDataLoading);
+  // const dispatch = useAppDispatch();
+  const isLoading = useAppSelector(getIsOffersLoading);
   const authStatus = useAppSelector(getAuthStatus);
 
   if (authStatus === AuthStatus.Auth) {
-    dispatch(getFavoritesAction());
+    // dispatch(getFavoritesAction());
   }
 
   if (isLoading) {

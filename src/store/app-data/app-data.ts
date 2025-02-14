@@ -1,8 +1,15 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AppData } from '../../types/state';
+import { createSlice } from '@reduxjs/toolkit';
+// import { AppData } from '../../types/state';
 import { NameSpace } from '../../const';
 import { SortTypes } from '../../const';
 import { DEFAULT_CITY } from '../../const';
+
+
+type AppData = {
+  city: string;
+  sortType: SortTypes;
+  isDataLoading: boolean;
+}
 
 const initialState: AppData = {
   city: DEFAULT_CITY,
@@ -16,10 +23,13 @@ export const appData = createSlice({
   initialState,
   reducers: {
     changeLocation: (state, action) => {
-      state.city = action.payload;
+      state.city = action.payload as string;
     },
     changeSort: (state, action) => {
-      state.sortType = action.payload;
+      state.sortType = action.payload as SortTypes;
+    },
+    changeLoadingStatus: (state, action) => {
+      state.isDataLoading = action.payload as boolean;
     }
   },
   // extraReducers(builder) {
@@ -30,4 +40,4 @@ export const appData = createSlice({
   // }
 });
 
-export const {changeLocation, changeSort} = appData.actions;
+export const {changeLocation, changeSort, changeLoadingStatus} = appData.actions;

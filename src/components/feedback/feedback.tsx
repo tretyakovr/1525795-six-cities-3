@@ -1,7 +1,8 @@
 import { useRef, useState } from 'react';
 import { sendCommentAction } from '../../store/api-actions';
 import { useAppSelector, useAppDispatch } from '../../hooks';
-import { setResetFormState } from '../../store/action';
+import { getIsDataLoading } from '../../store/offer-data/selectors';
+// import { setResetFormState } from '../../store/action';
 
 const DEFAULT_MIN_LENGTH = 50;
 const DEFAULT_MAX_LENGTH = 300;
@@ -17,8 +18,9 @@ function Feedback(props: FeedbackProps): JSX.Element {
   const refSubmit = useRef<HTMLButtonElement | null>(null);
   const refForm = useRef<HTMLFormElement | null>(null);
   const dispatch = useAppDispatch();
-  const isAsyncOp = useAppSelector((state) => state.isAsyncOp);
-  const isResetForm = useAppSelector((state) => state.isResetForm);
+  // const isAsyncOp = useAppSelector((state) => state.isAsyncOp);
+  // const isResetForm = useAppSelector((state) => state.isResetForm);
+  const isDataLoading = useAppSelector(getIsDataLoading);
 
   const handleSubmit = (evt: React.FormEvent<HTMLFormElement> | undefined) => {
     if (evt !== undefined) {
@@ -42,10 +44,11 @@ function Feedback(props: FeedbackProps): JSX.Element {
     }
   };
 
-  if (isAsyncOp) {
+  // if (isAsyncOp) {
+  if (isDataLoading) {
     if (refSubmit.current !== null && refForm.current !== null && commentText.current !== null) {
-      commentText.current.disabled = isAsyncOp;
-      refSubmit.current.disabled = isAsyncOp;
+      commentText.current.disabled = isDataLoading;
+      refSubmit.current.disabled = isDataLoading;
     }
   } else {
     if (refSubmit.current !== null) {
@@ -53,14 +56,14 @@ function Feedback(props: FeedbackProps): JSX.Element {
     }
   }
 
-  if (isResetForm) {
-    if (refSubmit.current !== null && refForm.current !== null && commentText.current !== null) {
-      dispatch(setResetFormState(false));
-      refForm.current.reset();
-      commentText.current.disabled = false;
-      refSubmit.current.disabled = false;
-    }
-  }
+  // if (isResetForm) {
+  //   if (refSubmit.current !== null && refForm.current !== null && commentText.current !== null) {
+  //     dispatch(setResetFormState(false));
+  //     refForm.current.reset();
+  //     commentText.current.disabled = false;
+  //     refSubmit.current.disabled = false;
+  //   }
+  // }
 
   return (
     <form ref={refForm} className="reviews__form form" action="#" method="post"

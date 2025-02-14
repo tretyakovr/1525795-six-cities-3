@@ -49,19 +49,19 @@ const reducer = createReducer(initialState, (builder) => {
     // .addCase(changeSort, (state, action) => {
     //   state.sortType = action.payload as SortTypes;
     // })
-    .addCase(setLoadingStatus, (state, action) => {
-      state.isDataLoading = action.payload;
-    })
-    .addCase(loadOffers, (state, action) => {
-      state.loadedOffers = action.payload;
-    })
+    // .addCase(setLoadingStatus, (state, action) => {
+    //   state.isDataLoading = action.payload;
+    // })
+    // .addCase(loadOffers, (state, action) => {
+    //   state.loadedOffers = action.payload;
+    // })
     .addCase(setAuthStatus, (state, action) => {
       state.authStatus = action.payload.authStatus;
       state.email = action.payload.email;
     })
-    .addCase(saveOffer, (state, action)=> {
-      state.offer = action.payload;
-    })
+    // .addCase(saveOffer, (state, action)=> {
+    //   state.offer = action.payload;
+    // })
     .addCase(saveComments, (state, action)=> {
       state.comments = action.payload;
     })
@@ -79,25 +79,25 @@ const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(setResetFormState, (state, action) => {
       state.isResetForm = action.payload;
-    })
-    .addCase(markFavorite, (state, action) => {
-      // Заменить оффер в state.loadedOffers
-      let index: number = state.loadedOffers.findIndex((item) => item.id === action.payload.id);
-      if (index !== -1) {
-        state.loadedOffers = [...state.loadedOffers.slice(0, index), action.payload, ...state.loadedOffers.slice(index + 1)];
-      }
-
-      // Привести в актуальное состояние state.favorites
-      index = state.favorites.findIndex((item) => item.id === action.payload.id);
-      if (index === -1) {
-        state.favorites.push(action.payload);
-      } else {
-        state.favorites = [...state.favorites.slice(0, index), ...state.favorites.slice(index + 1)];
-      }
-    })
-    .addCase(addComment, (state, action) => {
-      state.comments.push(action.payload);
     });
+    // .addCase(markFavorite, (state, action) => {
+    //   // Заменить оффер в state.loadedOffers
+    //   let index: number = state.loadedOffers.findIndex((item) => item.id === action.payload.id);
+    //   if (index !== -1) {
+    //     state.loadedOffers = [...state.loadedOffers.slice(0, index), action.payload, ...state.loadedOffers.slice(index + 1)];
+    //   }
+
+    //   // Привести в актуальное состояние state.favorites
+    //   index = state.favorites.findIndex((item) => item.id === action.payload.id);
+    //   if (index === -1) {
+    //     state.favorites.push(action.payload);
+    //   } else {
+    //     state.favorites = [...state.favorites.slice(0, index), ...state.favorites.slice(index + 1)];
+    //   }
+    // });
+    // .addCase(addComment, (state, action) => {
+    //   state.comments.push(action.payload);
+    // });
 });
 
 export {reducer};

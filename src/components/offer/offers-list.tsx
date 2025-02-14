@@ -3,6 +3,8 @@ import { Offer } from '../../types/offers';
 import Sort from '../../components/sort/sort';
 import { useAppSelector } from '../../hooks';
 import { getCityOffers, getSortedCityOffers } from '../../utils';
+import { getSortType } from '../../store/app-data/selectors';
+import { getLoadedOffers } from '../../store/offer-data/selectors';
 
 type OffersListProps = {
   activeLocation: string | undefined;
@@ -10,7 +12,7 @@ type OffersListProps = {
 }
 
 function OffersList({activeLocation, selectOfferHandler}: OffersListProps): JSX.Element {
-  const sortType = useAppSelector((state) => state.sortType);
+  const sortType = useAppSelector(getSortType);
 
   function handleMouseOver(evt: React.MouseEvent<HTMLElement>): void {
     const nodeName: React.MouseEvent<HTMLElement> | string = evt.currentTarget.nodeName;
@@ -24,7 +26,7 @@ function OffersList({activeLocation, selectOfferHandler}: OffersListProps): JSX.
   }
 
   const city = activeLocation;
-  let offers = useAppSelector((state) => state.loadedOffers);
+  let offers = useAppSelector(getLoadedOffers);
   offers = getCityOffers(offers, city);
   offers = getSortedCityOffers(offers, sortType);
 
