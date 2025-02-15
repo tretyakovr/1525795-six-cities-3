@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Locations from '../../components/locations/locations';
 import Header from '../../components/header/header';
 import OffersList from '../../components/offer/offers-list';
@@ -9,7 +9,11 @@ import { changeLocation } from '../../store/app-data/app-data';
 import { getCityOffers, getSortedCityOffers } from '../../utils';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { getSortType, getCity } from '../../store/app-data/selectors';
-import { getLoadedOffers } from '../../store/offer-data/selectors';
+import { getLoadedOffers, getOffersActionState } from '../../store/offer-data/selectors';
+import Loading from '../loading/loading';
+import { checkAuthAction, getFavoritesAction, getOffersAction } from '../../store/api-actions';
+import { getAuthStatus } from '../../store/user-data/selectors';
+import { APIActionState, AuthStatus } from '../../const';
 
 
 function getCityParams(city: string, cityOffers: Offers): City {
@@ -34,6 +38,21 @@ function getCityParams(city: string, cityOffers: Offers): City {
 
 function Main(): JSX.Element {
   const dispatch = useAppDispatch();
+  dispatch(checkAuthAction());
+  const offersActionState = useAppSelector(getOffersActionState);
+  const authStatus = useAppSelector(getAuthStatus);
+
+  useEffect(() => {
+    dispatch(getOffersAction());
+
+    // if (authStatus === AuthStatus.Auth) {
+    //   dispatch(getFavoritesAction());
+    // }
+  }, [dispatch, authStatus]);
+
+
+
+  // const dispatch = useAppDispatch();
   const city = useAppSelector(getCity);
 
   const [activeLocation, setActiveLocation] = useState(city);
@@ -57,6 +76,13 @@ function Main(): JSX.Element {
   const selectOfferHandler = (offerId: string) => {
     setSelectedOffer(offerId);
   };
+
+
+  if (offersActionState === APIActionState.CALL) {
+    return (
+      <Loading />
+    );
+  }
 
   return (
     <div className="page page--gray page--main">

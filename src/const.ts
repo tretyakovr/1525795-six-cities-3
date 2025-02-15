@@ -43,3 +43,10 @@ export enum NameSpace {
   Offer = 'OFFER',
   User = 'USER',
 }
+
+export enum APIActionState {
+  IDLE = 'Idle',
+  CALL = 'Call',
+  SUCCESS = 'Success',
+  ERROR = 'Error',
+}

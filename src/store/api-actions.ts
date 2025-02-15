@@ -6,7 +6,7 @@ import { Comment, Comments } from '../types/comments';
 // import {loadOffers, setLoadingStatus, changeLocation, setAuthStatus, redirectToRoute, saveOffer, setOfferFindErrorState} from './action';
 // import { saveComments, saveNearOffers, saveFavorites, markFavorite } from './action';
 // import { addComment } from './offer-process/offer-process';
-import {saveToken, dropToken} from '../services/token';
+import {saveToken, dropToken, getToken} from '../services/token';
 import {APIRoute} from '../const';
 // import { AuthStatus, DEFAULT_CITY } from '../const';
 
@@ -143,8 +143,18 @@ export const checkAuthAction = createAsyncThunk<UserData, undefined, {
 }>(
   'user/checkAuth',
   async (_arg, {extra: api}) => {
-    const {data} = await api.get<UserData>(APIRoute.Login);
-    return data;
+    // let data = {
+    //   name: '',
+    //   avatarUrl: '',
+    //   isPro: false,
+    //   email: '',
+    //   token: '',
+    // };
+    if (getToken()) {
+      const {data} = await api.get<UserData>(APIRoute.Login);
+      return data;
+    }
+    return {name: '', avatarUrl: '', isPro: false, email: '', token: '',};
   },
 );
 

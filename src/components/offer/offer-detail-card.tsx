@@ -1,43 +1,76 @@
-import { useParams, useNavigate } from 'react-router';
+import { Navigate } from 'react-router';
+import { useParams } from 'react-router';
 import Header from '../../components/header/header';
-import Feedback from '../../components/feedback/feedback';
-import Card from '../../components/card/card';
 import Reviews from './reviews';
+import NearOffers from './near-offers';
 import OfferMap from './offer-map';
 import { getOfferDetailAction, getCommentsAction, getNearOffersAction, markFavoriteAction } from '../../store/api-actions';
 import { capitalize } from '../../utils';
 import { useAppSelector, useAppDispatch } from '../../hooks';
-import { AppRoute, AuthStatus } from '../../const';
-import { getComments, getOfferDetail, getNearOffers, getIsDataLoading } from '../../store/offer-data/selectors';
+import { APIActionState, AppRoute, AuthStatus } from '../../const';
+import { getOfferDetail, getNearOffers, getLoadedOffers, getOfferDetailActionState } from '../../store/offer-data/selectors';
 import { getAuthStatus } from '../../store/user-data/selectors';
+import { useEffect } from 'react';
+import { setErrorMessage } from '../../store/app-data/app-data';
+import { resetOfferDetail } from '../../store/offer-data/offer-data';
+
+const VIEW_NEAR_OFFERS_COUNT = 3;
 
 
-function OfferDetailCard() {
+function OfferDetailCard(): JSX.Element {
   const params = useParams<string>();
-  const offerId: string | undefined = params.id;
-
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const offerId: string | undefined = params.id;
+  console.log('offer detail card', offerId);
 
-  const isDataLoading = useAppSelector(getIsDataLoading);
+  // const isDataLoading = useAppSelector(getIsDataLoading);
   const detailedOffer = useAppSelector(getOfferDetail);
-
-  const offerComments = useAppSelector(getComments);
-  const commentsCount = offerComments.length;
-
   let nearOffers = useAppSelector(getNearOffers);
-  nearOffers = [...nearOffers.filter((item) => item.id !== offerId).slice(0, 3)];
+  nearOffers = [...nearOffers.filter((item) => item.id !== offerId).slice(0, VIEW_NEAR_OFFERS_COUNT)];
 
   const authStatus: AuthStatus = useAppSelector(getAuthStatus);
 
-  let comments = [...offerComments].sort((review1, review2) => +new Date(review2.date) - +new Date(review1.date));
-  comments = [...comments.slice(0, 10)];
+  const offerDetailActionState = useAppSelector(getOfferDetailActionState);
 
-  if ((!isDataLoading && !detailedOffer) || (detailedOffer && offerId !== detailedOffer.id)) {
+  // Если offerId пустой, его отловит Router и переведет на Page404
+  // Если в адресной строке ввели offerId вручную, проверяем, есть ли он в loadedOffers
+  const loadedOffers = useAppSelector(getLoadedOffers);
+  // const index = loadedOffers.findIndex((item) => item.id === offerId);
+  // if (index === -1) {
+  //   dispatch(setErrorMessage(`Offer id# ${offerId} not found!`));
+  //   return (<Navigate to={AppRoute.Page404} />);
+  // }
+  // dispatch(resetOfferDetailActionState());
+
+  // console.log('offer detail card', offerDetailActionState);
+  // switch (offerDetailActionState) {
+  //   case APIActionState.IDLE:
+  //     dispatch(getOfferDetailAction(offerId));
+  //     break;
+  //   case APIActionState.ERROR:
+  //     dispatch(setErrorMessage(`Failed api.get detailed information Offer id# ${offerId}!`));
+  //     return (<Navigate to={AppRoute.Page404} />);
+  // }
+
+
+
+  // if ((!isDataLoading && !detailedOffer) || (detailedOffer && offerId !== detailedOffer.id)) {
+  //   dispatch(getOfferDetailAction(offerId));
+  //   dispatch(getCommentsAction(offerId));
+  //   dispatch(getNearOffersAction(offerId));
+  // }
+
+  useEffect(() => {
     dispatch(getOfferDetailAction(offerId));
     dispatch(getCommentsAction(offerId));
     dispatch(getNearOffersAction(offerId));
-  }
+    return () => {
+      // dispatch(resetOfferDetailActionState());
+      dispatch(resetOfferDetail());
+    };
+  }, [dispatch, offerId]);
+
+
 
   // if ((!isDataLoading && isLoadingError) || detailedOffer === undefined) {
   //   navigate(AppRoute.Main);
@@ -45,7 +78,7 @@ function OfferDetailCard() {
 
   const favoriteClickHandler = () => {
     if (authStatus !== AuthStatus.Auth) {
-      navigate(AppRoute.Login);
+      return (<Navigate to={AppRoute.Login} />);
     } else {
       if (detailedOffer !== undefined) {
         dispatch(markFavoriteAction({offerId: detailedOffer.id, favoriteState: Number(!detailedOffer.isFavorite)}));
@@ -145,36 +178,14 @@ function OfferDetailCard() {
                   </p>
                 </div>
               </div>
-              <section className="offer__reviews reviews">
-                <h2 className="reviews__title">Reviews &middot;
-                  <span className="reviews__amount">{commentsCount}</span>
-                </h2>
-                <Reviews comments={comments} />
-                { authStatus === AuthStatus.Auth && detailedOffer ? <Feedback offerId={detailedOffer.id} /> : null}
-              </section>
+              <Reviews />
             </div>
           </div>
           <section className="offer__map map">
             { detailedOffer ? <OfferMap offer={detailedOffer} nearOffers={nearOffers} /> : null }
           </section>
         </section>
-        <div className="container">
-          <section className="near-places places">
-            <h2 className="near-places__title">Other places in the neighbourhood</h2>
-            <div className="near-places__list places__list">
-              {nearOffers.map((item) => (
-                <article id={item.id} key={item.id}
-                  className="near-places__card place-card"
-                >
-                  <Card
-                    offer={item}
-                    divClassName='near-places__image-wrapper place-card__image-wrapper'
-                  />
-                </article>
-              ))}
-            </div>
-          </section>
-        </div>
+        <NearOffers />
       </main>
     </div>
   );

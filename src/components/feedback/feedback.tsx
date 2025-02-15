@@ -1,25 +1,30 @@
+import { Navigate } from 'react-router-dom';
 import { useRef, useState } from 'react';
 import { sendCommentAction } from '../../store/api-actions';
 import { useAppSelector, useAppDispatch } from '../../hooks';
-import { getIsResetFeedback } from '../../store/offer-data/selectors';
+import { getIsResetFeedback, getOfferDetail } from '../../store/offer-data/selectors';
 import { changeResetFeedback } from '../../store/offer-data/offer-data';
+import { AppRoute } from '../../const';
 
 const DEFAULT_MIN_LENGTH = 50;
 const DEFAULT_MAX_LENGTH = 300;
 
-type FeedbackProps = {
-  offerId: string;
-}
 
-function Feedback(props: FeedbackProps): JSX.Element {
-  const {offerId} = props;
+function Feedback(): JSX.Element {
+  const dispatch = useAppDispatch();
+
   const [rating, setRating] = useState<number>(0);
   const commentText = useRef<HTMLTextAreaElement | null>(null);
   const refSubmit = useRef<HTMLButtonElement | null>(null);
   const refForm = useRef<HTMLFormElement | null>(null);
 
-  const dispatch = useAppDispatch();
   const isResetFeedback = useAppSelector(getIsResetFeedback);
+
+  const offerDetail = useAppSelector(getOfferDetail);
+  if (offerDetail === undefined) {
+    return (<Navigate to={AppRoute.Page404} />);
+  }
+  const offerId = offerDetail.id;
 
   if (refSubmit.current !== null) {
     refSubmit.current.disabled = true;

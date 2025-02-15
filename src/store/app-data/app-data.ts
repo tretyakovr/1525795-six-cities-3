@@ -7,13 +7,13 @@ import { DEFAULT_CITY } from '../../const';
 type AppData = {
   city: string;
   sortType: SortTypes;
-  isDataLoading: boolean;
+  errorMessage: string;
 }
 
 const initialState: AppData = {
   city: DEFAULT_CITY,
   sortType: SortTypes.POPULAR,
-  isDataLoading: false,
+  errorMessage: '',
 };
 
 export const appData = createSlice({
@@ -26,10 +26,13 @@ export const appData = createSlice({
     changeSort: (state, action) => {
       state.sortType = action.payload as SortTypes;
     },
-    changeLoadingStatus: (state, action) => {
-      state.isDataLoading = action.payload as boolean;
+    setErrorMessage: (state, action) => {
+      state.errorMessage = action.payload as string;
+    },
+    clearErrorMessage: (state) => {
+      state.errorMessage = '';
     }
   },
 });
 
-export const {changeLocation, changeSort, changeLoadingStatus} = appData.actions;
+export const {changeLocation, changeSort, setErrorMessage, clearErrorMessage} = appData.actions;

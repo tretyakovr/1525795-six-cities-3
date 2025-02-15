@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+// import { useEffect } from 'react';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import Main from '../main/main';
@@ -7,29 +7,32 @@ import Login from '../login/login';
 import OfferDetailCard from '../offer/offer-detail-card';
 import Page404 from '../page404/page404';
 import PrivateRoute from '../private-route/private-route';
-import Loading from '../loading/loading';
+// import Loading from '../loading/loading';
 import { getAuthStatus } from '../../store/user-data/selectors';
-import { getIsOffersLoading } from '../../store/offer-data/selectors';
-import { AuthStatus } from '../../const';
-import { getFavoritesAction } from '../../store/api-actions';
+// import { getOffersActionState } from '../../store/offer-data/selectors';
+// import { APIActionState, AuthStatus } from '../../const';
+// import { checkAuthAction, getFavoritesAction, getOffersAction } from '../../store/api-actions';
 
 
 function App(): JSX.Element | null {
-  const dispatch = useAppDispatch();
-  const isLoading = useAppSelector(getIsOffersLoading);
+  // const dispatch = useAppDispatch();
+  // dispatch(checkAuthAction());
+  // const offersActionState = useAppSelector(getOffersActionState);
   const authStatus = useAppSelector(getAuthStatus);
 
-  useEffect(() => {
-    if (authStatus === AuthStatus.Auth) {
-      dispatch(getFavoritesAction());
-    }
-  }, [dispatch, authStatus]);
+  // useEffect(() => {
+  //   dispatch(getOffersAction());
 
-  if (isLoading) {
-    return (
-      <Loading />
-    );
-  }
+  //   if (authStatus === AuthStatus.Auth) {
+  //     dispatch(getFavoritesAction());
+  //   }
+  // }, [dispatch, authStatus]);
+
+  // if (offersActionState === APIActionState.CALL) {
+  //   return (
+  //     <Loading />
+  //   );
+  // }
 
   return (
     <BrowserRouter>

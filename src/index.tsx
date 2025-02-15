@@ -12,8 +12,8 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
-store.dispatch(checkAuthAction());
-store.dispatch(getOffersAction());
+// store.dispatch(checkAuthAction());
+// store.dispatch(getOffersAction());
 
 root.render(
   <React.StrictMode>

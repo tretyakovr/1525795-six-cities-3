@@ -1,32 +1,42 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { Offers, OfferDetail } from '../../types/offers';
 import { Comments } from '../../types/comments';
-import { NameSpace } from '../../const';
+import { APIActionState, NameSpace } from '../../const';
 import { getOffersAction, getFavoritesAction, getOfferDetailAction, getCommentsAction, getNearOffersAction, sendCommentAction, markFavoriteAction } from '../api-actions';
 
 
 type OfferData = {
-  isOffersLoading: boolean;
+  // isOffersLoading: boolean;
   loadedOffers: Offers;
+  offersActionState: APIActionState;
   isDataLoading: boolean;
   isLoadingError: boolean;
   offer: OfferDetail | undefined;
+  offerDetailActionState: APIActionState;
   comments: Comments;
+  commentsActionState: APIActionState;
   isResetFeedback: boolean;
   nearOffers: Offers;
+  nearOffersActionState: APIActionState;
   favorites: Offers;
+  sendCommentActionState: APIActionState;
 }
 
 const initialState: OfferData = {
-  isOffersLoading: false,
+  // isOffersLoading: false,
   loadedOffers: [],
+  offersActionState: APIActionState.IDLE,
   isDataLoading: false,
   isLoadingError: false,
   offer: undefined,
+  offerDetailActionState: APIActionState.IDLE,
   comments: [],
+  commentsActionState: APIActionState.IDLE,
   isResetFeedback: false,
   nearOffers: [],
+  nearOffersActionState: APIActionState.IDLE,
   favorites: [],
+  sendCommentActionState: APIActionState.IDLE,
 };
 
 
@@ -36,36 +46,50 @@ export const offerData = createSlice({
   reducers: {
     changeResetFeedback: (state, action) => {
       state.isResetFeedback = action.payload as boolean;
-    }
+    },
+    resetOfferDetail: (state) => {
+      state.offer = undefined;
+      state.offerDetailActionState = APIActionState.IDLE;
+      state.comments = [];
+      state.commentsActionState = APIActionState.IDLE;
+      state.nearOffers = [];
+      state.nearOffersActionState = APIActionState.IDLE;
+    },
   },
   extraReducers(builder) {
     builder
       .addCase(getOffersAction.pending, (state) => {
-        state.isOffersLoading = true;
-        state.isLoadingError = false;
+        state.offersActionState = APIActionState.CALL;
+        // state.isOffersLoading = true;
+        // state.isLoadingError = false;
       })
       .addCase(getOffersAction.fulfilled, (state, action) => {
-        state.isOffersLoading = false;
-        state.isLoadingError = false;
+        state.offersActionState = APIActionState.SUCCESS;
+        // state.isOffersLoading = false;
+        // state.isLoadingError = false;
         state.loadedOffers = action.payload;
       })
       .addCase(getOffersAction.rejected, (state) => {
-        state.isOffersLoading = false;
-        state.isLoadingError = true;
+        state.offersActionState = APIActionState.ERROR;
+        // state.isOffersLoading = false;
+        // state.isLoadingError = true;
         state.loadedOffers = [];
       })
       .addCase(getCommentsAction.pending, (state) => {
-        state.isDataLoading = true;
-        state.isLoadingError = false;
+        state.commentsActionState = APIActionState.CALL;
+        // state.isDataLoading = true;
+        // state.isLoadingError = false;
       })
       .addCase(getCommentsAction.fulfilled, (state, action) => {
-        state.isDataLoading = false;
-        state.isLoadingError = false;
+        state.commentsActionState = APIActionState.SUCCESS;
+        // state.isDataLoading = false;
+        // state.isLoadingError = false;
         state.comments = action.payload;
       })
       .addCase(getCommentsAction.rejected, (state) => {
-        state.isDataLoading = false;
-        state.isLoadingError = true;
+        state.commentsActionState = APIActionState.ERROR;
+        // state.isDataLoading = false;
+        // state.isLoadingError = true;
         state.comments = [];
       })
       .addCase(getFavoritesAction.pending, (state) => {
@@ -84,44 +108,48 @@ export const offerData = createSlice({
         state.isLoadingError = true;
       })
       .addCase(getOfferDetailAction.pending, (state) => {
-        state.isDataLoading = true;
+        state.offerDetailActionState = APIActionState.CALL;
+        // state.isDataLoading = true;
       })
       .addCase(getOfferDetailAction.fulfilled, (state, action) => {
-        state.isDataLoading = false;
+        state.offerDetailActionState = APIActionState.SUCCESS;
+        // state.isDataLoading = false;
         state.offer = action.payload;
       })
       .addCase(getOfferDetailAction.rejected, (state) => {
-        state.isDataLoading = false;
+        state.offerDetailActionState = APIActionState.ERROR;
+        // state.isDataLoading = false;
         state.offer = undefined;
       })
       .addCase(getNearOffersAction.pending, (state) => {
-        state.isDataLoading = true;
+        state.nearOffersActionState = APIActionState.CALL;
         state.isLoadingError = false;
       })
       .addCase(getNearOffersAction.fulfilled, (state, action) => {
-        state.isDataLoading = false;
-        state.isLoadingError = false;
+        state.nearOffersActionState = APIActionState.SUCCESS;
         state.nearOffers = action.payload;
       })
       .addCase(getNearOffersAction.rejected, (state) => {
-        state.isDataLoading = false;
-        state.isLoadingError = true;
+        state.nearOffersActionState = APIActionState.ERROR;
         state.nearOffers = [];
       })
       .addCase(sendCommentAction.pending, (state) => {
-        state.isDataLoading = true;
-        state.isLoadingError = false;
+        state.sendCommentActionState = APIActionState.IDLE;
+        // state.isDataLoading = true;
+        // state.isLoadingError = false;
       })
       .addCase(sendCommentAction.fulfilled, (state, action) => {
-        state.isDataLoading = false;
-        state.isLoadingError = false;
+        state.sendCommentActionState = APIActionState.SUCCESS;
+        // state.isDataLoading = false;
+        // state.isLoadingError = false;
         state.comments.push(action.payload);
         state.isResetFeedback = true;
       })
       .addCase(sendCommentAction.rejected, (state) => {
-        state.isDataLoading = false;
-        state.isLoadingError = true;
-        state.nearOffers = [];
+        state.sendCommentActionState = APIActionState.ERROR;
+        // state.isDataLoading = false;
+        // state.isLoadingError = true;
+        // state.nearOffers = [];
       })
 
       .addCase(markFavoriteAction.pending, (state) => {
@@ -159,4 +187,4 @@ export const offerData = createSlice({
   },
 });
 
-export const {changeResetFeedback} = offerData.actions;
+export const {changeResetFeedback, resetOfferDetail} = offerData.actions;
