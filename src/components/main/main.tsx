@@ -38,7 +38,7 @@ function getCityParams(city: string, cityOffers: Offers): City {
 
 function Main(): JSX.Element {
   const dispatch = useAppDispatch();
-  dispatch(checkAuthAction());
+  // dispatch(checkAuthAction());
   const offersActionState = useAppSelector(getOffersActionState);
   const authStatus = useAppSelector(getAuthStatus);
 
@@ -49,7 +49,6 @@ function Main(): JSX.Element {
     //   dispatch(getFavoritesAction());
     // }
   }, [dispatch, authStatus]);
-
 
 
   // const dispatch = useAppDispatch();

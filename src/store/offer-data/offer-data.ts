@@ -6,11 +6,10 @@ import { getOffersAction, getFavoritesAction, getOfferDetailAction, getCommentsA
 
 
 type OfferData = {
-  // isOffersLoading: boolean;
   loadedOffers: Offers;
   offersActionState: APIActionState;
-  isDataLoading: boolean;
-  isLoadingError: boolean;
+  // isDataLoading: boolean;
+  // isLoadingError: boolean;
   offer: OfferDetail | undefined;
   offerDetailActionState: APIActionState;
   comments: Comments;
@@ -19,15 +18,16 @@ type OfferData = {
   nearOffers: Offers;
   nearOffersActionState: APIActionState;
   favorites: Offers;
+  favoritesActionState: APIActionState;
   sendCommentActionState: APIActionState;
+  markFavoriteActionState: APIActionState;
 }
 
 const initialState: OfferData = {
-  // isOffersLoading: false,
   loadedOffers: [],
   offersActionState: APIActionState.IDLE,
-  isDataLoading: false,
-  isLoadingError: false,
+  // isDataLoading: false,
+  // isLoadingError: false,
   offer: undefined,
   offerDetailActionState: APIActionState.IDLE,
   comments: [],
@@ -36,7 +36,9 @@ const initialState: OfferData = {
   nearOffers: [],
   nearOffersActionState: APIActionState.IDLE,
   favorites: [],
+  favoritesActionState: APIActionState.IDLE,
   sendCommentActionState: APIActionState.IDLE,
+  markFavoriteActionState: APIActionState.IDLE,
 };
 
 
@@ -60,70 +62,59 @@ export const offerData = createSlice({
     builder
       .addCase(getOffersAction.pending, (state) => {
         state.offersActionState = APIActionState.CALL;
-        // state.isOffersLoading = true;
-        // state.isLoadingError = false;
       })
       .addCase(getOffersAction.fulfilled, (state, action) => {
         state.offersActionState = APIActionState.SUCCESS;
-        // state.isOffersLoading = false;
-        // state.isLoadingError = false;
         state.loadedOffers = action.payload;
       })
       .addCase(getOffersAction.rejected, (state) => {
         state.offersActionState = APIActionState.ERROR;
-        // state.isOffersLoading = false;
-        // state.isLoadingError = true;
         state.loadedOffers = [];
       })
       .addCase(getCommentsAction.pending, (state) => {
         state.commentsActionState = APIActionState.CALL;
-        // state.isDataLoading = true;
-        // state.isLoadingError = false;
       })
       .addCase(getCommentsAction.fulfilled, (state, action) => {
         state.commentsActionState = APIActionState.SUCCESS;
-        // state.isDataLoading = false;
-        // state.isLoadingError = false;
         state.comments = action.payload;
       })
       .addCase(getCommentsAction.rejected, (state) => {
         state.commentsActionState = APIActionState.ERROR;
-        // state.isDataLoading = false;
-        // state.isLoadingError = true;
         state.comments = [];
       })
       .addCase(getFavoritesAction.pending, (state) => {
-        state.isDataLoading = true;
-        state.isLoadingError = false;
+        state.favoritesActionState = APIActionState.CALL;
+        // state.isDataLoading = true;
+        // state.isLoadingError = false;
       })
       .addCase(getFavoritesAction.fulfilled, (state, action) => {
-        state.isDataLoading = false;
-        state.isLoadingError = false;
+        state.favoritesActionState = APIActionState.SUCCESS;
+        state.favorites = action.payload;
+        // state.isDataLoading = false;
+        // state.isLoadingError = false;
 
         state.favorites = action.payload;
       })
       .addCase(getFavoritesAction.rejected, (state) => {
+        state.favoritesActionState = APIActionState.ERROR;
         state.favorites = [];
-        state.isDataLoading = false;
-        state.isLoadingError = true;
+        // state.isDataLoading = false;
+        // state.isLoadingError = true;
       })
       .addCase(getOfferDetailAction.pending, (state) => {
         state.offerDetailActionState = APIActionState.CALL;
-        // state.isDataLoading = true;
       })
       .addCase(getOfferDetailAction.fulfilled, (state, action) => {
         state.offerDetailActionState = APIActionState.SUCCESS;
-        // state.isDataLoading = false;
         state.offer = action.payload;
       })
       .addCase(getOfferDetailAction.rejected, (state) => {
         state.offerDetailActionState = APIActionState.ERROR;
-        // state.isDataLoading = false;
         state.offer = undefined;
       })
       .addCase(getNearOffersAction.pending, (state) => {
         state.nearOffersActionState = APIActionState.CALL;
-        state.isLoadingError = false;
+        // state.isLoadingError = false;
       })
       .addCase(getNearOffersAction.fulfilled, (state, action) => {
         state.nearOffersActionState = APIActionState.SUCCESS;
@@ -135,30 +126,21 @@ export const offerData = createSlice({
       })
       .addCase(sendCommentAction.pending, (state) => {
         state.sendCommentActionState = APIActionState.IDLE;
-        // state.isDataLoading = true;
-        // state.isLoadingError = false;
       })
       .addCase(sendCommentAction.fulfilled, (state, action) => {
         state.sendCommentActionState = APIActionState.SUCCESS;
-        // state.isDataLoading = false;
-        // state.isLoadingError = false;
         state.comments.push(action.payload);
         state.isResetFeedback = true;
       })
       .addCase(sendCommentAction.rejected, (state) => {
         state.sendCommentActionState = APIActionState.ERROR;
-        // state.isDataLoading = false;
-        // state.isLoadingError = true;
-        // state.nearOffers = [];
       })
 
       .addCase(markFavoriteAction.pending, (state) => {
-        state.isDataLoading = true;
-        state.isLoadingError = false;
+        state.markFavoriteActionState = APIActionState.CALL;
       })
       .addCase(markFavoriteAction.fulfilled, (state, action) => {
-        state.isDataLoading = false;
-        state.isLoadingError = false;
+        state.markFavoriteActionState = APIActionState.SUCCESS;
         // Заменить оффер в state.loadedOffers
         let index: number = state.loadedOffers.findIndex((item) => item.id === action.payload.id);
         if (index !== -1) {
@@ -180,8 +162,7 @@ export const offerData = createSlice({
         }
       })
       .addCase(markFavoriteAction.rejected, (state) => {
-        state.isDataLoading = false;
-        state.isLoadingError = true;
+        state.markFavoriteActionState = APIActionState.ERROR;
       });
 
   },

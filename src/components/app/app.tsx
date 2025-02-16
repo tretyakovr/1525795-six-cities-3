@@ -12,11 +12,12 @@ import { getAuthStatus } from '../../store/user-data/selectors';
 // import { getOffersActionState } from '../../store/offer-data/selectors';
 // import { APIActionState, AuthStatus } from '../../const';
 // import { checkAuthAction, getFavoritesAction, getOffersAction } from '../../store/api-actions';
+import { checkAuthAction } from '../../store/api-actions';
 
 
 function App(): JSX.Element | null {
-  // const dispatch = useAppDispatch();
-  // dispatch(checkAuthAction());
+  const dispatch = useAppDispatch();
+  dispatch(checkAuthAction());
   // const offersActionState = useAppSelector(getOffersActionState);
   const authStatus = useAppSelector(getAuthStatus);
 

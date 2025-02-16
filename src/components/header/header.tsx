@@ -22,6 +22,7 @@ function HeaderLogo({sourcePage}: HeaderProps): JSX.Element {
 
 function Header({sourcePage}: HeaderProps): JSX.Element {
   const authStatus = useAppSelector(getAuthStatus);
+  // console.log('reader', authStatus);
 
   const dispatch = useAppDispatch();
   const email = useAppSelector(getUserEmail);

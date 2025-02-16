@@ -1,18 +1,21 @@
+import { useEffect } from 'react';
 import { Navigate } from 'react-router';
 import { useParams } from 'react-router';
 import Header from '../../components/header/header';
 import Reviews from './reviews';
 import NearOffers from './near-offers';
 import OfferMap from './offer-map';
+import Loading from '../loading/loading';
 import { getOfferDetailAction, getCommentsAction, getNearOffersAction, markFavoriteAction } from '../../store/api-actions';
-import { capitalize } from '../../utils';
-import { useAppSelector, useAppDispatch } from '../../hooks';
-import { APIActionState, AppRoute, AuthStatus } from '../../const';
-import { getOfferDetail, getNearOffers, getLoadedOffers, getOfferDetailActionState } from '../../store/offer-data/selectors';
+import { getOfferDetail, getNearOffers } from '../../store/offer-data/selectors';
+import { getOfferDetailActionState, getNearOffersActionState, getCommentsActionState } from '../../store/offer-data/selectors';
 import { getAuthStatus } from '../../store/user-data/selectors';
-import { useEffect } from 'react';
 import { setErrorMessage } from '../../store/app-data/app-data';
 import { resetOfferDetail } from '../../store/offer-data/offer-data';
+import { useAppSelector, useAppDispatch } from '../../hooks';
+import { APIActionState, AppRoute, AuthStatus } from '../../const';
+import { capitalize } from '../../utils';
+
 
 const VIEW_NEAR_OFFERS_COUNT = 3;
 
@@ -21,60 +24,24 @@ function OfferDetailCard(): JSX.Element {
   const params = useParams<string>();
   const dispatch = useAppDispatch();
   const offerId: string | undefined = params.id;
-  console.log('offer detail card', offerId);
 
-  // const isDataLoading = useAppSelector(getIsDataLoading);
   const detailedOffer = useAppSelector(getOfferDetail);
+  const authStatus = useAppSelector(getAuthStatus);
   let nearOffers = useAppSelector(getNearOffers);
-  nearOffers = [...nearOffers.filter((item) => item.id !== offerId).slice(0, VIEW_NEAR_OFFERS_COUNT)];
 
-  const authStatus: AuthStatus = useAppSelector(getAuthStatus);
-
-  const offerDetailActionState = useAppSelector(getOfferDetailActionState);
-
-  // Если offerId пустой, его отловит Router и переведет на Page404
-  // Если в адресной строке ввели offerId вручную, проверяем, есть ли он в loadedOffers
-  const loadedOffers = useAppSelector(getLoadedOffers);
-  // const index = loadedOffers.findIndex((item) => item.id === offerId);
-  // if (index === -1) {
-  //   dispatch(setErrorMessage(`Offer id# ${offerId} not found!`));
-  //   return (<Navigate to={AppRoute.Page404} />);
-  // }
-  // dispatch(resetOfferDetailActionState());
-
-  // console.log('offer detail card', offerDetailActionState);
-  // switch (offerDetailActionState) {
-  //   case APIActionState.IDLE:
-  //     dispatch(getOfferDetailAction(offerId));
-  //     break;
-  //   case APIActionState.ERROR:
-  //     dispatch(setErrorMessage(`Failed api.get detailed information Offer id# ${offerId}!`));
-  //     return (<Navigate to={AppRoute.Page404} />);
-  // }
-
-
-
-  // if ((!isDataLoading && !detailedOffer) || (detailedOffer && offerId !== detailedOffer.id)) {
-  //   dispatch(getOfferDetailAction(offerId));
-  //   dispatch(getCommentsAction(offerId));
-  //   dispatch(getNearOffersAction(offerId));
-  // }
+  const offerDetailActionsState = [
+    useAppSelector(getOfferDetailActionState),
+    useAppSelector(getNearOffersActionState),
+    useAppSelector(getCommentsActionState)];
 
   useEffect(() => {
     dispatch(getOfferDetailAction(offerId));
-    dispatch(getCommentsAction(offerId));
     dispatch(getNearOffersAction(offerId));
+    dispatch(getCommentsAction(offerId));
     return () => {
-      // dispatch(resetOfferDetailActionState());
       dispatch(resetOfferDetail());
     };
   }, [dispatch, offerId]);
-
-
-
-  // if ((!isDataLoading && isLoadingError) || detailedOffer === undefined) {
-  //   navigate(AppRoute.Main);
-  // }
 
   const favoriteClickHandler = () => {
     if (authStatus !== AuthStatus.Auth) {
@@ -85,6 +52,16 @@ function OfferDetailCard(): JSX.Element {
       }
     }
   };
+
+  if (offerDetailActionsState.some((item) => item === APIActionState.ERROR)) {
+    dispatch(setErrorMessage(`Failed api.get detailed information Offer id# ${offerId}!`));
+    return (<Navigate to={AppRoute.Page404} />);
+  }
+  if (!offerDetailActionsState.every((item) => item === APIActionState.SUCCESS)) {
+    return (<Loading />);
+  }
+
+  nearOffers = [...nearOffers.filter((item) => item.id !== offerId).slice(0, VIEW_NEAR_OFFERS_COUNT)];
 
   return (
     <div className="page">
@@ -185,7 +162,7 @@ function OfferDetailCard(): JSX.Element {
             { detailedOffer ? <OfferMap offer={detailedOffer} nearOffers={nearOffers} /> : null }
           </section>
         </section>
-        <NearOffers />
+        <NearOffers nearOffers={nearOffers}/>
       </main>
     </div>
   );

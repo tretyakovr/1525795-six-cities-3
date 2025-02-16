@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { changeLocation } from '../../store/app-data/app-data';
-import { loginAction } from '../../store/api-actions';
+import { getFavoritesAction, loginAction } from '../../store/api-actions';
 import { AppRoute, CITIES } from '../../const';
 import { useAppDispatch } from '../../hooks';
 import { getRandomInteger } from '../../utils';
@@ -27,6 +27,7 @@ function Login(): JSX.Element {
     const loginValue = loginRef.current?.value ?? '';
     const passwordValue = passwordRef.current?.value ?? '';
     dispatch(loginAction({email: loginValue, password: passwordValue}));
+    dispatch(getFavoritesAction());
     navigate(AppRoute.Main);
   };
 

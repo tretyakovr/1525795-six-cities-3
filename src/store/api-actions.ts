@@ -150,11 +150,11 @@ export const checkAuthAction = createAsyncThunk<UserData, undefined, {
     //   email: '',
     //   token: '',
     // };
-    if (getToken()) {
-      const {data} = await api.get<UserData>(APIRoute.Login);
-      return data;
-    }
-    return {name: '', avatarUrl: '', isPro: false, email: '', token: '',};
+    // if (getToken()) {
+    const {data} = await api.get<UserData>(APIRoute.Login);
+    return data;
+    // }
+    // return {name: '', avatarUrl: '', isPro: false, email: '', token: '',};
   },
 );
 
