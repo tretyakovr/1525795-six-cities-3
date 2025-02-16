@@ -61,6 +61,11 @@ function OfferDetailCard(): JSX.Element {
     return (<Loading />);
   }
 
+  if (detailedOffer === undefined) {
+    dispatch(setErrorMessage(`Failed api.get detailed information Offer id# ${detailedOffer}!`));
+    return (<Navigate to={AppRoute.Page404} />);
+  }
+
   nearOffers = [...nearOffers.filter((item) => item.id !== offerId).slice(0, VIEW_NEAR_OFFERS_COUNT)];
 
   return (
@@ -71,7 +76,7 @@ function OfferDetailCard(): JSX.Element {
         <section className="offer">
           <div className="offer__gallery-container container">
             <div className="offer__gallery">
-              {detailedOffer?.images.slice(0, 6).map((item) => (
+              {detailedOffer.images.slice(0, 6).map((item) => (
                 <div key={item} className="offer__image-wrapper">
                   <img className="offer__image" src={item} alt="Photo studio" />
                 </div>
@@ -80,13 +85,13 @@ function OfferDetailCard(): JSX.Element {
           </div>
           <div className="offer__container container">
             <div className="offer__wrapper">
-              { detailedOffer?.isPremium &&
+              { detailedOffer.isPremium &&
                 <div className="offer__mark">
                   <span>Premium</span>
                 </div> }
               <div className="offer__name-wrapper">
                 <h1 className="offer__name">
-                  {detailedOffer?.title}
+                  {detailedOffer.title}
                 </h1>
                 <button className=
                   {detailedOffer && detailedOffer.isFavorite && authStatus === AuthStatus.Auth ?
@@ -106,27 +111,27 @@ function OfferDetailCard(): JSX.Element {
                   <span style={{width: `${detailedOffer && (Math.round(detailedOffer.rating) * 100 / 5).toString(10)}%`}}></span>
                   <span className="visually-hidden">Rating</span>
                 </div>
-                <span className="offer__rating-value rating__value">{detailedOffer?.rating}</span>
+                <span className="offer__rating-value rating__value">{detailedOffer.rating}</span>
               </div>
               <ul className="offer__features">
                 <li className="offer__feature offer__feature--entire">
                   {detailedOffer && capitalize(detailedOffer.type)}
                 </li>
                 <li className="offer__feature offer__feature--bedrooms">
-                  {detailedOffer?.bedrooms} Bedroom{detailedOffer && detailedOffer.bedrooms > 1 ? 's' : ''}
+                  {detailedOffer.bedrooms} Bedroom{detailedOffer && detailedOffer.bedrooms > 1 ? 's' : ''}
                 </li>
                 <li className="offer__feature offer__feature--adults">
-                  Max {detailedOffer?.maxAdults} adult{detailedOffer && detailedOffer.maxAdults > 1 ? 's' : ''}
+                  Max {detailedOffer.maxAdults} adult{detailedOffer && detailedOffer.maxAdults > 1 ? 's' : ''}
                 </li>
               </ul>
               <div className="offer__price">
-                <b className="offer__price-value">&euro;{detailedOffer?.price}</b>
+                <b className="offer__price-value">&euro;{detailedOffer.price}</b>
                 <span className="offer__price-text">&nbsp;night</span>
               </div>
               <div className="offer__inside">
                 <h2 className="offer__inside-title">What&apos;s inside</h2>
                 <ul className="offer__inside-list">
-                  {detailedOffer?.goods.map((item) => (
+                  {detailedOffer.goods.map((item) => (
                     <li key={item} className="offer__inside-item">
                       {item}
                     </li>
@@ -137,21 +142,21 @@ function OfferDetailCard(): JSX.Element {
                 <h2 className="offer__host-title">Meet the host</h2>
                 <div className="offer__host-user user">
                   <div className={
-                    detailedOffer?.host.isPro ?
+                    detailedOffer.host.isPro ?
                       'offer__avatar-wrapper offer__avatar-wrapper--pro user__avatar-wrapper' :
                       'offer__avatar-wrapper user__avatar-wrapper'
                   }
                   >
-                    <img className="offer__avatar user__avatar" src={detailedOffer?.host.avatarUrl} width="74" height="74" alt="Host avatar" />
+                    <img className="offer__avatar user__avatar" src={detailedOffer.host.avatarUrl} width="74" height="74" alt="Host avatar" />
                   </div>
                   <span className="offer__user-name">
-                    {detailedOffer?.host.name}
+                    {detailedOffer.host.name}
                   </span>
-                  {detailedOffer?.host.isPro ? <span className="offer__user-status">Pro</span> : ''}
+                  {detailedOffer.host.isPro ? <span className="offer__user-status">Pro</span> : ''}
                 </div>
                 <div className="offer__description">
                   <p className="offer__text">
-                    {detailedOffer?.description}
+                    {detailedOffer.description}
                   </p>
                 </div>
               </div>

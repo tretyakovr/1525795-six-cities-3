@@ -3,13 +3,13 @@ import { Offers, OfferDetail } from '../../types/offers';
 import { Comments } from '../../types/comments';
 import { APIActionState, NameSpace } from '../../const';
 import { getOffersAction, getFavoritesAction, getOfferDetailAction, getCommentsAction, getNearOffersAction, sendCommentAction, markFavoriteAction } from '../api-actions';
+// import { sendCommentActionState } from './selectors';
+import {toast} from 'react-toastify';
 
 
 type OfferData = {
   loadedOffers: Offers;
   offersActionState: APIActionState;
-  // isDataLoading: boolean;
-  // isLoadingError: boolean;
   offer: OfferDetail | undefined;
   offerDetailActionState: APIActionState;
   comments: Comments;
@@ -26,8 +26,6 @@ type OfferData = {
 const initialState: OfferData = {
   loadedOffers: [],
   offersActionState: APIActionState.IDLE,
-  // isDataLoading: false,
-  // isLoadingError: false,
   offer: undefined,
   offerDetailActionState: APIActionState.IDLE,
   comments: [],
@@ -46,9 +44,9 @@ export const offerData = createSlice({
   name: NameSpace.Offer,
   initialState,
   reducers: {
-    changeResetFeedback: (state, action) => {
-      state.isResetFeedback = action.payload as boolean;
-    },
+    // changeResetFeedback: (state, action) => {
+    //   state.isResetFeedback = action.payload as boolean;
+    // },
     resetOfferDetail: (state) => {
       state.offer = undefined;
       state.offerDetailActionState = APIActionState.IDLE;
@@ -57,6 +55,9 @@ export const offerData = createSlice({
       state.nearOffers = [];
       state.nearOffersActionState = APIActionState.IDLE;
     },
+    resetFeedbackState: (state) => {
+      state.sendCommentActionState = APIActionState.IDLE;
+    }
   },
   extraReducers(builder) {
     builder
@@ -68,6 +69,7 @@ export const offerData = createSlice({
         state.loadedOffers = action.payload;
       })
       .addCase(getOffersAction.rejected, (state) => {
+        toast.error('Error get offers!');
         state.offersActionState = APIActionState.ERROR;
         state.loadedOffers = [];
       })
@@ -79,27 +81,23 @@ export const offerData = createSlice({
         state.comments = action.payload;
       })
       .addCase(getCommentsAction.rejected, (state) => {
+        toast.error('Error get comments!');
         state.commentsActionState = APIActionState.ERROR;
         state.comments = [];
       })
       .addCase(getFavoritesAction.pending, (state) => {
         state.favoritesActionState = APIActionState.CALL;
-        // state.isDataLoading = true;
-        // state.isLoadingError = false;
       })
       .addCase(getFavoritesAction.fulfilled, (state, action) => {
         state.favoritesActionState = APIActionState.SUCCESS;
         state.favorites = action.payload;
-        // state.isDataLoading = false;
-        // state.isLoadingError = false;
 
         state.favorites = action.payload;
       })
       .addCase(getFavoritesAction.rejected, (state) => {
+        toast.error('Error get favorites!');
         state.favoritesActionState = APIActionState.ERROR;
         state.favorites = [];
-        // state.isDataLoading = false;
-        // state.isLoadingError = true;
       })
       .addCase(getOfferDetailAction.pending, (state) => {
         state.offerDetailActionState = APIActionState.CALL;
@@ -109,18 +107,19 @@ export const offerData = createSlice({
         state.offer = action.payload;
       })
       .addCase(getOfferDetailAction.rejected, (state) => {
+        toast.error('Error get offer detail!');
         state.offerDetailActionState = APIActionState.ERROR;
         state.offer = undefined;
       })
       .addCase(getNearOffersAction.pending, (state) => {
         state.nearOffersActionState = APIActionState.CALL;
-        // state.isLoadingError = false;
       })
       .addCase(getNearOffersAction.fulfilled, (state, action) => {
         state.nearOffersActionState = APIActionState.SUCCESS;
         state.nearOffers = action.payload;
       })
       .addCase(getNearOffersAction.rejected, (state) => {
+        toast.error('Error get near offers!');
         state.nearOffersActionState = APIActionState.ERROR;
         state.nearOffers = [];
       })
@@ -133,6 +132,7 @@ export const offerData = createSlice({
         state.isResetFeedback = true;
       })
       .addCase(sendCommentAction.rejected, (state) => {
+        toast.error('Error send comment!');
         state.sendCommentActionState = APIActionState.ERROR;
       })
 
@@ -162,10 +162,11 @@ export const offerData = createSlice({
         }
       })
       .addCase(markFavoriteAction.rejected, (state) => {
+        toast.warn('Error toggle favorite!');
         state.markFavoriteActionState = APIActionState.ERROR;
       });
 
   },
 });
 
-export const {changeResetFeedback, resetOfferDetail} = offerData.actions;
+export const {resetOfferDetail, resetFeedbackState} = offerData.actions;

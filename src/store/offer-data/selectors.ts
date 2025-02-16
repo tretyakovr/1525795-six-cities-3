@@ -14,3 +14,4 @@ export const getOffersActionState = (state: State): APIActionState => state[Name
 export const getOfferDetailActionState = (state: State): APIActionState =>state[NameSpace.Offer].offerDetailActionState;
 export const getNearOffersActionState = (state: State): APIActionState => state[NameSpace.Offer].nearOffersActionState;
 export const getCommentsActionState = (state: State): APIActionState => state[NameSpace.Offer].commentsActionState;
+export const sendCommentActionState = (state: State): APIActionState => state[NameSpace.Offer].sendCommentActionState;

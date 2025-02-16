@@ -17,6 +17,8 @@ import { checkAuthAction } from '../../store/api-actions';
 
 function App(): JSX.Element | null {
   const dispatch = useAppDispatch();
+
+
   dispatch(checkAuthAction());
   // const offersActionState = useAppSelector(getOffersActionState);
   const authStatus = useAppSelector(getAuthStatus);

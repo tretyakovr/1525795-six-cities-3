@@ -2,9 +2,9 @@ import { Navigate } from 'react-router-dom';
 import { useRef, useState } from 'react';
 import { sendCommentAction } from '../../store/api-actions';
 import { useAppSelector, useAppDispatch } from '../../hooks';
-import { getIsResetFeedback, getOfferDetail } from '../../store/offer-data/selectors';
-import { changeResetFeedback } from '../../store/offer-data/offer-data';
-import { AppRoute } from '../../const';
+import { getOfferDetail, sendCommentActionState } from '../../store/offer-data/selectors';
+import { resetFeedbackState } from '../../store/offer-data/offer-data';
+import { APIActionState, AppRoute } from '../../const';
 
 const DEFAULT_MIN_LENGTH = 50;
 const DEFAULT_MAX_LENGTH = 300;
@@ -12,13 +12,12 @@ const DEFAULT_MAX_LENGTH = 300;
 
 function Feedback(): JSX.Element {
   const dispatch = useAppDispatch();
+  const sendCommentState = useAppSelector(sendCommentActionState);
 
   const [rating, setRating] = useState<number>(0);
   const commentText = useRef<HTMLTextAreaElement | null>(null);
   const refSubmit = useRef<HTMLButtonElement | null>(null);
   const refForm = useRef<HTMLFormElement | null>(null);
-
-  const isResetFeedback = useAppSelector(getIsResetFeedback);
 
   const offerDetail = useAppSelector(getOfferDetail);
   if (offerDetail === undefined) {
@@ -26,42 +25,38 @@ function Feedback(): JSX.Element {
   }
   const offerId = offerDetail.id;
 
-  if (refSubmit.current !== null) {
-    refSubmit.current.disabled = true;
-  }
-
   const handleSubmit = (evt: React.FormEvent<HTMLFormElement> | undefined) => {
     if (evt !== undefined) {
       evt.preventDefault();
     }
+    dispatch(sendCommentAction({offerId: offerId, comment: String(commentText.current?.value), rating: rating}));
+  };
+
+  if (sendCommentState === APIActionState.SUCCESS) {
+    if (refSubmit.current !== null && refForm.current !== null && commentText.current !== null) {
+      refForm.current.reset();
+      commentText.current.disabled = false;
+      dispatch(resetFeedbackState());
+    }
+  }
+
+  if (refSubmit.current !== null) {
+    refSubmit.current.disabled = !(commentText.current !== null && rating !== 0 &&
+      commentText.current.value.length >= DEFAULT_MIN_LENGTH &&
+      commentText.current.value.length <= DEFAULT_MAX_LENGTH);
+  }
+
+  if (sendCommentState === APIActionState.CALL) {
     if (refSubmit.current !== null && refForm.current !== null && commentText.current !== null) {
       refForm.current.disabled = true;
       commentText.current.disabled = true;
       refSubmit.current.disabled = true;
     }
-    dispatch(sendCommentAction({offerId: offerId, comment: String(commentText.current?.value), rating: rating}));
-  };
-
-  if (isResetFeedback) {
-    if (refSubmit.current !== null && refForm.current !== null && commentText.current !== null) {
-      refForm.current.reset();
-      commentText.current.disabled = false;
-      dispatch(changeResetFeedback({isResetFeedback: false}));
-    }
   }
-
-  const handleChange = () => {
-    if (refSubmit.current !== null) {
-      refSubmit.current.disabled = !(commentText.current !== null && rating !== 0 &&
-        commentText.current.value.length >= DEFAULT_MIN_LENGTH &&
-        commentText.current.value.length <= DEFAULT_MAX_LENGTH);
-    }
-  };
 
   return (
     <form ref={refForm} className="reviews__form form" action="#" method="post"
       onSubmit={handleSubmit}
-      onChange={handleChange}
     >
       <label className="reviews__label form__label" htmlFor="review">Your review</label>
       <div className="reviews__rating-form form__rating">
