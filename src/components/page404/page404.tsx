@@ -6,7 +6,6 @@ import { useAppSelector } from '../../hooks';
 function Page404(): JSX.Element {
   const message = useAppSelector(getErrorMessage);
 
-  console.trace('s;dlkjsd');
   return (
     <div>
       <h1>Error 404: Page not found</h1>

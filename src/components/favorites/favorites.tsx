@@ -1,19 +1,35 @@
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../../components/header/header';
-import { Offers } from '../../types/offers';
 import FavoriteLocation from './favorite-location';
 import FavoritesEmpty from './favorites-empty';
-import { useAppSelector } from '../../hooks';
-import { getFavorites } from '../../store/offer-data/selectors';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { getFavorites, getFavoritesActionState } from '../../store/offer-data/selectors';
+import { getAuthStatus } from '../../store/user-data/selectors';
+import { APIActionState, AuthStatus } from '../../const';
+import { getFavoritesAction } from '../../store/api-actions';
+import Loading from '../loading/loading';
 
 
 function Favorites(): JSX.Element {
-  // const favorites: Offers = useAppSelector((state) => state.favorites);
-  const favorites: Offers = useAppSelector(getFavorites);
+  const dispatch = useAppDispatch();
+  const authStatus = useAppSelector(getAuthStatus);
+  const favorites = useAppSelector(getFavorites);
+  const favoritesActionState = useAppSelector(getFavoritesActionState);
 
   const favoriteCities: string[] = Array.from(
     new Set<string>(favorites.map((item) => item.city.name))
   );
+
+  useEffect(() => {
+    if (authStatus === AuthStatus.Auth) {
+      dispatch(getFavoritesAction());
+    }
+  }, [dispatch, authStatus]);
+
+  if (favoritesActionState === APIActionState.CALL) {
+    return (<Loading />);
+  }
 
   if (!favorites.length) {
     return (<FavoritesEmpty />);

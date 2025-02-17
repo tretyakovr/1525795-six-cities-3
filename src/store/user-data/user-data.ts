@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { AuthStatus, NameSpace } from '../../const';
 import { checkAuthAction, loginAction, logoutAction } from '../api-actions';
 import { APIActionState } from '../../const';
+import {toast} from 'react-toastify';
 
 type UserData = {
   loginActionState: APIActionState;
@@ -27,6 +28,9 @@ export const userData = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder
+      .addCase(loginAction.pending, ((state) => {
+        state.loginActionState = APIActionState.CALL;
+      }))
       .addCase(loginAction.fulfilled, ((state, action) => {
         state.loginActionState = APIActionState.SUCCESS;
         state.authStatus = AuthStatus.Auth;
@@ -34,8 +38,15 @@ export const userData = createSlice({
         state.avatarUrl = action.payload.avatarUrl;
       }))
       .addCase(loginAction.rejected, ((state) => {
+        toast.error('Error login!');
         state.loginActionState = APIActionState.ERROR;
         state.authStatus = AuthStatus.NoAuth;
+      }))
+      .addCase(checkAuthAction.pending, ((state) => {
+        state.checkAuthActionState = APIActionState.CALL;
+        state.authStatus = AuthStatus.NoAuth;
+        state.email = '';
+        state.avatarUrl = '';
       }))
       .addCase(checkAuthAction.fulfilled, ((state, action) => {
         state.checkAuthActionState = APIActionState.SUCCESS;
@@ -48,12 +59,14 @@ export const userData = createSlice({
         state.authStatus = AuthStatus.NoAuth;
       }))
       .addCase(logoutAction.fulfilled, ((state) => {
+        state.loginActionState = APIActionState.IDLE;
         state.logoutActionState = APIActionState.SUCCESS;
         state.authStatus = AuthStatus.NoAuth;
         state.email = '';
         state.avatarUrl = '';
       }))
       .addCase(logoutAction.rejected, ((state) => {
+        toast.error('Error logout!');
         state.logoutActionState = APIActionState.ERROR;
         state.authStatus = AuthStatus.NoAuth;
         state.email = '';

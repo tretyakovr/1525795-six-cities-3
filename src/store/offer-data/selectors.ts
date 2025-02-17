@@ -5,6 +5,7 @@ import { Comments } from '../../types/comments';
 
 export const getLoadedOffers = (state: State): Offers => state[NameSpace.Offer].loadedOffers;
 export const getFavorites = (state: State): Offers => state[NameSpace.Offer].favorites;
+export const getFavoritesActionState = (state: State): APIActionState => state[NameSpace.Offer].favoritesActionState;
 export const getOfferDetail = (state: State): OfferDetail | undefined => state[NameSpace.Offer].offer;
 export const getComments = (state: State): Comments => state[NameSpace.Offer].comments;
 export const getNearOffers = (state: State): Offers => state[NameSpace.Offer].nearOffers;

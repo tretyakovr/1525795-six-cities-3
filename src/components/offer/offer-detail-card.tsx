@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Navigate } from 'react-router';
+import { Navigate, useNavigate } from 'react-router';
 import { useParams } from 'react-router';
 import Header from '../../components/header/header';
 import Reviews from './reviews';
@@ -21,6 +21,7 @@ const VIEW_NEAR_OFFERS_COUNT = 3;
 
 
 function OfferDetailCard(): JSX.Element {
+  const navigate = useNavigate();
   const params = useParams<string>();
   const dispatch = useAppDispatch();
   const offerId: string | undefined = params.id;
@@ -44,8 +45,8 @@ function OfferDetailCard(): JSX.Element {
   }, [dispatch, offerId]);
 
   const favoriteClickHandler = () => {
-    if (authStatus !== AuthStatus.Auth) {
-      return (<Navigate to={AppRoute.Login} />);
+    if (authStatus === AuthStatus.NoAuth) {
+      navigate(AppRoute.Login);
     } else {
       if (detailedOffer !== undefined) {
         dispatch(markFavoriteAction({offerId: detailedOffer.id, favoriteState: Number(!detailedOffer.isFavorite)}));

@@ -3,7 +3,6 @@ import { Offers, OfferDetail } from '../../types/offers';
 import { Comments } from '../../types/comments';
 import { APIActionState, NameSpace } from '../../const';
 import { getOffersAction, getFavoritesAction, getOfferDetailAction, getCommentsAction, getNearOffersAction, sendCommentAction, markFavoriteAction } from '../api-actions';
-// import { sendCommentActionState } from './selectors';
 import {toast} from 'react-toastify';
 
 
@@ -44,9 +43,6 @@ export const offerData = createSlice({
   name: NameSpace.Offer,
   initialState,
   reducers: {
-    // changeResetFeedback: (state, action) => {
-    //   state.isResetFeedback = action.payload as boolean;
-    // },
     resetOfferDetail: (state) => {
       state.offer = undefined;
       state.offerDetailActionState = APIActionState.IDLE;
@@ -61,9 +57,6 @@ export const offerData = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(getOffersAction.pending, (state) => {
-        state.offersActionState = APIActionState.CALL;
-      })
       .addCase(getOffersAction.fulfilled, (state, action) => {
         state.offersActionState = APIActionState.SUCCESS;
         state.loadedOffers = action.payload;
@@ -90,8 +83,6 @@ export const offerData = createSlice({
       })
       .addCase(getFavoritesAction.fulfilled, (state, action) => {
         state.favoritesActionState = APIActionState.SUCCESS;
-        state.favorites = action.payload;
-
         state.favorites = action.payload;
       })
       .addCase(getFavoritesAction.rejected, (state) => {
