@@ -1,32 +1,41 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { Offers, OfferDetail } from '../../types/offers';
 import { Comments } from '../../types/comments';
-import { NameSpace } from '../../const';
+import { APIActionState, NameSpace } from '../../const';
 import { getOffersAction, getFavoritesAction, getOfferDetailAction, getCommentsAction, getNearOffersAction, sendCommentAction, markFavoriteAction } from '../api-actions';
+import {toast} from 'react-toastify';
 
 
 type OfferData = {
-  isOffersLoading: boolean;
   loadedOffers: Offers;
-  isDataLoading: boolean;
-  isLoadingError: boolean;
+  offersActionState: APIActionState;
   offer: OfferDetail | undefined;
+  offerDetailActionState: APIActionState;
   comments: Comments;
+  commentsActionState: APIActionState;
   isResetFeedback: boolean;
   nearOffers: Offers;
+  nearOffersActionState: APIActionState;
   favorites: Offers;
+  favoritesActionState: APIActionState;
+  sendCommentActionState: APIActionState;
+  markFavoriteActionState: APIActionState;
 }
 
 const initialState: OfferData = {
-  isOffersLoading: false,
   loadedOffers: [],
-  isDataLoading: false,
-  isLoadingError: false,
+  offersActionState: APIActionState.IDLE,
   offer: undefined,
+  offerDetailActionState: APIActionState.IDLE,
   comments: [],
+  commentsActionState: APIActionState.IDLE,
   isResetFeedback: false,
   nearOffers: [],
+  nearOffersActionState: APIActionState.IDLE,
   favorites: [],
+  favoritesActionState: APIActionState.IDLE,
+  sendCommentActionState: APIActionState.IDLE,
+  markFavoriteActionState: APIActionState.IDLE,
 };
 
 
@@ -34,103 +43,95 @@ export const offerData = createSlice({
   name: NameSpace.Offer,
   initialState,
   reducers: {
-    changeResetFeedback: (state, action) => {
-      state.isResetFeedback = action.payload as boolean;
+    resetOfferDetail: (state) => {
+      state.offer = undefined;
+      state.offerDetailActionState = APIActionState.IDLE;
+      state.comments = [];
+      state.commentsActionState = APIActionState.IDLE;
+      state.nearOffers = [];
+      state.nearOffersActionState = APIActionState.IDLE;
+    },
+    resetFeedbackState: (state) => {
+      state.sendCommentActionState = APIActionState.IDLE;
     }
   },
   extraReducers(builder) {
     builder
-      .addCase(getOffersAction.pending, (state) => {
-        state.isOffersLoading = true;
-        state.isLoadingError = false;
-      })
       .addCase(getOffersAction.fulfilled, (state, action) => {
-        state.isOffersLoading = false;
-        state.isLoadingError = false;
+        state.offersActionState = APIActionState.SUCCESS;
         state.loadedOffers = action.payload;
       })
       .addCase(getOffersAction.rejected, (state) => {
-        state.isOffersLoading = false;
-        state.isLoadingError = true;
+        toast.error('Error get offers!');
+        state.offersActionState = APIActionState.ERROR;
         state.loadedOffers = [];
       })
       .addCase(getCommentsAction.pending, (state) => {
-        state.isDataLoading = true;
-        state.isLoadingError = false;
+        state.commentsActionState = APIActionState.CALL;
       })
       .addCase(getCommentsAction.fulfilled, (state, action) => {
-        state.isDataLoading = false;
-        state.isLoadingError = false;
+        state.commentsActionState = APIActionState.SUCCESS;
         state.comments = action.payload;
       })
       .addCase(getCommentsAction.rejected, (state) => {
-        state.isDataLoading = false;
-        state.isLoadingError = true;
+        toast.error('Error get comments!');
+        state.commentsActionState = APIActionState.ERROR;
         state.comments = [];
       })
       .addCase(getFavoritesAction.pending, (state) => {
-        state.isDataLoading = true;
-        state.isLoadingError = false;
+        state.favoritesActionState = APIActionState.CALL;
       })
       .addCase(getFavoritesAction.fulfilled, (state, action) => {
-        state.isDataLoading = false;
-        state.isLoadingError = false;
-
+        state.favoritesActionState = APIActionState.SUCCESS;
         state.favorites = action.payload;
       })
       .addCase(getFavoritesAction.rejected, (state) => {
+        toast.error('Error get favorites!');
+        state.favoritesActionState = APIActionState.ERROR;
         state.favorites = [];
-        state.isDataLoading = false;
-        state.isLoadingError = true;
       })
       .addCase(getOfferDetailAction.pending, (state) => {
-        state.isDataLoading = true;
+        state.offerDetailActionState = APIActionState.CALL;
       })
       .addCase(getOfferDetailAction.fulfilled, (state, action) => {
-        state.isDataLoading = false;
+        state.offerDetailActionState = APIActionState.SUCCESS;
         state.offer = action.payload;
       })
       .addCase(getOfferDetailAction.rejected, (state) => {
-        state.isDataLoading = false;
+        toast.error('Error get offer detail!');
+        state.offerDetailActionState = APIActionState.ERROR;
         state.offer = undefined;
       })
       .addCase(getNearOffersAction.pending, (state) => {
-        state.isDataLoading = true;
-        state.isLoadingError = false;
+        state.nearOffersActionState = APIActionState.CALL;
       })
       .addCase(getNearOffersAction.fulfilled, (state, action) => {
-        state.isDataLoading = false;
-        state.isLoadingError = false;
+        state.nearOffersActionState = APIActionState.SUCCESS;
         state.nearOffers = action.payload;
       })
       .addCase(getNearOffersAction.rejected, (state) => {
-        state.isDataLoading = false;
-        state.isLoadingError = true;
+        toast.error('Error get near offers!');
+        state.nearOffersActionState = APIActionState.ERROR;
         state.nearOffers = [];
       })
       .addCase(sendCommentAction.pending, (state) => {
-        state.isDataLoading = true;
-        state.isLoadingError = false;
+        state.sendCommentActionState = APIActionState.IDLE;
       })
       .addCase(sendCommentAction.fulfilled, (state, action) => {
-        state.isDataLoading = false;
-        state.isLoadingError = false;
+        state.sendCommentActionState = APIActionState.SUCCESS;
         state.comments.push(action.payload);
         state.isResetFeedback = true;
       })
       .addCase(sendCommentAction.rejected, (state) => {
-        state.isDataLoading = false;
-        state.isLoadingError = true;
-        state.nearOffers = [];
+        toast.error('Error send comment!');
+        state.sendCommentActionState = APIActionState.ERROR;
       })
 
       .addCase(markFavoriteAction.pending, (state) => {
-        state.isDataLoading = true;
-        state.isLoadingError = false;
+        state.markFavoriteActionState = APIActionState.CALL;
       })
       .addCase(markFavoriteAction.fulfilled, (state, action) => {
-        state.isDataLoading = false;
-        state.isLoadingError = false;
+        state.markFavoriteActionState = APIActionState.SUCCESS;
         // Заменить оффер в state.loadedOffers
         let index: number = state.loadedOffers.findIndex((item) => item.id === action.payload.id);
         if (index !== -1) {
@@ -152,11 +153,11 @@ export const offerData = createSlice({
         }
       })
       .addCase(markFavoriteAction.rejected, (state) => {
-        state.isDataLoading = false;
-        state.isLoadingError = true;
+        toast.warn('Error toggle favorite!');
+        state.markFavoriteActionState = APIActionState.ERROR;
       });
 
   },
 });
 
-export const {changeResetFeedback} = offerData.actions;
+export const {resetOfferDetail, resetFeedbackState} = offerData.actions;

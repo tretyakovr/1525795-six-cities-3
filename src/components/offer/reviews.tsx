@@ -1,11 +1,21 @@
+import { useAppSelector } from '../../hooks';
 import { Comment } from '../../types/comments';
+import { getComments } from '../../store/offer-data/selectors';
+import { getAuthStatus } from '../../store/user-data/selectors';
+import { AuthStatus } from '../../const';
+import Feedback from '../feedback/feedback';
+
+const VIEW_COMMENTS_COUNT = 10;
 
 
-type ReviewsProps = {
-  comments: Comment[];
-}
+function Reviews(): JSX.Element {
+  const authStatus = useAppSelector(getAuthStatus);
+  let comments = useAppSelector(getComments);
+  const commentsCount = comments.length;
 
-function Reviews({comments}: ReviewsProps): JSX.Element {
+  comments = [...comments].sort((review1, review2) => +new Date(review2.date) - +new Date(review1.date));
+  comments = [...comments.slice(0, VIEW_COMMENTS_COUNT)];
+
   const getFormattedDate = (date: string): string => {
     const commentDate = new Date(date);
     const year = commentDate.getFullYear();
@@ -25,30 +35,36 @@ function Reviews({comments}: ReviewsProps): JSX.Element {
   };
 
   return (
-    <ul className="reviews__list">
-      { comments.map((item: Comment) => (
-        <li key={item.id} className="reviews__item">
-          <div className="reviews__user user">
-            <div className="reviews__avatar-wrapper user__avatar-wrapper">
-              <img className="reviews__avatar user__avatar" src={item.user.avatarUrl} width="54" height="54" alt="Reviews avatar" />
-            </div>
-            <span className="reviews__user-name">{item.user.name}</span>
-          </div>
-          <div className="reviews__info">
-            <div className="reviews__rating rating">
-              <div className="reviews__stars rating__stars">
-                <span style={{ width: `${(Math.round(item.rating) * 100 / 5).toString(10)}%` }}></span>
-                <span className="visually-hidden">{item.rating}</span>
+    <section className="offer__reviews reviews">
+      <h2 className="reviews__title">Reviews &middot;
+        <span className="reviews__amount">{commentsCount}</span>
+      </h2>
+      <ul className="reviews__list">
+        { comments.map((item: Comment) => (
+          <li key={item.id} className="reviews__item">
+            <div className="reviews__user user">
+              <div className="reviews__avatar-wrapper user__avatar-wrapper">
+                <img className="reviews__avatar user__avatar" src={item.user.avatarUrl} width="54" height="54" alt="Reviews avatar" />
               </div>
+              <span className="reviews__user-name">{item.user.name}</span>
             </div>
-            <p className="reviews__text">
-              {item.comment}
-            </p>
-            <time className="reviews__time" dateTime={getFormattedDate(item.date)}>{getDateMMMMYYYY(item.date)}</time>
-          </div>
-        </li>
-      ))}
-    </ul>
+            <div className="reviews__info">
+              <div className="reviews__rating rating">
+                <div className="reviews__stars rating__stars">
+                  <span style={{ width: `${(Math.round(item.rating) * 100 / 5).toString(10)}%` }}></span>
+                  <span className="visually-hidden">{item.rating}</span>
+                </div>
+              </div>
+              <p className="reviews__text">
+                {item.comment}
+              </p>
+              <time className="reviews__time" dateTime={getFormattedDate(item.date)}>{getDateMMMMYYYY(item.date)}</time>
+            </div>
+          </li>
+        ))}
+      </ul>
+      { authStatus === AuthStatus.Auth ? <Feedback /> : null}
+    </section>
   );
 }
 

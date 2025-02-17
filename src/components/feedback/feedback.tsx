@@ -1,101 +1,104 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { Navigate } from 'react-router-dom';
 import { sendCommentAction } from '../../store/api-actions';
+import { resetFeedbackState } from '../../store/offer-data/offer-data';
+import { getOfferDetail, sendCommentActionState } from '../../store/offer-data/selectors';
 import { useAppSelector, useAppDispatch } from '../../hooks';
-import { getIsResetFeedback } from '../../store/offer-data/selectors';
-import { changeResetFeedback } from '../../store/offer-data/offer-data';
+import { APIActionState, AppRoute } from '../../const';
 
 const DEFAULT_MIN_LENGTH = 50;
 const DEFAULT_MAX_LENGTH = 300;
 
-type FeedbackProps = {
-  offerId: string;
-}
 
-function Feedback(props: FeedbackProps): JSX.Element {
-  const {offerId} = props;
+function Feedback(): JSX.Element {
+  let starsDisabled = false;
+  const dispatch = useAppDispatch();
+  const sendCommentState = useAppSelector(sendCommentActionState);
+
   const [rating, setRating] = useState<number>(0);
+  const [comment, setComment] = useState<string>('');
   const commentText = useRef<HTMLTextAreaElement | null>(null);
   const refSubmit = useRef<HTMLButtonElement | null>(null);
   const refForm = useRef<HTMLFormElement | null>(null);
 
-  const dispatch = useAppDispatch();
-  const isResetFeedback = useAppSelector(getIsResetFeedback);
+  const offerDetail = useAppSelector(getOfferDetail);
 
-  if (refSubmit.current !== null) {
-    refSubmit.current.disabled = true;
+  useEffect(() => {
+    if (refSubmit.current !== null) {
+      refSubmit.current.disabled = !(rating !== 0 && comment.length >= DEFAULT_MIN_LENGTH && comment.length <= DEFAULT_MAX_LENGTH);
+    }
+
+    if (sendCommentState === APIActionState.CALL) {
+      if (refSubmit.current !== null && commentText.current !== null) {
+        refSubmit.current.disabled = true;
+        commentText.current.disabled = true;
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        starsDisabled = true;
+      }
+    }
+    if (sendCommentState === APIActionState.SUCCESS) {
+      if (refSubmit.current !== null && refForm.current !== null && commentText.current !== null) {
+        refForm.current.reset();
+        commentText.current.disabled = false;
+        starsDisabled = false;
+        setRating(0);
+        setComment('');
+        dispatch(resetFeedbackState());
+      }
+    }
+    if (sendCommentState === APIActionState.ERROR) {
+      if (refSubmit.current !== null && commentText.current !== null) {
+        commentText.current.disabled = false;
+        starsDisabled = false;
+        refSubmit.current.disabled = false;
+      }
+    }
+  }, [rating, comment, sendCommentState, dispatch, starsDisabled]);
+
+
+  if (offerDetail === undefined) {
+    return (<Navigate to={AppRoute.Page404} />);
   }
+  const offerId = offerDetail.id;
+
+  const handleCommentChange: React.ChangeEventHandler<HTMLTextAreaElement> = (evt) => {
+    setComment(evt.target.value);
+  };
 
   const handleSubmit = (evt: React.FormEvent<HTMLFormElement> | undefined) => {
     if (evt !== undefined) {
       evt.preventDefault();
     }
-    if (refSubmit.current !== null && refForm.current !== null && commentText.current !== null) {
-      refForm.current.disabled = true;
+    if (refSubmit.current !== null && commentText.current !== null) {
       commentText.current.disabled = true;
       refSubmit.current.disabled = true;
+      starsDisabled = true;
     }
-    dispatch(sendCommentAction({offerId: offerId, comment: String(commentText.current?.value), rating: rating}));
-  };
-
-  if (isResetFeedback) {
-    if (refSubmit.current !== null && refForm.current !== null && commentText.current !== null) {
-      refForm.current.reset();
-      commentText.current.disabled = false;
-      dispatch(changeResetFeedback({isResetFeedback: false}));
-    }
-  }
-
-  const handleChange = () => {
-    if (refSubmit.current !== null) {
-      refSubmit.current.disabled = !(commentText.current !== null && rating !== 0 &&
-        commentText.current.value.length >= DEFAULT_MIN_LENGTH &&
-        commentText.current.value.length <= DEFAULT_MAX_LENGTH);
-    }
+    dispatch(sendCommentAction({offerId: offerId, comment: String(comment), rating: rating}));
   };
 
   return (
     <form ref={refForm} className="reviews__form form" action="#" method="post"
       onSubmit={handleSubmit}
-      onChange={handleChange}
     >
       <label className="reviews__label form__label" htmlFor="review">Your review</label>
       <div className="reviews__rating-form form__rating">
-        <input onChange={() => setRating(5)} className="form__rating-input visually-hidden" name="rating" value="5" id="5-stars" type="radio" />
-        <label htmlFor="5-stars" className="reviews__rating-label form__rating-label" title="perfect">
-          <svg className="form__star-image" width="37" height="33">
-            <use xlinkHref="#icon-star"></use>
-          </svg>
-        </label>
-
-        <input onChange={() => setRating(4)} className="form__rating-input visually-hidden" name="rating" value="4" id="4-stars" type="radio" />
-        <label htmlFor="4-stars" className="reviews__rating-label form__rating-label" title="good">
-          <svg className="form__star-image" width="37" height="33">
-            <use xlinkHref="#icon-star"></use>
-          </svg>
-        </label>
-
-        <input onChange={() => setRating(3)} className="form__rating-input visually-hidden" name="rating" value="3" id="3-stars" type="radio" />
-        <label htmlFor="3-stars" className="reviews__rating-label form__rating-label" title="not bad">
-          <svg className="form__star-image" width="37" height="33">
-            <use xlinkHref="#icon-star"></use>
-          </svg>
-        </label>
-
-        <input onChange={() => setRating(2)} className="form__rating-input visually-hidden" name="rating" value="2" id="2-stars" type="radio" />
-        <label htmlFor="2-stars" className="reviews__rating-label form__rating-label" title="badly">
-          <svg className="form__star-image" width="37" height="33">
-            <use xlinkHref="#icon-star"></use>
-          </svg>
-        </label>
-
-        <input onChange={() => setRating(1)} className="form__rating-input visually-hidden" name="rating" value="1" id="1-star" type="radio" />
-        <label htmlFor="1-star" className="reviews__rating-label form__rating-label" title="terribly">
-          <svg className="form__star-image" width="37" height="33">
-            <use xlinkHref="#icon-star"></use>
-          </svg>
-        </label>
+        { Object.entries({1: 'terribly', 2: 'badly', 3: 'not bad', 4: 'good', 5: 'perfect'}).reverse().map(([key, value]) => (
+          <>
+            <input key={key} onChange={() => setRating(+key)}
+              className="form__rating-input visually-hidden"
+              name="rating" value={key} id={`${key}-stars`} type="radio"
+              multiple disabled={starsDisabled}
+            />
+            <label htmlFor={`${key}-stars`} className="reviews__rating-label form__rating-label" title={value}>
+              <svg className="form__star-image" width="37" height="33">
+                <use xlinkHref="#icon-star"></use>
+              </svg>
+            </label>
+          </>))}
       </div>
       <textarea ref={commentText}
+        onChange={handleCommentChange}
         className="reviews__textarea form__textarea"
         id="review"
         name="review"

@@ -11,7 +11,6 @@ type UseOfferMapProps = {
 function useOfferMap({mapContainer, offer}: UseOfferMapProps): Map | null {
   const [map, setMap] = useState<Map | null>(null);
   const isRenderedRef = useRef<boolean>(false);
-  // const cityName = city.name;
 
   useEffect(() => {
     if (mapContainer.current !== null && !isRenderedRef.current) {

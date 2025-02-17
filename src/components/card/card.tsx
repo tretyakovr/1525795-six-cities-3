@@ -18,8 +18,6 @@ function Card({offer, divClassName}: CardProps): JSX.Element {
   const navigate = useNavigate();
   const authStatus = useAppSelector(getAuthStatus);
 
-  // Значение isFavorite ищем в loadedOffers, чтобы не мудрить с
-  // обновлением nearOffers, если компонент вызывается из OfferDetailCard и там меняется его значение
   const loadedOffers = useAppSelector(getLoadedOffers);
   const isFavorite = loadedOffers.find((item) => item.id === offer.id)?.isFavorite;
 

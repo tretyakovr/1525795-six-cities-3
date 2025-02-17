@@ -3,12 +3,8 @@ import {createAsyncThunk} from '@reduxjs/toolkit';
 import {AppDispatch, State} from '../types/state';
 import {OfferDetail, Offers } from '../types/offers';
 import { Comment, Comments } from '../types/comments';
-// import {loadOffers, setLoadingStatus, changeLocation, setAuthStatus, redirectToRoute, saveOffer, setOfferFindErrorState} from './action';
-// import { saveComments, saveNearOffers, saveFavorites, markFavorite } from './action';
-// import { addComment } from './offer-process/offer-process';
 import {saveToken, dropToken} from '../services/token';
 import {APIRoute} from '../const';
-// import { AuthStatus, DEFAULT_CITY } from '../const';
 
 type AuthData = {
   email: string | undefined;

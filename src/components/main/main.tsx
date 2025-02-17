@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Locations from '../../components/locations/locations';
 import Header from '../../components/header/header';
 import OffersList from '../../components/offer/offers-list';
@@ -9,7 +9,11 @@ import { changeLocation } from '../../store/app-data/app-data';
 import { getCityOffers, getSortedCityOffers } from '../../utils';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { getSortType, getCity } from '../../store/app-data/selectors';
-import { getLoadedOffers } from '../../store/offer-data/selectors';
+import { getFavoritesActionState, getLoadedOffers, getOffersActionState } from '../../store/offer-data/selectors';
+import Loading from '../loading/loading';
+import { getFavoritesAction, getOffersAction } from '../../store/api-actions';
+import { getAuthStatus } from '../../store/user-data/selectors';
+import { APIActionState, AuthStatus } from '../../const';
 
 
 function getCityParams(city: string, cityOffers: Offers): City {
@@ -34,13 +38,24 @@ function getCityParams(city: string, cityOffers: Offers): City {
 
 function Main(): JSX.Element {
   const dispatch = useAppDispatch();
-  const city = useAppSelector(getCity);
 
+  const city = useAppSelector(getCity);
   const [activeLocation, setActiveLocation] = useState(city);
   const [selectedOffer, setSelectedOffer] = useState('');
 
+  const offersActionState = useAppSelector(getOffersActionState);
+  const favoritesActionState = useAppSelector(getFavoritesActionState);
+  const authStatus = useAppSelector(getAuthStatus);
   const loadedOffers = useAppSelector(getLoadedOffers);
   const sortType = useAppSelector(getSortType);
+
+  useEffect(() => {
+    dispatch(getOffersAction());
+
+    if (authStatus === AuthStatus.Auth) {
+      dispatch(getFavoritesAction());
+    }
+  }, [dispatch, authStatus]);
 
   let cityOffers = getCityOffers(loadedOffers, activeLocation);
   cityOffers = getSortedCityOffers(cityOffers, sortType);
@@ -57,6 +72,12 @@ function Main(): JSX.Element {
   const selectOfferHandler = (offerId: string) => {
     setSelectedOffer(offerId);
   };
+
+  if (offersActionState === APIActionState.CALL || favoritesActionState === APIActionState.CALL) {
+    return (
+      <Loading />
+    );
+  }
 
   return (
     <div className="page page--gray page--main">
