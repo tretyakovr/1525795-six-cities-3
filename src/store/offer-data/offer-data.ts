@@ -57,6 +57,9 @@ export const offerData = createSlice({
   },
   extraReducers(builder) {
     builder
+      .addCase(getOffersAction.pending, (state) => {
+        state.offersActionState = APIActionState.CALL;
+      })
       .addCase(getOffersAction.fulfilled, (state, action) => {
         state.offersActionState = APIActionState.SUCCESS;
         state.loadedOffers = action.payload;
@@ -115,7 +118,7 @@ export const offerData = createSlice({
         state.nearOffers = [];
       })
       .addCase(sendCommentAction.pending, (state) => {
-        state.sendCommentActionState = APIActionState.IDLE;
+        state.sendCommentActionState = APIActionState.CALL;
       })
       .addCase(sendCommentAction.fulfilled, (state, action) => {
         state.sendCommentActionState = APIActionState.SUCCESS;
