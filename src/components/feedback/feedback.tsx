@@ -2,89 +2,75 @@ import { useEffect, useRef, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { sendCommentAction } from '../../store/api-actions';
 import { resetFeedbackState } from '../../store/offer-data/offer-data';
-import { getOfferDetail, sendCommentActionState } from '../../store/offer-data/selectors';
+import { getOfferDetail, getSendCommentActionState } from '../../store/offer-data/selectors';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { APIActionState, AppRoute } from '../../const';
 
-const DEFAULT_MIN_LENGTH = 50;
-const DEFAULT_MAX_LENGTH = 300;
-
+const enum CommentLength {
+    Min = 50,
+    Max = 300,
+}
 
 function Feedback(): JSX.Element {
-  // let starsDisabled = false;
   const dispatch = useAppDispatch();
-  const sendCommentState = useAppSelector(sendCommentActionState);
 
-  const [rating, setRating] = useState<number>(0);
-  const [comment, setComment] = useState<string>('');
+  const sendCommentState = useAppSelector(getSendCommentActionState);
+  const [form, setForm] = useState({rating: 0, comment: ''});
   const commentText = useRef<HTMLTextAreaElement | null>(null);
   const refSubmit = useRef<HTMLButtonElement | null>(null);
   const refForm = useRef<HTMLFormElement | null>(null);
 
   const offerDetail = useAppSelector(getOfferDetail);
-  // const [starsDisabled, setStarsDisabled ] = useState(false); //sendCommentState === APIActionState.CALL;
 
   let starsDisabled = sendCommentState === APIActionState.Call;
-  console.log('stars', sendCommentState, starsDisabled);
 
   useEffect(() => {
-    // if (sendCommentState === APIActionState.CALL) {
-    //   starsDisabled = true;
-    // }
-
-    if (refSubmit.current !== null) {
-      refSubmit.current.disabled = !(rating !== 0 && comment.length >= DEFAULT_MIN_LENGTH && comment.length <= DEFAULT_MAX_LENGTH);
+    if (sendCommentState === APIActionState.Idle) {
+      if (refSubmit.current !== null) {
+        refSubmit.current.disabled = !(form.rating !== 0 && +CommentLength.Min <= +form.comment.length && +form.comment.length <= +CommentLength.Max);
+      }
     }
 
     if (sendCommentState === APIActionState.Call) {
       if (refSubmit.current !== null && commentText.current !== null) {
         refSubmit.current.disabled = true;
         commentText.current.disabled = true;
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        starsDisabled = true;
       }
     }
+
     if (sendCommentState === APIActionState.Success) {
       if (refSubmit.current !== null && refForm.current !== null && commentText.current !== null) {
         refForm.current.reset();
+        setForm({...form, rating: 0, comment: ''});
         commentText.current.disabled = false;
-        starsDisabled = false;
-        setRating(0);
-        setComment('');
         dispatch(resetFeedbackState());
       }
     }
+
     if (sendCommentState === APIActionState.Error) {
       if (refSubmit.current !== null && commentText.current !== null) {
         commentText.current.disabled = false;
-        starsDisabled = false;
         refSubmit.current.disabled = false;
       }
     }
-  }, [rating, comment, sendCommentState, dispatch]);
-
+  }, [sendCommentState, form, dispatch, starsDisabled]);
 
   if (offerDetail === undefined) {
     return (<Navigate to={AppRoute.Page404} />);
   }
   const offerId = offerDetail.id;
-
-  const handleCommentChange: React.ChangeEventHandler<HTMLTextAreaElement> = (evt) => {
-    setComment(evt.target.value);
-  };
+  const handleCommentChange: React.ChangeEventHandler<HTMLTextAreaElement> = (evt) => setForm({...form, comment: evt.target.value});
 
   const handleSubmit = (evt: React.FormEvent<HTMLFormElement> | undefined) => {
     if (evt !== undefined) {
       evt.preventDefault();
     }
     if (refSubmit.current !== null && commentText.current !== null) {
+      starsDisabled = true;
       commentText.current.disabled = true;
       refSubmit.current.disabled = true;
-      // setStarsDisabled(true);
-      starsDisabled = true;
-      console.log(starsDisabled);
+      dispatch(sendCommentAction({offerId: offerId, comment: String(form.comment), rating: form.rating}));
     }
-    dispatch(sendCommentAction({offerId: offerId, comment: String(comment), rating: rating}));
   };
 
   return (
@@ -95,7 +81,7 @@ function Feedback(): JSX.Element {
       <div className="reviews__rating-form form__rating">
         { Object.entries({1: 'terribly', 2: 'badly', 3: 'not bad', 4: 'good', 5: 'perfect'}).reverse().map(([key, value]) => (
           <>
-            <input key={key} onChange={() => setRating(+key)}
+            <input key={key} onClick={() => setForm({...form, rating: +key})}
               className="form__rating-input visually-hidden"
               name="rating" value={key} id={`${key}-stars`} type="radio"
               multiple disabled={starsDisabled}

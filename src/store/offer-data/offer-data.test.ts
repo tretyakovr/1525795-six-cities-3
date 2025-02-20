@@ -365,7 +365,6 @@ describe('offer-data slice', () => {
       offerDetailActionState: APIActionState.Success,
       comments: [],
       commentsActionState: APIActionState.Error,
-      isResetFeedback: false,
       nearOffers: [],
       nearOffersActionState: APIActionState.Call,
       favorites: [],
@@ -380,7 +379,6 @@ describe('offer-data slice', () => {
       offerDetailActionState: APIActionState.Idle,
       comments: [],
       commentsActionState: APIActionState.Idle,
-      isResetFeedback: false,
       nearOffers: [],
       nearOffersActionState: APIActionState.Idle,
       favorites: [],
@@ -567,9 +565,9 @@ describe('offer-data slice', () => {
     expect(result).toEqual(expectedState);
   });
 
-  it('should return initialState with sendCommentActionState = APIActionState.SUCCESS, isResetFeedback = true and comments = <Comments> when sendCommentAction.fulfilled', () => {
+  it('should return initialState with sendCommentActionState = APIActionState.SUCCESS and comments = <Comments> when sendCommentAction.fulfilled', () => {
     const initialState = {...mockInitialState};
-    const expectedState = {...initialState, sendCommentActionState: APIActionState.Success, comments: [mockResponseComment], isResetFeedback: true};
+    const expectedState = {...initialState, sendCommentActionState: APIActionState.Success, comments: [mockResponseComment]};
     const result = offerData.reducer(initialState, sendCommentAction.fulfilled(mockResponseComment, '', mockRequestComment));
 
     expect(result).toEqual(expectedState);

@@ -35,7 +35,7 @@ export const sendCommentAction = createAsyncThunk<Comment, CommentData, {
   state: State;
   extra: AxiosInstance;
 }>(
-  'sendComment',
+  'offer/sendComment',
   async ({offerId, comment, rating}, {extra: api}) => {
     const {data} = await api.post<Comment>(`${APIRoute.Comments}/${offerId}`, {comment, rating});
     return data;
@@ -48,7 +48,7 @@ export const getOfferDetailAction = createAsyncThunk<OfferDetail, string | undef
   state: State;
   extra: AxiosInstance;
 }>(
-  'getOffer',
+  'offer/getOffer',
   async (offerId, {extra: api}) => {
     const {data} = await api.get<OfferDetail>(`${APIRoute.Offers}/${offerId}`);
     return data;
@@ -60,7 +60,7 @@ export const getCommentsAction = createAsyncThunk<Comments, string | undefined, 
   state: State;
   extra: AxiosInstance;
 }>(
-  'getComments',
+  'offer/getComments',
   async (offerId, {extra: api}) => {
     const {data} = await api.get<Comments>(`${APIRoute.Comments}/${offerId}`);
     return data;
@@ -73,21 +73,9 @@ export const getOffersAction = createAsyncThunk<Offers, undefined, {
   state: State;
   extra: AxiosInstance;
 }>(
-  'getOffers',
+  'offer/getOffers',
   async (_arg, {extra: api}) => {
     const {data} = await api.get<Offers>(APIRoute.Offers);
-    return data;
-  },
-);
-
-export const getFavoritesAction = createAsyncThunk<Offers, string | undefined, {
-  dispatch: AppDispatch;
-  state: State;
-  extra: AxiosInstance;
-}>(
-  'getFavorites',
-  async (_arg, {extra: api}) => {
-    const {data} = await api.get<Offers>(`${APIRoute.Favorite}`);
     return data;
   },
 );
@@ -97,7 +85,7 @@ export const getNearOffersAction = createAsyncThunk<Offers, string | undefined, 
   state: State;
   extra: AxiosInstance;
 }>(
-  'getNearOffers',
+  'offer/getNearOffers',
   async (offerId, {extra: api}) => {
     const {data} = await api.get<Offers>(`${APIRoute.Offers}/${offerId}/nearby`);
     return data;
@@ -150,9 +138,21 @@ export const markFavoriteAction = createAsyncThunk<OfferDetail, FavoriteData, {
   state: State;
   extra: AxiosInstance;
 }>(
-  'markFavorite',
+  'favorite/markFavorite',
   async ({offerId, favoriteState}, {extra: api}) => {
     const {data} = await api.post<OfferDetail>(`${APIRoute.Favorite}/${offerId}/${favoriteState}`);
+    return data;
+  },
+);
+
+export const getFavoritesAction = createAsyncThunk<Offers, string | undefined, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'favorite/getFavorites',
+  async (_arg, {extra: api}) => {
+    const {data} = await api.get<Offers>(`${APIRoute.Favorite}`);
     return data;
   },
 );

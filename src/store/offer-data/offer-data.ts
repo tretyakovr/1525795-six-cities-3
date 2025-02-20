@@ -13,7 +13,6 @@ type OfferData = {
   offerDetailActionState: APIActionState;
   comments: Comments;
   commentsActionState: APIActionState;
-  isResetFeedback: boolean;
   nearOffers: Offers;
   nearOffersActionState: APIActionState;
   favorites: Offers;
@@ -29,7 +28,6 @@ const initialState: OfferData = {
   offerDetailActionState: APIActionState.Idle,
   comments: [],
   commentsActionState: APIActionState.Idle,
-  isResetFeedback: false,
   nearOffers: [],
   nearOffersActionState: APIActionState.Idle,
   favorites: [],
@@ -123,7 +121,6 @@ export const offerData = createSlice({
       .addCase(sendCommentAction.fulfilled, (state, action) => {
         state.sendCommentActionState = APIActionState.Success;
         state.comments.push(action.payload);
-        state.isResetFeedback = true;
       })
       .addCase(sendCommentAction.rejected, (state) => {
         toast.error('Error send comment!');
