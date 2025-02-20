@@ -4,7 +4,7 @@ import { getComments } from '../../store/offer-data/selectors';
 import { getAuthStatus } from '../../store/user-data/selectors';
 import { AuthStatus } from '../../const';
 import Feedback from '../feedback/feedback';
-import { starsWidth } from '../../utils';
+import { getStarsWidth } from '../../utils';
 
 const VIEW_COMMENTS_COUNT = 10;
 
@@ -52,7 +52,7 @@ function Reviews(): JSX.Element {
             <div className="reviews__info">
               <div className="reviews__rating rating">
                 <div className="reviews__stars rating__stars">
-                  <span style={{ width: starsWidth(item.rating) }}></span>
+                  <span style={{ width: getStarsWidth(item.rating) }}></span>
                   <span className="visually-hidden">{item.rating}</span>
                 </div>
               </div>

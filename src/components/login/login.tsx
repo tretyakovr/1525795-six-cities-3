@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { changeLocation } from '../../store/app-data/app-data';
 import { loginAction } from '../../store/api-actions';
-import { APIActionState, AppRoute, AuthStatus, CITIES } from '../../const';
+import { APIActionState, AppRoute, AuthStatus, cities } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { getRandomInteger } from '../../utils';
 import { getAuthStatus, getLoginActionState } from '../../store/user-data/selectors';
@@ -20,7 +20,7 @@ function Login(): JSX.Element {
     return (<Navigate to={AppRoute.Main}/>);
   }
 
-  const randomLocation = CITIES[getRandomInteger(0, CITIES.length - 1)];
+  const randomLocation = cities[getRandomInteger(0, cities.length - 1)];
 
   const locationClickHandler = (evt: React.MouseEvent<HTMLElement>):void => {
     const newLocation = evt.currentTarget.innerText;
@@ -38,7 +38,7 @@ function Login(): JSX.Element {
     }
   };
 
-  if (loginActionState === APIActionState.SUCCESS) {
+  if (loginActionState === APIActionState.Success) {
     return (<Navigate to={AppRoute.Main} />);
   }
 

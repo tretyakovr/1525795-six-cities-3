@@ -438,7 +438,7 @@ describe('offer-data slice', () => {
   });
 
 
-  it('should return initialState with offersActionState = APIActionState.ERROR when getOffersAction.rejected', () => {
+  it('should return initialState with offersActionState = APIActionState.Error when getOffersAction.rejected', () => {
     const initialState = {...mockInitialState};
     const expectedState = {...initialState, offersActionState: APIActionState.Error,};
     const result = offerData.reducer(initialState, getOffersAction.rejected);
@@ -446,7 +446,7 @@ describe('offer-data slice', () => {
     expect(result).toEqual(expectedState);
   });
 
-  it('should return initialState with offersActionState = APIActionState.SUCCESS and loadedOffer = <Offers> when getOffersAction.fulfilled', () => {
+  it('should return initialState with offersActionState = APIActionState.Success and loadedOffer = <Offers> when getOffersAction.fulfilled', () => {
     const initialState = {...mockInitialState};
     const expectedState = {...initialState, offersActionState: APIActionState.Success, loadedOffers: mockLoadedOffers};
     const result = offerData.reducer(initialState, getOffersAction.fulfilled(mockLoadedOffers, '', undefined));

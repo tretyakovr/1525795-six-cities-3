@@ -14,7 +14,7 @@ import { setErrorMessage } from '../../store/app-data/app-data';
 import { resetOfferDetail } from '../../store/offer-data/offer-data';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { APIActionState, AppRoute, AuthStatus } from '../../const';
-import { capitalize, starsWidth } from '../../utils';
+import { capitalize, getStarsWidth } from '../../utils';
 
 
 const VIEW_NEAR_OFFERS_COUNT = 3;
@@ -54,11 +54,11 @@ function OfferDetailCard(): JSX.Element {
     }
   };
 
-  if (offerDetailActionsState.some((item) => item === APIActionState.ERROR)) {
+  if (offerDetailActionsState.some((item) => item === APIActionState.Error)) {
     dispatch(setErrorMessage(`Failed api.get detailed information Offer id# ${offerId}!`));
     return (<Navigate to={AppRoute.Page404} />);
   }
-  if (!offerDetailActionsState.every((item) => item === APIActionState.SUCCESS)) {
+  if (!offerDetailActionsState.every((item) => item === APIActionState.Success)) {
     return (<Loading />);
   }
 
@@ -109,7 +109,7 @@ function OfferDetailCard(): JSX.Element {
               </div>
               <div className="offer__rating rating">
                 <div className="offer__stars rating__stars">
-                  <span style={{width: starsWidth(detailedOffer.rating) }}></span>
+                  <span style={{width: getStarsWidth(detailedOffer.rating) }}></span>
                   <span className="visually-hidden">Rating</span>
                 </div>
                 <span className="offer__rating-value rating__value">{detailedOffer.rating}</span>

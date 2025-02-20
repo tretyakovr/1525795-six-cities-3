@@ -34,5 +34,5 @@ export const getRandomInteger = (min: number, max: number): number => {
 };
 
 
-export const starsWidth = (rating : number) => `${String((Math.round(rating) * 100 / 5))}%`;
+export const getStarsWidth = (rating : number) => `${String((Math.round(rating) * 100 / 5))}%`;
 

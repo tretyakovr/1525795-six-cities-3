@@ -3,7 +3,7 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import Main from '../main/main';
 import Favorites from '../favorites/favorites';
 import Login from '../login/login';
-import OfferDetailCard from '../offer/offer-detail-card';
+import OfferDetailCard from '../offers-list/offer-detail-card';
 import Page404 from '../page404/page404';
 import PrivateRoute from '../private-route/private-route';
 import { checkAuthAction } from '../../store/api-actions';
