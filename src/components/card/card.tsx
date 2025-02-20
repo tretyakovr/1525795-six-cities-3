@@ -3,7 +3,7 @@ import { Offer } from '../../types/offers';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { markFavoriteAction } from '../../store/api-actions';
-import { capitalize } from '../../utils';
+import { capitalize, starsWidth } from '../../utils';
 import { AppRoute, AuthStatus } from '../../const';
 import { getAuthStatus } from '../../store/user-data/selectors';
 import { getLoadedOffers } from '../../store/offer-data/selectors';
@@ -61,7 +61,7 @@ function Card({offer, divClassName}: CardProps): JSX.Element {
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{ width: `${(Math.round(offer.rating) * 100 / 5).toString(10)}%` }}></span>
+            <span style={{ width: starsWidth(offer.rating) }}></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>

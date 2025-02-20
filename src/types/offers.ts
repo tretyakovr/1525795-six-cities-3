@@ -4,7 +4,7 @@ type Location = {
   zoom: number;
 }
 
-export enum OFFER_TYPE {
+export enum OfferType {
   APARTMENT = 'apartment',
   HOTEL = 'hotel',
   HOUSE = 'house',
@@ -14,8 +14,7 @@ export enum OFFER_TYPE {
 export type Offer = {
   id: string;
   title: string;
-  // type: 'apartment' | 'hotel' | 'house' | 'room';
-  type: OFFER_TYPE;
+  type: OfferType;
   price: number;
   previewImage: string;
   city: {
@@ -31,7 +30,7 @@ export type Offer = {
 export type OfferDetail = {
   id: string;
   title: string;
-  type: OFFER_TYPE;
+  type: OfferType;
   price: number;
   city: {
     name: string;

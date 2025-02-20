@@ -14,7 +14,7 @@ import { setErrorMessage } from '../../store/app-data/app-data';
 import { resetOfferDetail } from '../../store/offer-data/offer-data';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { APIActionState, AppRoute, AuthStatus } from '../../const';
-import { capitalize } from '../../utils';
+import { capitalize, starsWidth } from '../../utils';
 
 
 const VIEW_NEAR_OFFERS_COUNT = 3;
@@ -109,7 +109,7 @@ function OfferDetailCard(): JSX.Element {
               </div>
               <div className="offer__rating rating">
                 <div className="offer__stars rating__stars">
-                  <span style={{width: `${detailedOffer && (Math.round(detailedOffer.rating) * 100 / 5).toString(10)}%`}}></span>
+                  <span style={{width: starsWidth(detailedOffer.rating) }}></span>
                   <span className="visually-hidden">Rating</span>
                 </div>
                 <span className="offer__rating-value rating__value">{detailedOffer.rating}</span>

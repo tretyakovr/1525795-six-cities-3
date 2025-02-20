@@ -24,7 +24,7 @@ function Feedback(): JSX.Element {
   const offerDetail = useAppSelector(getOfferDetail);
   // const [starsDisabled, setStarsDisabled ] = useState(false); //sendCommentState === APIActionState.CALL;
 
-  let starsDisabled = sendCommentState === APIActionState.CALL;
+  let starsDisabled = sendCommentState === APIActionState.Call;
   console.log('stars', sendCommentState, starsDisabled);
 
   useEffect(() => {
@@ -36,7 +36,7 @@ function Feedback(): JSX.Element {
       refSubmit.current.disabled = !(rating !== 0 && comment.length >= DEFAULT_MIN_LENGTH && comment.length <= DEFAULT_MAX_LENGTH);
     }
 
-    if (sendCommentState === APIActionState.CALL) {
+    if (sendCommentState === APIActionState.Call) {
       if (refSubmit.current !== null && commentText.current !== null) {
         refSubmit.current.disabled = true;
         commentText.current.disabled = true;
@@ -44,7 +44,7 @@ function Feedback(): JSX.Element {
         starsDisabled = true;
       }
     }
-    if (sendCommentState === APIActionState.SUCCESS) {
+    if (sendCommentState === APIActionState.Success) {
       if (refSubmit.current !== null && refForm.current !== null && commentText.current !== null) {
         refForm.current.reset();
         commentText.current.disabled = false;
@@ -54,7 +54,7 @@ function Feedback(): JSX.Element {
         dispatch(resetFeedbackState());
       }
     }
-    if (sendCommentState === APIActionState.ERROR) {
+    if (sendCommentState === APIActionState.Error) {
       if (refSubmit.current !== null && commentText.current !== null) {
         commentText.current.disabled = false;
         starsDisabled = false;

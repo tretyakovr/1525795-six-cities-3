@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Offer } from '../../types/offers';
-import { capitalize } from '../../utils';
+import { capitalize, starsWidth } from '../../utils';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { markFavoriteAction } from '../../store/api-actions';
 import { AppRoute, AuthStatus } from '../../const';
@@ -60,7 +60,7 @@ function FavoriteItem({favoriteItem}: FavoriteItemProps): JSX.Element {
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{width: `${(favoriteItem.rating * 100 / 5).toString(10)}%`}}></span>
+            <span style={{width: starsWidth(favoriteItem.rating) }}></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>

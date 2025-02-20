@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { SortTypes } from '../../const';
+import { SortType } from '../../const';
 import { changeSort } from '../../store/app-data/app-data';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { getSortType } from '../../store/app-data/selectors';
@@ -21,7 +21,7 @@ function Sort(): JSX.Element {
     }
 
     const target = evt.target as HTMLLIElement;
-    const itemText = target.innerText as SortTypes;
+    const itemText = target.innerText as SortType;
     dispatch(changeSort(itemText));
   }
 
@@ -35,7 +35,7 @@ function Sort(): JSX.Element {
         </svg>
       </span>
       <ul ref={refSortMenu} className="places__options places__options--custom" >
-        {Object.entries(SortTypes).map(([key, value]) => (
+        {Object.entries(SortType).map(([key, value]) => (
           <li key={key}
             className={value === currentSortType ? 'places__option places__option--active' : 'places__option'}
             tabIndex={0}

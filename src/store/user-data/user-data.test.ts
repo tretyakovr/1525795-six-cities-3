@@ -4,9 +4,9 @@ import { userData } from './user-data';
 import { loginAction, checkAuthAction, logoutAction } from '../api-actions';
 
 const mockInitialState = {
-  loginActionState: APIActionState.IDLE,
-  checkAuthActionState: APIActionState.IDLE,
-  logoutActionState: APIActionState.IDLE,
+  loginActionState: APIActionState.Idle,
+  checkAuthActionState: APIActionState.Idle,
+  logoutActionState: APIActionState.Idle,
   authStatus: AuthStatus.NoAuth,
   email: '',
   avatarUrl: '',
@@ -15,7 +15,7 @@ const mockInitialState = {
 describe('user-data slice', () => {
   it('should return initialState with loginActionState = APIActionState.CALL when loginAction.pending', () => {
     const initialState = {...mockInitialState};
-    const expectedState = {...initialState, loginActionState: APIActionState.CALL,};
+    const expectedState = {...initialState, loginActionState: APIActionState.Call,};
     const result = userData.reducer(initialState, loginAction.pending);
 
     expect(result).toEqual(expectedState);
@@ -23,7 +23,7 @@ describe('user-data slice', () => {
 
   it('should return initialState with loginActionState = APIActionState.ERROR when loginAction.rejected', () => {
     const initialState = {...mockInitialState};
-    const expectedState = {...initialState, loginActionState: APIActionState.ERROR,};
+    const expectedState = {...initialState, loginActionState: APIActionState.Error,};
     const result = userData.reducer(initialState, loginAction.rejected);
 
     expect(result).toEqual(expectedState);
@@ -41,7 +41,7 @@ describe('user-data slice', () => {
     };
     const expectedState = {
       ...initialState,
-      loginActionState: APIActionState.SUCCESS,
+      loginActionState: APIActionState.Success,
       authStatus: AuthStatus.Auth,
       email: 'user@example.com',
       avatarUrl: 'https://15.design.htmlacademy.pro/static/avatar/1.jpg',
@@ -53,7 +53,7 @@ describe('user-data slice', () => {
 
   it('should return initialState with chackAuthActionState = APIActionState.CALL when checkAuthAction.pending', () => {
     const initialState = {...mockInitialState};
-    const expectedState = {...initialState, checkAuthActionState: APIActionState.CALL, authStatus: AuthStatus.NoAuth, email: '', avatarUrl: ''};
+    const expectedState = {...initialState, checkAuthActionState: APIActionState.Call, authStatus: AuthStatus.NoAuth, email: '', avatarUrl: ''};
     const result = userData.reducer(initialState, checkAuthAction.pending);
 
     expect(result).toEqual(expectedState);
@@ -61,7 +61,7 @@ describe('user-data slice', () => {
 
   it('should return initialState with checkAuthActionState = APIActionState.ERROR when checkAuthAction.rejected', () => {
     const initialState = {...mockInitialState};
-    const expectedState = {...initialState, checkAuthActionState: APIActionState.ERROR, authStatus: AuthStatus.NoAuth};
+    const expectedState = {...initialState, checkAuthActionState: APIActionState.Error, authStatus: AuthStatus.NoAuth};
     const result = userData.reducer(initialState, checkAuthAction.rejected);
 
     expect(result).toEqual(expectedState);
@@ -78,7 +78,7 @@ describe('user-data slice', () => {
     };
     const expectedState = {
       ...initialState,
-      checkAuthActionState: APIActionState.SUCCESS,
+      checkAuthActionState: APIActionState.Success,
       authStatus: AuthStatus.Auth,
       email: 'user@example.com',
       avatarUrl: 'https://15.design.htmlacademy.pro/static/avatar/1.jpg',
@@ -88,12 +88,9 @@ describe('user-data slice', () => {
     expect(result).toEqual(expectedState);
   });
 
-
-
-
   it('should return initialState with logoutActionState = APIActionState.ERROR when logoutAction.rejected', () => {
     const initialState = {...mockInitialState, authStatus: AuthStatus.Auth, email: 'user@example.com', avatarUrl: 'https://15.design.htmlacademy.pro/static/avatar/1.jpg'};
-    const expectedState = {...initialState, logoutActionState: APIActionState.ERROR, authStatus: AuthStatus.NoAuth, email: '', avatarUrl: ''};
+    const expectedState = {...initialState, logoutActionState: APIActionState.Error, authStatus: AuthStatus.NoAuth, email: '', avatarUrl: ''};
     const result = userData.reducer(initialState, logoutAction.rejected);
 
     expect(result).toEqual(expectedState);
@@ -101,11 +98,9 @@ describe('user-data slice', () => {
 
   it('should return initialState with no user logged in when logoutAction.fulfilled', () => {
     const initialState = {...mockInitialState, authStatus: AuthStatus.Auth, email: 'user@example.com', avatarUrl: 'https://15.design.htmlacademy.pro/static/avatar/1.jpg'};
-    const expectedState = {...initialState, logoutActionState: APIActionState.SUCCESS, authStatus: AuthStatus.NoAuth, email: '', avatarUrl: '',};
+    const expectedState = {...initialState, logoutActionState: APIActionState.Success, authStatus: AuthStatus.NoAuth, email: '', avatarUrl: '',};
     const result = userData.reducer(initialState, logoutAction.fulfilled(undefined, '', undefined));
 
     expect(result).toEqual(expectedState);
   });
-
-
 });

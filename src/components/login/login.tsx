@@ -30,13 +30,10 @@ function Login(): JSX.Element {
   const authFormSubmitHandler = (evt: React.FormEvent<HTMLFormElement>): void => {
     evt.preventDefault();
     if (loginRef.current && passwordRef.current) {
-      // const re = /\[A-Za-z]+\d+/;
       if (passwordRef.current.value.match(/^(?=.*[A-Za-z])(?=.*\d)/)) {
         const loginValue = loginRef.current.value ?? '';
         const passwordValue = passwordRef.current.value ?? '';
         dispatch(loginAction({email: loginValue, password: passwordValue}));
-      // } else {
-        // passwordRef.current.value = '';
       }
     }
   };

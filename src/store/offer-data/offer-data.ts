@@ -24,18 +24,18 @@ type OfferData = {
 
 const initialState: OfferData = {
   loadedOffers: [],
-  offersActionState: APIActionState.IDLE,
+  offersActionState: APIActionState.Idle,
   offer: undefined,
-  offerDetailActionState: APIActionState.IDLE,
+  offerDetailActionState: APIActionState.Idle,
   comments: [],
-  commentsActionState: APIActionState.IDLE,
+  commentsActionState: APIActionState.Idle,
   isResetFeedback: false,
   nearOffers: [],
-  nearOffersActionState: APIActionState.IDLE,
+  nearOffersActionState: APIActionState.Idle,
   favorites: [],
-  favoritesActionState: APIActionState.IDLE,
-  sendCommentActionState: APIActionState.IDLE,
-  markFavoriteActionState: APIActionState.IDLE,
+  favoritesActionState: APIActionState.Idle,
+  sendCommentActionState: APIActionState.Idle,
+  markFavoriteActionState: APIActionState.Idle,
 };
 
 
@@ -45,96 +45,96 @@ export const offerData = createSlice({
   reducers: {
     resetOfferDetail: (state) => {
       state.offer = undefined;
-      state.offerDetailActionState = APIActionState.IDLE;
+      state.offerDetailActionState = APIActionState.Idle;
       state.comments = [];
-      state.commentsActionState = APIActionState.IDLE;
+      state.commentsActionState = APIActionState.Idle;
       state.nearOffers = [];
-      state.nearOffersActionState = APIActionState.IDLE;
+      state.nearOffersActionState = APIActionState.Idle;
     },
     resetFeedbackState: (state) => {
-      state.sendCommentActionState = APIActionState.IDLE;
+      state.sendCommentActionState = APIActionState.Idle;
     }
   },
   extraReducers(builder) {
     builder
       .addCase(getOffersAction.pending, (state) => {
-        state.offersActionState = APIActionState.CALL;
+        state.offersActionState = APIActionState.Call;
       })
       .addCase(getOffersAction.fulfilled, (state, action) => {
-        state.offersActionState = APIActionState.SUCCESS;
+        state.offersActionState = APIActionState.Success;
         state.loadedOffers = action.payload;
       })
       .addCase(getOffersAction.rejected, (state) => {
         toast.error('Error get offers!');
-        state.offersActionState = APIActionState.ERROR;
+        state.offersActionState = APIActionState.Error;
         state.loadedOffers = [];
       })
       .addCase(getCommentsAction.pending, (state) => {
-        state.commentsActionState = APIActionState.CALL;
+        state.commentsActionState = APIActionState.Call;
       })
       .addCase(getCommentsAction.fulfilled, (state, action) => {
-        state.commentsActionState = APIActionState.SUCCESS;
+        state.commentsActionState = APIActionState.Success;
         state.comments = action.payload;
       })
       .addCase(getCommentsAction.rejected, (state) => {
         toast.error('Error get comments!');
-        state.commentsActionState = APIActionState.ERROR;
+        state.commentsActionState = APIActionState.Error;
         state.comments = [];
       })
       .addCase(getFavoritesAction.pending, (state) => {
-        state.favoritesActionState = APIActionState.CALL;
+        state.favoritesActionState = APIActionState.Call;
       })
       .addCase(getFavoritesAction.fulfilled, (state, action) => {
-        state.favoritesActionState = APIActionState.SUCCESS;
+        state.favoritesActionState = APIActionState.Success;
         state.favorites = action.payload;
       })
       .addCase(getFavoritesAction.rejected, (state) => {
         toast.error('Error get favorites!');
-        state.favoritesActionState = APIActionState.ERROR;
+        state.favoritesActionState = APIActionState.Error;
         state.favorites = [];
       })
       .addCase(getOfferDetailAction.pending, (state) => {
-        state.offerDetailActionState = APIActionState.CALL;
+        state.offerDetailActionState = APIActionState.Call;
       })
       .addCase(getOfferDetailAction.fulfilled, (state, action) => {
-        state.offerDetailActionState = APIActionState.SUCCESS;
+        state.offerDetailActionState = APIActionState.Success;
         state.offer = action.payload;
       })
       .addCase(getOfferDetailAction.rejected, (state) => {
         toast.error('Error get offer detail!');
-        state.offerDetailActionState = APIActionState.ERROR;
+        state.offerDetailActionState = APIActionState.Error;
         state.offer = undefined;
       })
       .addCase(getNearOffersAction.pending, (state) => {
-        state.nearOffersActionState = APIActionState.CALL;
+        state.nearOffersActionState = APIActionState.Call;
       })
       .addCase(getNearOffersAction.fulfilled, (state, action) => {
-        state.nearOffersActionState = APIActionState.SUCCESS;
+        state.nearOffersActionState = APIActionState.Success;
         state.nearOffers = action.payload;
       })
       .addCase(getNearOffersAction.rejected, (state) => {
         toast.error('Error get near offers!');
-        state.nearOffersActionState = APIActionState.ERROR;
+        state.nearOffersActionState = APIActionState.Error;
         state.nearOffers = [];
       })
       .addCase(sendCommentAction.pending, (state) => {
-        state.sendCommentActionState = APIActionState.CALL;
+        state.sendCommentActionState = APIActionState.Call;
       })
       .addCase(sendCommentAction.fulfilled, (state, action) => {
-        state.sendCommentActionState = APIActionState.SUCCESS;
+        state.sendCommentActionState = APIActionState.Success;
         state.comments.push(action.payload);
         state.isResetFeedback = true;
       })
       .addCase(sendCommentAction.rejected, (state) => {
         toast.error('Error send comment!');
-        state.sendCommentActionState = APIActionState.ERROR;
+        state.sendCommentActionState = APIActionState.Error;
       })
 
       .addCase(markFavoriteAction.pending, (state) => {
-        state.markFavoriteActionState = APIActionState.CALL;
+        state.markFavoriteActionState = APIActionState.Call;
       })
       .addCase(markFavoriteAction.fulfilled, (state, action) => {
-        state.markFavoriteActionState = APIActionState.SUCCESS;
+        state.markFavoriteActionState = APIActionState.Success;
         // Заменить оффер в state.loadedOffers
         let index: number = state.loadedOffers.findIndex((item) => item.id === action.payload.id);
         if (index !== -1) {
@@ -157,7 +157,7 @@ export const offerData = createSlice({
       })
       .addCase(markFavoriteAction.rejected, (state) => {
         toast.warn('Error toggle favorite!');
-        state.markFavoriteActionState = APIActionState.ERROR;
+        state.markFavoriteActionState = APIActionState.Error;
       });
 
   },
