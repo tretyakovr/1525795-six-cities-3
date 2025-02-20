@@ -11,7 +11,7 @@ const DEFAULT_MAX_LENGTH = 300;
 
 
 function Feedback(): JSX.Element {
-  let starsDisabled = false;
+  // let starsDisabled = false;
   const dispatch = useAppDispatch();
   const sendCommentState = useAppSelector(sendCommentActionState);
 
@@ -22,8 +22,16 @@ function Feedback(): JSX.Element {
   const refForm = useRef<HTMLFormElement | null>(null);
 
   const offerDetail = useAppSelector(getOfferDetail);
+  // const [starsDisabled, setStarsDisabled ] = useState(false); //sendCommentState === APIActionState.CALL;
+
+  let starsDisabled = sendCommentState === APIActionState.CALL;
+  console.log('stars', sendCommentState, starsDisabled);
 
   useEffect(() => {
+    // if (sendCommentState === APIActionState.CALL) {
+    //   starsDisabled = true;
+    // }
+
     if (refSubmit.current !== null) {
       refSubmit.current.disabled = !(rating !== 0 && comment.length >= DEFAULT_MIN_LENGTH && comment.length <= DEFAULT_MAX_LENGTH);
     }
@@ -53,7 +61,7 @@ function Feedback(): JSX.Element {
         refSubmit.current.disabled = false;
       }
     }
-  }, [rating, comment, sendCommentState, dispatch, starsDisabled]);
+  }, [rating, comment, sendCommentState, dispatch]);
 
 
   if (offerDetail === undefined) {
@@ -72,7 +80,9 @@ function Feedback(): JSX.Element {
     if (refSubmit.current !== null && commentText.current !== null) {
       commentText.current.disabled = true;
       refSubmit.current.disabled = true;
+      // setStarsDisabled(true);
       starsDisabled = true;
+      console.log(starsDisabled);
     }
     dispatch(sendCommentAction({offerId: offerId, comment: String(comment), rating: rating}));
   };
