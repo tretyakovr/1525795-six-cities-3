@@ -1,18 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { NameSpace } from '../../const';
-import { SortTypes } from '../../const';
+import { SortType } from '../../const';
 import { DEFAULT_CITY } from '../../const';
 
 
 type AppData = {
   city: string;
-  sortType: SortTypes;
+  sortType: SortType;
   errorMessage: string;
 }
 
 const initialState: AppData = {
   city: DEFAULT_CITY,
-  sortType: SortTypes.POPULAR,
+  sortType: SortType.Popular,
   errorMessage: '',
 };
 
@@ -24,7 +24,7 @@ export const appData = createSlice({
       state.city = action.payload as string;
     },
     changeSort: (state, action) => {
-      state.sortType = action.payload as SortTypes;
+      state.sortType = action.payload as SortType;
     },
     setErrorMessage: (state, action) => {
       state.errorMessage = action.payload as string;

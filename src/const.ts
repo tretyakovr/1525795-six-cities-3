@@ -17,14 +17,14 @@ export const URL_MARKER_DEFAULT = '/public/img/pin.svg';
 export const URL_MARKER_CURRENT = '/public/img/pin-active.svg';
 
 
-export const CITIES: string[] = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
-export const DEFAULT_CITY = CITIES[0];
+export const cities: string[] = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
+export const DEFAULT_CITY = cities[0];
 
-export enum SortTypes {
-  POPULAR = 'Popular',
-  LOWTOHIGH = 'Price: low to high',
-  HIGHTOLOW = 'Price: high to low',
-  TOPRATED = 'Top rated first',
+export enum SortType {
+  Popular = 'Popular',
+  LowToHigh = 'Price: low to high',
+  HighToLow = 'Price: high to low',
+  TopRated = 'Top rated first',
 }
 
 
@@ -45,8 +45,8 @@ export enum NameSpace {
 }
 
 export enum APIActionState {
-  IDLE = 'Idle',
-  CALL = 'Call',
-  SUCCESS = 'Success',
-  ERROR = 'Error',
+  Idle = 'Idle',
+  Call = 'Call',
+  Success = 'Success',
+  Error = 'Error',
 }

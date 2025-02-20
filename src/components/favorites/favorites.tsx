@@ -27,7 +27,7 @@ function Favorites(): JSX.Element {
     }
   }, [dispatch, authStatus]);
 
-  if (favoritesActionState === APIActionState.CALL) {
+  if (favoritesActionState === APIActionState.Call) {
     return (<Loading />);
   }
 

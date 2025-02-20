@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Locations from '../../components/locations/locations';
 import Header from '../../components/header/header';
-import OffersList from '../../components/offer/offers-list';
+import OffersList from '../../components/offers-list/offers-list';
 import CityMap from '../../components/city-map/city-map';
 import { City } from '../../types/city';
 import { Offers } from '../../types/offers';
@@ -73,7 +73,7 @@ function Main(): JSX.Element {
     setSelectedOffer(offerId);
   };
 
-  if (offersActionState === APIActionState.CALL || favoritesActionState === APIActionState.CALL) {
+  if (offersActionState === APIActionState.Call || favoritesActionState === APIActionState.Call) {
     return (
       <Loading />
     );

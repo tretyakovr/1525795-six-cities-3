@@ -1,5 +1,5 @@
 import { appData, changeLocation, changeSort, setErrorMessage, clearErrorMessage } from './app-data';
-import { DEFAULT_CITY, SortTypes } from '../../const';
+import { DEFAULT_CITY, SortType } from '../../const';
 
 
 describe('app-data slice', () => {
@@ -7,7 +7,7 @@ describe('app-data slice', () => {
     const emptyAction = {type: ''};
     const expectedState = {
       city: DEFAULT_CITY,
-      sortType: SortTypes.POPULAR,
+      sortType: SortType.Popular,
       errorMessage: '',
     };
 
@@ -19,13 +19,13 @@ describe('app-data slice', () => {
   it('should return changed initialState with "Cologne" in city', () => {
     const initialState = {
       city: 'Dusseldorf',
-      sortType: SortTypes.POPULAR,
+      sortType: SortType.Popular,
       errorMessage: '',
     };
     const city = 'Cologne';
     const expectedState = {
       city: 'Cologne',
-      sortType: SortTypes.POPULAR,
+      sortType: SortType.Popular,
       errorMessage: '',
     };
 
@@ -38,7 +38,7 @@ describe('app-data slice', () => {
     const city = 'Amsterdam';
     const expectedState = {
       city: 'Amsterdam',
-      sortType: SortTypes.POPULAR,
+      sortType: SortType.Popular,
       errorMessage: '',
     };
 
@@ -51,7 +51,7 @@ describe('app-data slice', () => {
     const sortType = 'Top rated first';
     const expectedState = {
       city: 'Paris',
-      sortType: SortTypes.TOPRATED,
+      sortType: SortType.TopRated,
       errorMessage: '',
     };
 
@@ -64,7 +64,7 @@ describe('app-data slice', () => {
     const errorMessage = 'Test error';
     const expectedState = {
       city: 'Paris',
-      sortType: SortTypes.POPULAR,
+      sortType: SortType.Popular,
       errorMessage: 'Test error',
     };
 
@@ -76,12 +76,12 @@ describe('app-data slice', () => {
   it('clearErrorMessage action: should return empty error message', () => {
     const initialState = {
       city: 'Paris',
-      sortType: SortTypes.POPULAR,
+      sortType: SortType.Popular,
       errorMessage: 'Test error',
     };
     const expectedState = {
       city: 'Paris',
-      sortType: SortTypes.POPULAR,
+      sortType: SortType.Popular,
       errorMessage: '',
     };
 

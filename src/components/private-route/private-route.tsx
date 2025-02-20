@@ -20,7 +20,7 @@ function PrivateRoute(props: PrivateRouteProps): JSX.Element {
     dispatch(checkAuthAction());
   }, [dispatch]);
 
-  if (checkAuthActionState === APIActionState.IDLE || checkAuthActionState === APIActionState.CALL) {
+  if (checkAuthActionState === APIActionState.Idle || checkAuthActionState === APIActionState.Call) {
     return (<Loading />);
   }
 
