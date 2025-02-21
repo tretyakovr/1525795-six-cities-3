@@ -17,7 +17,7 @@ function Locations({changeLocationHandler}: LocationsProps): JSX.Element {
   };
 
   return (
-    <ul className="locations__list tabs__list">
+    <ul className="locations__list tabs__list" data-testid="city-container">
       {cities.map((item) => (
         <li key={item} className="locations__item">
           <Link className=
@@ -25,7 +25,7 @@ function Locations({changeLocationHandler}: LocationsProps): JSX.Element {
               item === activeLocation ? classActiveLocation : classLocation
             } to="/" onClick={locationClickHandler}
           >
-            <span>{item}</span>
+            <span data-testid={item}>{item}</span>
           </Link>
         </li>
       ))}
