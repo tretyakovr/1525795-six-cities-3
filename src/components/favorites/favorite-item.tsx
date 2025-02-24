@@ -17,7 +17,6 @@ function FavoriteItem({favoriteItem}: FavoriteItemProps): JSX.Element {
   const dispatch = useAppDispatch();
 
   const authStatus = useAppSelector(getAuthStatus);
-  // Вообще говоря, здесь всегда будет true
   const favorites = useAppSelector(getFavorites);
   const isFavorite = favorites.find((item) => item.id === favoriteItem.id)?.isFavorite;
 
@@ -65,7 +64,7 @@ function FavoriteItem({favoriteItem}: FavoriteItemProps): JSX.Element {
           </div>
         </div>
         <h2 className="place-card__name">
-          <Link to={`/offer/${favoriteItem.id}`}>{favoriteItem.title}</Link>
+          <Link to={`/offer/${favoriteItem.id}`} >{favoriteItem.title}</Link>
         </h2>
         <p className="place-card__type">{capitalize(favoriteItem.type)}</p>
       </div>
