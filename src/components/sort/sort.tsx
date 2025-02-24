@@ -34,12 +34,13 @@ function Sort(): JSX.Element {
           <use xlinkHref="#icon-arrow-select"></use>
         </svg>
       </span>
-      <ul ref={refSortMenu} className="places__options places__options--custom" >
+      <ul ref={refSortMenu} className="places__options places__options--custom" data-testid="sort-ul">
         {Object.entries(SortType).map(([key, value]) => (
           <li key={key}
             className={value === currentSortType ? 'places__option places__option--active' : 'places__option'}
             tabIndex={0}
             onClick={handleChangeSort}
+            data-testid={value}
           >{value}
           </li>
         ))}
