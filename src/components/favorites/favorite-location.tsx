@@ -15,7 +15,7 @@ function FavoriteLocation({favorites, city}: FavoriteLocationProps): JSX.Element
   const cityOffers: Offer[] = favorites.filter(
     (item) => item.city.name === city);
 
-  const locationClickHandler = (evt: React.MouseEvent<HTMLElement>):void => {
+  const handleLocationClick = (evt: React.MouseEvent<HTMLElement>):void => {
     dispatch(changeLocation(evt.currentTarget.innerText));
   };
 
@@ -23,7 +23,7 @@ function FavoriteLocation({favorites, city}: FavoriteLocationProps): JSX.Element
     <>
       <div className="favorites__locations locations locations--current">
         <div className="locations__item">
-          <Link className="locations__item-link" to="/" onClick={locationClickHandler}>
+          <Link className="locations__item-link" to="/" onClick={handleLocationClick}>
             <span>{city}</span>
           </Link>
         </div>

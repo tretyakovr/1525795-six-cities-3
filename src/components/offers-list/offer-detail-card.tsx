@@ -44,7 +44,7 @@ function OfferDetailCard(): JSX.Element {
     };
   }, [dispatch, offerId]);
 
-  const favoriteClickHandler = () => {
+  const handleFavoriteClick = () => {
     if (authStatus === AuthStatus.NoAuth) {
       navigate(AppRoute.Login);
     } else {
@@ -99,7 +99,7 @@ function OfferDetailCard(): JSX.Element {
                     'offer__bookmark-button button offer__bookmark-button--active' :
                     'offer__bookmark-button button'}
                 type="button"
-                onClick={favoriteClickHandler}
+                onClick={handleFavoriteClick}
                 >
                   <svg className="offer__bookmark-icon" width="31" height="33">
                     <use xlinkHref="#icon-bookmark"></use>

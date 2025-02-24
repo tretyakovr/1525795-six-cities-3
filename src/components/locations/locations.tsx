@@ -12,7 +12,7 @@ function Locations({changeLocationHandler}: LocationsProps): JSX.Element {
   const classLocation = 'locations__item-link tabs__item';
   const classActiveLocation = `${classLocation} tabs__item--active`;
 
-  const locationClickHandler = (evt: React.MouseEvent<HTMLElement>):void => {
+  const handleLocationClick = (evt: React.MouseEvent<HTMLElement>):void => {
     changeLocationHandler(evt.currentTarget.innerText);
   };
 
@@ -23,7 +23,7 @@ function Locations({changeLocationHandler}: LocationsProps): JSX.Element {
           <Link className=
             {
               item === activeLocation ? classActiveLocation : classLocation
-            } to="/" onClick={locationClickHandler}
+            } to="/" onClick={handleLocationClick}
           >
             <span data-testid={item}>{item}</span>
           </Link>

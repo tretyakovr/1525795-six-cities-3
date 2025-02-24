@@ -21,7 +21,7 @@ function Card({offer, divClassName}: CardProps): JSX.Element {
   const loadedOffers = useAppSelector(getLoadedOffers);
   const isFavorite = loadedOffers.find((item) => item.id === offer.id)?.isFavorite;
 
-  const favoriteClickHandler = () => {
+  const handleFavoriteClick = () => {
     if (authStatus !== AuthStatus.Auth) {
       navigate(AppRoute.Login);
     } else {
@@ -51,7 +51,7 @@ function Card({offer, divClassName}: CardProps): JSX.Element {
               'place-card__bookmark-button button place-card__bookmark-button--active' :
               'place-card__bookmark-button button'}
           type="button"
-          onClick={favoriteClickHandler}
+          onClick={handleFavoriteClick}
           >
             <svg className="place-card__bookmark-icon" width="18" height="19">
               <use xlinkHref="#icon-bookmark"></use>

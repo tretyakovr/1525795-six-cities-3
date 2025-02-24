@@ -12,10 +12,10 @@ export enum AppRoute {
   Page404 = '/error404',
 }
 
-export const URL_MARKER_DEFAULT = '/public/img/pin.svg';
-
-export const URL_MARKER_CURRENT = '/public/img/pin-active.svg';
-
+export enum IconMarker {
+  Default = '/public/img/pin.svg',
+  Current = '/public/img/pin-active.svg',
+}
 
 export const cities: string[] = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
 export const DEFAULT_CITY = cities[0];

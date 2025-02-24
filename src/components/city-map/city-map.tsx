@@ -3,7 +3,7 @@ import { Icon, Marker, layerGroup } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { City } from '../../types/city';
 import { Offers } from '../../types/offers';
-import {URL_MARKER_DEFAULT, URL_MARKER_CURRENT} from '../../const';
+import {IconMarker} from '../../const';
 import useMap from './use-map';
 
 
@@ -14,13 +14,13 @@ type CityMapProps = {
 };
 
 const defaultCustomIcon = new Icon({
-  iconUrl: URL_MARKER_DEFAULT,
+  iconUrl: IconMarker.Default,
   iconSize: [28, 39],
   iconAnchor: [14, 39]
 });
 
 const currentCustomIcon = new Icon({
-  iconUrl: URL_MARKER_CURRENT,
+  iconUrl: IconMarker.Current,
   iconSize: [28, 39],
   iconAnchor: [14, 39]
 });

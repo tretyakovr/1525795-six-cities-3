@@ -22,12 +22,12 @@ function Login(): JSX.Element {
 
   const randomLocation = cities[getRandomInteger(0, cities.length - 1)];
 
-  const locationClickHandler = (evt: React.MouseEvent<HTMLElement>):void => {
+  const handleLocationClick = (evt: React.MouseEvent<HTMLElement>):void => {
     const newLocation = evt.currentTarget.innerText;
     dispatch(changeLocation(newLocation));
   };
 
-  const authFormSubmitHandler = (evt: React.FormEvent<HTMLFormElement>): void => {
+  const handleAuthFormSubmit = (evt: React.FormEvent<HTMLFormElement>): void => {
     evt.preventDefault();
     if (loginRef.current && passwordRef.current) {
       if (passwordRef.current.value.match(/^(?=.*[A-Za-z])(?=.*\d)/)) {
@@ -60,7 +60,7 @@ function Login(): JSX.Element {
         <div className="page__login-container container">
           <section className="login">
             <h1 className="login__title">Sign in</h1>
-            <form className="login__form form" action="#" method="post" onSubmit={authFormSubmitHandler}>
+            <form className="login__form form" action="#" method="post" onSubmit={handleAuthFormSubmit}>
               <div className="login__input-wrapper form__input-wrapper">
                 <label className="visually-hidden" htmlFor="email">E-mail</label>
                 <input ref={loginRef} className="login__input form__input" type="email" name="email" placeholder="Email" />
@@ -74,7 +74,7 @@ function Login(): JSX.Element {
           </section>
           <section className="locations locations--login locations--current">
             <div className="locations__item">
-              <Link className="locations__item-link" to="/" onClick={locationClickHandler}>
+              <Link className="locations__item-link" to="/" onClick={handleLocationClick}>
                 <span>{randomLocation}</span>
               </Link>
             </div>
